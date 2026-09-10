@@ -1,0 +1,10 @@
+{
+  "name": "cpbconnect/cpbsync",
+  "description": "PrestaShop product synchronization module by CPBConnect",
+  "type": "prestashop-module",
+  "autoload": {
+    "psr-4": {
+      "CPBConnect\\": "src/"
+    }
+  }
+}

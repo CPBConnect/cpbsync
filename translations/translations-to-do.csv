@@ -1,0 +1,83 @@
+﻿Archivo,Linea,Traduccion
+views/templates/admin/dry-run.tpl,8,Vista previa
+views/templates/admin/dry-run.tpl,10,Se muestran los primeros 5 productos de la fuente.
+views/templates/admin/dry-run.tpl,12,No se modificó ningún producto en PrestaShop.
+views/templates/admin/dry-run.tpl,20,Producto
+views/templates/admin/dry-run.tpl,24,Válido
+views/templates/admin/dry-run.tpl,28,Con errores
+views/templates/admin/dry-run.tpl,35,Errores:
+views/templates/admin/dry-run.tpl,50,Campo PrestaShop
+views/templates/admin/dry-run.tpl,51,Original
+views/templates/admin/dry-run.tpl,52,Resultado
+views/templates/admin/sync-result.tpl,4,Resultado de sincronización
+views/templates/admin/sync-result.tpl,8,Sincronización completada
+views/templates/admin/sync-result.tpl,14,Ejecución
+views/templates/admin/sync-result.tpl,18,Esta sincronización quedó registrada en el historial.
+views/templates/admin/sync-result.tpl,27,Total
+views/templates/admin/sync-result.tpl,35,Creado
+views/templates/admin/sync-result.tpl,44,Actualizado
+views/templates/admin/sync-result.tpl,53,Omitido
+views/templates/admin/sync-result.tpl,62,Errores
+views/templates/admin/sync-result.tpl,73,Referencia
+views/templates/admin/sync-result.tpl,74,Estado
+views/templates/admin/sync-result.tpl,75,ID PrestaShop
+views/templates/admin/sync-result.tpl,76,Detalle
+views/templates/admin/sync-result.tpl,90,Creado
+views/templates/admin/sync-result.tpl,94,Actualizado
+views/templates/admin/sync-result.tpl,98,Omitido
+views/templates/admin/sync-result.tpl,102,Errores
+views/templates/admin/sync-result.tpl,136,Volver al mapping
+views/templates/admin/source-preview.tpl,5,Vista previa de la fuente
+views/templates/admin/source-preview.tpl,13,Conexión exitosa.
+views/templates/admin/source-preview.tpl,19,registros encontrados.
+views/templates/admin/source-preview.tpl,23,Columnas detectadas
+views/templates/admin/source-preview.tpl,41,Primeros registros
+views/templates/admin/source-preview.tpl,93,Volver a fuentes
+views/templates/admin/sources.tpl,5,CPB Sync
+views/templates/admin/sources.tpl,14,Fuentes de datos
+views/templates/admin/sources.tpl,18,"Conecta proveedores, ERP y otras fuentes de productos con PrestaShop."
+views/templates/admin/sources.tpl,29,Historial
+views/templates/admin/sources.tpl,36,Agregar fuente
+views/templates/admin/sources.tpl,48,Aún no tienes fuentes configuradas.
+views/templates/admin/sources.tpl,65,Tipo:
+views/templates/admin/sources.tpl,73,URL:
+views/templates/admin/sources.tpl,81,Frecuencia:
+views/templates/admin/sources.tpl,89,Estado:
+views/templates/admin/sources.tpl,94,Activa
+views/templates/admin/sources.tpl,98,Inactiva
+views/templates/admin/sources.tpl,111,Probar conexión
+views/templates/admin/sources.tpl,119,Mapear
+views/templates/admin/sources.tpl,127,Editar
+views/templates/admin/sources.tpl,133,¿Estás seguro de eliminar esta fuente?
+views/templates/admin/sources.tpl,136,Eliminar
+views/templates/admin/source-form.tpl,5,Nueva fuente
+views/templates/admin/source-form.tpl,21,Nombre
+views/templates/admin/source-form.tpl,29,Ej. Proveedor ABC
+views/templates/admin/source-form.tpl,35,Tipo de fuente
+views/templates/admin/source-form.tpl,52,URL de la fuente
+views/templates/admin/source-form.tpl,66,Frecuencia
+views/templates/admin/source-form.tpl,73,Manual
+views/templates/admin/source-form.tpl,78,Cada hora
+views/templates/admin/source-form.tpl,83,Cada 6 horas
+views/templates/admin/source-form.tpl,88,Diariamente
+views/templates/admin/source-form.tpl,103,Fuente activa
+views/templates/admin/source-form.tpl,113,Cancelar
+views/templates/admin/source-form.tpl,118,Guardar
+views/templates/admin/source-mapping.tpl,5,Mapear campos
+views/templates/admin/source-mapping.tpl,11,Asigna cada campo de la fuente al campo correspondiente de PrestaShop.
+views/templates/admin/source-mapping.tpl,32,Campo proveedor
+views/templates/admin/source-mapping.tpl,35,Campo PrestaShop
+views/templates/admin/source-mapping.tpl,38,Transformación
+views/templates/admin/source-mapping.tpl,97,-- No mapear --
+views/templates/admin/source-mapping.tpl,173,-- Ninguna --
+views/templates/admin/source-mapping.tpl,180,Normalizar precio
+views/templates/admin/source-mapping.tpl,189,-- Ninguna --
+views/templates/admin/source-mapping.tpl,196,Normalizar stock
+views/templates/admin/source-mapping.tpl,207,-- Ninguna --
+views/templates/admin/source-mapping.tpl,214,Normalizar texto
+views/templates/admin/source-mapping.tpl,221,Reemplazar texto
+views/templates/admin/source-mapping.tpl,232,Buscar
+views/templates/admin/source-mapping.tpl,246,Reemplazar por
+views/templates/admin/source-mapping.tpl,262,No disponible
+views/templates/admin/source-mapping.tpl,284,Volver
+views/templates/admin/source-mapping.tpl,292,Guardar mapping

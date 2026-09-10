@@ -1,0 +1,57 @@
+<?php
+
+namespace CPBConnect\Application\Product;
+
+use Product;
+
+class ProductCreator
+{
+    private ProductDataApplier $dataApplier;
+    private ProductManufacturerApplier $manufacturerApplier;
+    private ProductCategoryApplier $categoryApplier;
+    private ProductImageApplier $imageApplier;
+    private ProductStockApplier $stockApplier;
+
+    public function __construct()
+    {
+        $this->dataApplier = new ProductDataApplier();
+        $this->manufacturerApplier = new ProductManufacturerApplier();
+        $this->categoryApplier = new ProductCategoryApplier();
+        $this->imageApplier = new ProductImageApplier();
+        $this->stockApplier = new ProductStockApplier();
+    }
+
+    public function create(array $data): int
+    {
+        if (empty($data['reference'])) {
+            throw new \RuntimeException(
+                'No se puede crear un producto sin reference.'
+            );
+        }
+
+        if (empty($data['name'])) {
+            throw new \RuntimeException(
+                'No se puede crear un producto sin name.'
+            );
+        }
+
+        $product = new Product();
+
+        $this->dataApplier->apply($product, $data);
+        $this->manufacturerApplier->apply($product, $data);
+
+        $product->active = 1;
+
+        if (!$product->add()) {
+            throw new \RuntimeException(
+                'No fue posible crear el producto en PrestaShop.'
+            );
+        }
+
+        $this->stockApplier->apply($product, $data);
+        $this->categoryApplier->apply($product, $data);
+        $this->imageApplier->apply($product, $data);
+
+        return (int) $product->id;
+    }
+}

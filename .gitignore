@@ -1,0 +1,30 @@
+# Sistema / IDE
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# PrestaShop
+cache/
+var/cache/
+var/logs/
+
+# PHPUnit / coverage
+.phpunit.result.cache
+.phpunit.cache/
+coverage/
+
+# Tests locales / fixtures
+# tests/fixtures/
+
+# Variables de entorno
+.env
+.env.*
+!.env.example
