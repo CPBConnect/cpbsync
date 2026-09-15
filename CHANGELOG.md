@@ -2,51 +2,55 @@
 
 All notable changes to CPB Sync are documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project follows Semantic Versioning.
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project follows Semantic Versioning.
 
-## [1.0.0] - 2026-09-10
+## [1.0.0] - 2026-09-15
 
 ### Added
 
-* Initial public release of CPB Sync.
-* CSV external source support.
-* Configurable product source management.
-* Source creation, editing, and deletion.
-* Configurable field mapping between external catalogs and PrestaShop.
-* Product field validation.
+* CSV catalog sources.
+* Multiple configurable data sources.
+* Configurable source-to-PrestaShop field mapping.
 * Data transformations:
 
-    * Price normalization.
-    * Stock normalization.
-    * Text normalization.
-    * Text replacement.
-* Dry Run functionality to preview product changes before synchronization.
-* Product creation and update synchronization.
-* Product change detection to skip products without changes.
-* Product image synchronization.
-* Product synchronization history.
+  * Price normalization.
+  * Stock normalization.
+  * Text normalization.
+  * Text replacement.
+* Dry Run before synchronization.
+* Product creation.
+* Product updates.
+* Automatic detection of products without changes.
+* Product validation.
+* Individual product error handling.
+* Synchronization history.
 * Detailed synchronization results.
-* Error handling per product during synchronization.
+* Batch processing for large imports.
+* Import progress tracking.
 * Scheduled synchronization through cron.
-* Support for manual, hourly, every 6 hours, and daily synchronization frequencies.
+* Cron frequencies:
+
+  * Manual.
+  * Hourly.
+  * Every 6 hours.
+  * Daily.
 * Cron execution lock to prevent concurrent executions.
-* Separate application, domain, and infrastructure layers.
-* Composer PSR-4 autoloading.
-* Basic source and product data validation.
-* PrestaShop Back Office integration.
+* Resumption of pending batch imports.
+* Automatic cleanup of temporary CSV files after successful imports.
+* English and Spanish documentation.
 
-### Documentation
+### Changed
 
-* Added English README.
-* Added Spanish README.
-* Added project documentation and installation instructions.
-* Added initial project roadmap.
+* Manual and scheduled synchronization now use the same batch processing engine.
+* Large CSV imports are processed in batches to reduce server execution-time issues.
+* Synchronization errors are handled at the individual product level so other products can continue processing.
 
-### Notes
+### Security
 
-CPB Sync 1.0.0 is the first public release and is provided free of charge.
+* Cron execution is restricted to the command line interface.
 
-The initial release focuses on CSV-based product synchronization and establishes the foundation for future integrations and synchronization capabilities.
+## [Unreleased]
+
+Changes for the next version will be documented here.
 
 [1.0.0]: https://github.com/CPBConnect/cpbsync/releases/tag/v1.0.0

@@ -1,29 +1,33 @@
 # CPB Sync
 
-**Product synchronization for PrestaShop using external catalogs, configurable field mappings, and data transformations.**
+**Product synchronization for PrestaShop using external catalogs, configurable field mappings, data transformations, batch processing, and scheduled synchronization.**
 
-CPB Sync is a PrestaShop module developed by **CPBConnect** that allows store administrators to synchronize product information from external sources with their PrestaShop catalog.
+CPB Sync is a PrestaShop module developed by **CPBConnect** that allows store administrators to synchronize product information from external catalogs with their PrestaShop store.
 
-The first version focuses on CSV-based synchronization, configurable mappings, basic transformations, dry runs, synchronization history, and scheduled execution.
+Version **1.0.0** focuses on reliable CSV-based product synchronization with configurable mappings, transformations, validation, Dry Run, batch processing, synchronization history, and automated execution through cron.
 
 ## Features
 
 * 📥 Import product catalogs from CSV sources
 * 🔗 Configurable source-to-PrestaShop field mapping
-* 🔄 Data transformations
+* 🔄 Configurable data transformations
 * 🧪 Dry Run before applying changes
 * 📦 Product creation and updates
+* ⏭️ Automatically skip products without changes
 * 🖼️ Product image synchronization
 * 📊 Synchronization results and history
+* 📈 Batch processing with progress tracking
 * ⏰ Scheduled synchronization through cron
 * ✅ Product data validation
+* ⚠️ Individual product error handling
 * 🗂️ Multiple configurable data sources
+* 🧹 Automatic cleanup of temporary import files
 
-## Supported source
+## Supported sources
 
 ### CSV
 
-CPB Sync currently supports CSV catalogs.
+CPB Sync 1.0.0 currently supports CSV catalogs.
 
 Example:
 
@@ -33,11 +37,11 @@ ABC001,Product One,Product description,25.99,10,Category A,Brand A,https://examp
 ABC002,Product Two,Another description,49.99,5,Category B,Brand B,https://example.com/image2.jpg,1234567890124
 ```
 
-The CSV fields can be mapped to supported PrestaShop product fields.
+CSV fields can be mapped to supported PrestaShop product fields.
 
 ## Mapping
 
-CPB Sync allows administrators to configure how fields from the external catalog are mapped to PrestaShop.
+CPB Sync allows administrators to configure how fields from an external catalog are mapped to PrestaShop.
 
 Example:
 
@@ -65,15 +69,27 @@ The current version includes:
 * Text normalization
 * Text replacement
 
-Transformations allow external catalog data to be adapted before it is sent to PrestaShop.
+Transformations allow external catalog data to be adapted before it is synchronized with PrestaShop.
 
 ## Dry Run
 
 Before performing a real synchronization, CPB Sync provides a **Dry Run**.
 
-The Dry Run processes a sample of products and displays the original data alongside the transformed data.
+The Dry Run processes products and displays the original data alongside the transformed data.
 
 This allows administrators to verify their mapping and transformations before modifying the store catalog.
+
+## Batch processing
+
+Large CSV catalogs can be processed in batches instead of being handled in a single request.
+
+CPB Sync processes imports in batches of products and keeps track of the current progress.
+
+This helps reduce the risk of server execution-time limitations when importing larger catalogs.
+
+Manual imports provide progress information while the synchronization is running.
+
+Temporary uploaded CSV files are automatically removed after a successful import to avoid unnecessary storage usage.
 
 ## Synchronization
 
@@ -84,9 +100,20 @@ CPB Sync can:
 * Create new products
 * Update existing products
 * Skip products without changes
-* Report validation or synchronization errors
+* Validate product data
+* Report individual product errors
+* Continue processing when individual products fail
 
 Synchronization results are stored in the module history.
+
+Each synchronization records:
+
+* Total products
+* Created products
+* Updated products
+* Skipped products
+* Errors
+* Detailed synchronization results
 
 ## Cron
 
@@ -101,34 +128,27 @@ Supported frequencies include:
 
 The cron process only executes active sources configured with a scheduled frequency.
 
-Example:
+The cron runner uses the same batch processing system as manual imports.
+
+This means manual and scheduled synchronization share the same product synchronization logic.
+
+### Cron command
+
+The cron script is intended to be executed from the command line:
 
 ```bash
 php modules/cpbsync/cron.php
 ```
 
-The cron script is intended to be executed from the command line.
+For example, a server cron job can execute CPB Sync every hour:
 
-## Requirements
+```bash
+0 * * * * php /path/to/prestashop/modules/cpbsync/cron.php
+```
 
-* PrestaShop 8.0 or later
-* PHP version compatible with the installed PrestaShop version
-* MySQL/MariaDB supported by PrestaShop
-* Composer dependencies included in the module package
+The cron process includes a lock mechanism to prevent multiple CPB Sync cron executions from running simultaneously.
 
-## Installation
-
-1. Download the CPB Sync module.
-2. Open the PrestaShop Back Office.
-3. Go to **Modules > Module Manager**.
-4. Select **Upload a module**.
-5. Upload the CPB Sync ZIP file.
-6. Install the module.
-7. Open the CPB Sync configuration page.
-
-After installation, configure an external CSV source and create the required field mapping.
-
-## Basic workflow
+## Synchronization workflow
 
 ```text
 External CSV
@@ -146,11 +166,69 @@ Transformations
 Dry Run
      │
      ▼
-Synchronization
+Batch processing
+     │
+     ▼
+Product validation
+     │
+     ▼
+Create / Update / Skip
+     │
+     ▼
+Synchronization history
      │
      ▼
 PrestaShop catalog
 ```
+
+Scheduled synchronization follows the same processing flow:
+
+```text
+Server Cron
+     │
+     ▼
+CronRunner
+     │
+     ▼
+Active scheduled source
+     │
+     ▼
+ImportBatchProcessor
+     │
+     ▼
+Product synchronization
+     │
+     ▼
+Synchronization history
+```
+
+## Requirements
+
+* PrestaShop 8.0 or later
+* PHP version compatible with the installed PrestaShop version
+* MySQL/MariaDB supported by PrestaShop
+* Composer dependencies included in the module package
+
+## Installation
+
+1. Download the CPB Sync module ZIP package.
+2. Open the PrestaShop Back Office.
+3. Go to **Modules > Module Manager**.
+4. Select **Upload a module**.
+5. Upload the CPB Sync ZIP file.
+6. Install the module.
+7. Open the CPB Sync configuration page.
+
+After installation:
+
+1. Create an external CSV source.
+2. Configure the source settings.
+3. Configure the field mapping.
+4. Configure transformations if required.
+5. Run a Dry Run.
+6. Execute the synchronization.
+
+For automatic synchronization, configure the desired frequency and add the CPB Sync cron command to the server's scheduler.
 
 ## Project structure
 
@@ -177,9 +255,9 @@ The module follows a layered structure separating application logic, domain logi
 
 **Version:** 1.0.0
 
-CPB Sync 1.0.0 is the first public version of the project.
+CPB Sync 1.0.0 is the first public release of the project.
 
-This version is focused on providing a reliable foundation for CSV-based product synchronization.
+This version provides a complete CSV-based product synchronization workflow, including manual imports, batch processing, validation, Dry Run, synchronization history, and scheduled execution through cron.
 
 ## Roadmap
 
@@ -190,8 +268,8 @@ Future versions may include:
 * REST API integrations
 * Incremental synchronization
 * Advanced transformation rules
-* More synchronization options
-* Improved logging
+* Additional synchronization options
+* Improved logging and monitoring
 * Additional scheduling options
 * Premium features
 
@@ -201,7 +279,9 @@ The roadmap may evolve according to user feedback and real-world requirements.
 
 CPB Sync 1.0.0 is provided free of charge.
 
-The project is being developed by CPBConnect with the goal of building a practical synchronization solution for PrestaShop stores.
+The free version provides the complete CSV synchronization workflow available in the 1.0.0 release.
+
+Future versions may introduce additional premium features while maintaining the functionality included in the free version.
 
 ## Contributing
 
