@@ -2,44 +2,61 @@
 
 namespace CPBConnect\Application\Cron;
 
-use CPBConnect\Application\Mapping\MappingConfigurationBuilder;
+use CPBConnect\Application\Import\ImportBatchProcessor;
 use CPBConnect\Application\Product\ProductMapper;
 use CPBConnect\Application\Product\ProductSync;
-use CPBConnect\Application\Source\CsvSourceService;
+use CPBConnect\Infrastructure\Persistence\ImportRepository;
 use CPBConnect\Infrastructure\Persistence\MappingRepository;
 use CPBConnect\Infrastructure\Persistence\SourceRepository;
 use CPBConnect\Infrastructure\Persistence\SyncLogRepository;
+use CPBConnect\Infrastructure\Source\CsvSourceReader;
 
 class CronRunner
 {
     private SourceRepository $sourceRepository;
     private MappingRepository $mappingRepository;
     private SyncLogRepository $logRepository;
-    private CsvSourceService $csvService;
-    private MappingConfigurationBuilder $mappingBuilder;
-    private ProductMapper $productMapper;
-    private ProductSync $productSync;
+    private ImportRepository $importRepository;
+    private CsvSourceReader $csvSourceReader;
+    private ImportBatchProcessor $batchProcessor;
 
     public function __construct()
     {
-        $this->sourceRepository = new SourceRepository();
-        $this->mappingRepository = new MappingRepository();
-        $this->logRepository = new SyncLogRepository();
+        $this->sourceRepository =
+            new SourceRepository();
 
-        $this->csvService = new CsvSourceService();
-        $this->mappingBuilder = new MappingConfigurationBuilder();
-        $this->productMapper = new ProductMapper();
-        $this->productSync = new ProductSync();
+        $this->mappingRepository =
+            new MappingRepository();
+
+        $this->logRepository =
+            new SyncLogRepository();
+
+        $this->importRepository =
+            new ImportRepository();
+
+        $this->csvSourceReader =
+            new CsvSourceReader();
+
+        $this->batchProcessor =
+            new ImportBatchProcessor(
+                $this->sourceRepository,
+                $this->mappingRepository,
+                $this->importRepository,
+                $this->csvSourceReader,
+                new ProductMapper(),
+                new ProductSync()
+            );
     }
 
     public function run(): array
     {
-
-        $sources = $this->sourceRepository->findAll();
+        $sources =
+            $this->sourceRepository->findAll();
 
         $results = [];
 
         foreach ($sources as $source) {
+
             if (!(int) $source['active']) {
                 continue;
             }
@@ -49,14 +66,18 @@ class CronRunner
             }
 
             try {
-                $result = $this->runSource($source);
+
+                $result =
+                    $this->runSource($source);
 
                 $results[] = [
                     'id_source' => (int) $source['id_source'],
                     'status' => 'success',
                     'result' => $result,
                 ];
+
             } catch (\Throwable $e) {
+
                 $errorResult = [
                     'total' => 0,
                     'created' => 0,
@@ -99,64 +120,154 @@ class CronRunner
             );
         }
 
-        $result = $this->csvService->read(
-            $source['url']
-        );
-
-        if (empty($result['rows'])) {
-            throw new \RuntimeException(
-                'La fuente no contiene registros.'
-            );
-        }
-
-        $savedMappings =
-            $this->mappingRepository->findBySourceId(
+        /*
+         * Evitamos tomar una importación manual
+         * que haya quedado pendiente.
+         */
+        $import =
+            $this->findPendingCronImport(
                 (int) $source['id_source']
             );
 
-        if (empty($savedMappings)) {
+        /*
+         * Si no existe una importación pendiente,
+         * creamos una nueva.
+         */
+        if ($import === null) {
+
+            $total =
+                $this->csvSourceReader->countRows(
+                    $source['url']
+                );
+
+            if ($total === 0) {
+                throw new \RuntimeException(
+                    'La fuente CSV no contiene registros.'
+                );
+            }
+
+            $mappings =
+                $this->mappingRepository->findBySourceId(
+                    (int) $source['id_source']
+                );
+
+            if (empty($mappings)) {
+                throw new \RuntimeException(
+                    'La fuente no tiene un mapping configurado.'
+                );
+            }
+
+            $importId =
+                $this->importRepository->create(
+                    (int) $source['id_source'],
+                    $total,
+                    null,
+                    'cron'
+                );
+
+            $import =
+                $this->importRepository->find(
+                    $importId
+                );
+        }
+
+        if ($import === null) {
             throw new \RuntimeException(
-                'La fuente no tiene un mapping configurado.'
+                'No fue posible obtener la importación.'
             );
         }
 
-        $mapping =
-            $this->mappingBuilder->build(
-                $savedMappings
-            );
+        $created = 0;
+        $updated = 0;
+        $skipped = 0;
+        $errors = 0;
+        $items = [];
 
-        $products =
-            $this->productMapper->map(
-                $result['rows'],
-                $mapping
-            );
+        /*
+         * Procesamos todos los batches.
+         */
+        while (true) {
 
-        $syncResult =
-            $this->productSync->sync(
-                $products
-            );
+            $batch =
+                $this->batchProcessor->processBatch(
+                    (int) $import['id_import']
+                );
 
+            $batchResult =
+                $batch['batch'];
+
+            $created +=
+                (int) $batchResult['created'];
+
+            $updated +=
+                (int) $batchResult['updated'];
+
+            $skipped +=
+                (int) $batchResult['skipped'];
+
+            $errors +=
+                (int) $batchResult['errors'];
+
+            if (!empty($batchResult['items'])) {
+                $items = array_merge(
+                    $items,
+                    $batchResult['items']
+                );
+            }
+
+            $import =
+                $batch['import'];
+
+            if (
+                $import === null ||
+                $import['status'] === 'completed' ||
+                $import['status'] === 'failed'
+            ) {
+                break;
+            }
+        }
+
+        $total =
+            $created
+            + $updated
+            + $skipped
+            + $errors;
+
+        $result = [
+            'total' => $total,
+            'created' => $created,
+            'updated' => $updated,
+            'skipped' => $skipped,
+            'errors' => $errors,
+            'items' => $items,
+        ];
+
+        /*
+         * Un solo log final por ejecución cron.
+         */
         $this->logRepository->create(
             (int) $source['id_source'],
-            $syncResult,
+            $result,
             'cron'
         );
 
-        return $syncResult;
+        return $result;
     }
 
     private function shouldRun(array $source): bool
     {
-        $frequency = $source['frequency'] ?? 'manual';
+        $frequency =
+            $source['frequency'] ?? 'manual';
 
         if ($frequency === 'manual') {
             return false;
         }
 
         $lastLog =
-            $this->logRepository->findLatestCronBySourceId(
-                (int) $source['id_source']
-            );
+            $this->logRepository
+                ->findLatestCronBySourceId(
+                    (int) $source['id_source']
+                );
 
         if (!$lastLog) {
             return true;
@@ -169,7 +280,8 @@ class CronRunner
             return true;
         }
 
-        $elapsed = time() - $lastRun;
+        $elapsed =
+            time() - $lastRun;
 
         if ($frequency === 'hourly') {
             return $elapsed >= 3600;
@@ -184,5 +296,31 @@ class CronRunner
         }
 
         return false;
+    }
+
+    private function findPendingCronImport(
+        int $sourceId
+    ): ?array {
+        $import =
+            $this->importRepository
+                ->findPendingBySourceId(
+                    $sourceId
+                );
+
+        if ($import === null) {
+            return null;
+        }
+
+        /*
+         * No reutilizamos una importación manual.
+         */
+        if (
+            ($import['execution_type'] ?? 'manual')
+            !== 'cron'
+        ) {
+            return null;
+        }
+
+        return $import;
     }
 }

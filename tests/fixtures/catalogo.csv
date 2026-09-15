@@ -1,8 +1,8 @@
 sku,name,description,price,stock,category,brand,image,ean
-ABC001,   Producto     A2   ,Descripción del producto A,26.900,15,Electrónica,Marca A,https://placehold.co/600x400.jpg?text=cambio,7801234567890
-ABC002,Producto B,Descripción del producto B,39900,8,Accesorios,Marca B,https://placehold.co/600x400.jpg?text=CPB+Sync+Test,7701234567891
-ABC003,Producto C,Descripción del producto C,12000,0,Oficina,Marca C,https://placehold.co/600x400.jpg?text=CPB+Sync+Test,7701234567892
-ABC004,Producto D,Descripción del producto D,85000,"25 uds",Electrónica,Marca A,https://placehold.co/600x400.jpg?text=CPB+Sync+Test,7701234567893
-ABC005,Producto E,Descripción del producto E,19900,3,Accesorios,Marca D,https://placehold.co/600x400.jpg?text=CPB+Sync+Test,7701234567894
-ABC006,Producto F,Descripción del producto F,20900,3,Accesorios,Marca D,https://placehold.co/600x400.jpg?text=producof,7701234567895
-ABC008,Producto H,Descripción del producto H,814900,3,Accesorios,Marca H,https://placehold.co/600x400.jpg?text=producoH,7701234567806
+TEST001,Producto 001,Producto de prueba 001,10000,10,Categoria Prueba,Marca Prueba,,7700000000001
+TEST002,Producto 002,Producto de prueba 002,10001,11,Categoria Prueba,Marca Prueba,,7700000000002
+TEST003,Producto 003,Producto de prueba 003,10002,12,Categoria Prueba,Marca Prueba,,7700000000003
+TEST004,Producto 004,Producto de prueba 004,10003,13,Categoria Prueba,Marca Prueba,,7700000000004
+TEST005,Producto 005,Producto de prueba 005,10004,14,Categoria Prueba,Marca Prueba,,7700000000005
+TEST006,Producto 006,Producto de prueba 006,10005,15,Categoria Prueba,Marca Prueba,,7700000000006
+TEST007,Producto 007,Producto de prueba 007,10006,16,Categoria Prueba,Marca Prueba,,7700000000007

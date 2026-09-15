@@ -1,0 +1,276 @@
+<?php
+
+namespace CPBConnect\Application\Import;
+
+use CPBConnect\Application\Product\ProductMapper;
+use CPBConnect\Application\Product\ProductSync;
+use CPBConnect\Infrastructure\Persistence\ImportRepository;
+use CPBConnect\Infrastructure\Persistence\MappingRepository;
+use CPBConnect\Infrastructure\Persistence\SourceRepository;
+use CPBConnect\Infrastructure\Source\CsvSourceReader;
+use RuntimeException;
+
+class ImportBatchProcessor
+{
+    private const BATCH_SIZE = 50;
+
+    public function __construct(
+        private SourceRepository $sourceRepository,
+        private MappingRepository $mappingRepository,
+        private ImportRepository $importRepository,
+        private CsvSourceReader $csvSourceReader,
+        private ProductMapper $productMapper,
+        private ProductSync $productSync
+    ) {
+    }
+
+    /**
+     * Mantiene compatibilidad con la importación manual.
+     */
+    public function process(int $importId): array
+    {
+        $result = $this->processBatch($importId);
+
+        return $result['import'];
+    }
+
+    /**
+     * Procesa un batch y devuelve:
+     *
+     * - estado de la importación
+     * - resultado detallado del batch
+     */
+    public function processBatch(int $importId): array
+    {
+        $import = $this->importRepository->find($importId);
+
+        if ($import === null) {
+            throw new RuntimeException(
+                'La importación no existe.'
+            );
+        }
+
+        if (in_array(
+            $import['status'],
+            ['completed', 'failed'],
+            true
+        )) {
+            return [
+                'import' => $import,
+                'batch' => [
+                    'total' => 0,
+                    'created' => 0,
+                    'updated' => 0,
+                    'skipped' => 0,
+                    'errors' => 0,
+                    'items' => [],
+                ],
+            ];
+        }
+
+        $source = $this->sourceRepository->findById(
+            (int) $import['id_source']
+        );
+
+        if ($source === null) {
+            throw new RuntimeException(
+                'La fuente no existe.'
+            );
+        }
+
+        $mappings = $this->mappingRepository->findBySourceId(
+            (int) $import['id_source']
+        );
+
+        $mappings = $this->normalizeMappings($mappings);
+
+        if ($mappings === []) {
+            throw new RuntimeException(
+                'No existen mappings para la fuente.'
+            );
+        }
+
+        $this->importRepository->updateStatus(
+            $importId,
+            'processing'
+        );
+
+        $offset = (int) $import['current_position'];
+
+        if (!empty($import['file_path'])) {
+            $rows = $this->csvSourceReader->readBatchFromFile(
+                $import['file_path'],
+                $offset,
+                self::BATCH_SIZE
+            );
+        } else {
+            $rows = $this->csvSourceReader->readBatch(
+                $source['url'],
+                $offset,
+                self::BATCH_SIZE
+            );
+        }
+
+        /*
+         * Ya no hay más registros.
+         */
+        if ($rows === []) {
+            $this->importRepository->updateStatus(
+                $importId,
+                'completed'
+            );
+
+            return [
+                'import' => $this->importRepository->find(
+                    $importId
+                ),
+                'batch' => [
+                    'total' => 0,
+                    'created' => 0,
+                    'updated' => 0,
+                    'skipped' => 0,
+                    'errors' => 0,
+                    'items' => [],
+                ],
+            ];
+        }
+
+        $products = $this->productMapper->map(
+            $rows,
+            $mappings
+        );
+
+        /*
+         * Procesamos los 50 productos.
+         *
+         * ProductSync ya se encarga de capturar
+         * los errores individuales.
+         */
+        $syncResult = $this->productSync->sync(
+            $products
+        );
+
+        $success =
+            (int) $syncResult['created']
+            + (int) $syncResult['updated']
+            + (int) $syncResult['skipped'];
+
+        $errors =
+            (int) $syncResult['errors'];
+
+        $processed =
+            $offset + count($rows);
+
+        $totalSuccess =
+            (int) $import['success']
+            + $success;
+
+        $totalErrors =
+            (int) $import['errors']
+            + $errors;
+
+        $this->importRepository->updateProgress(
+            $importId,
+            $processed,
+            $totalSuccess,
+            $totalErrors,
+            $processed
+        );
+
+        $status = $processed >= (int) $import['total']
+            ? 'completed'
+            : 'processing';
+
+        $this->importRepository->updateStatus(
+            $importId,
+            $status
+        );
+
+        if ($status === 'completed') {
+            $completedImport =
+                $this->importRepository->find($importId);
+
+            if ($completedImport !== null) {
+                $this->cleanupImportFile($completedImport);
+            }
+
+            $this->importRepository->clearFilePath(
+                $importId
+            );
+        }
+
+        return [
+            'import' => $this->importRepository->find(
+                $importId
+            ),
+            'batch' => [
+                'total' => (int) $syncResult['total'],
+                'created' => (int) $syncResult['created'],
+                'updated' => (int) $syncResult['updated'],
+                'skipped' => (int) $syncResult['skipped'],
+                'errors' => (int) $syncResult['errors'],
+                'items' => $syncResult['items'] ?? [],
+            ],
+        ];
+    }
+
+    private function normalizeMappings(array $mappings): array
+    {
+        $result = [];
+
+        foreach ($mappings as $mapping) {
+            $sourceField = (string) (
+                $mapping['source_field'] ?? ''
+            );
+
+            $targetField = (string) (
+                $mapping['target_field'] ?? ''
+            );
+
+            if ($sourceField === '' || $targetField === '') {
+                continue;
+            }
+
+            $transformConfig = [];
+
+            if (!empty($mapping['transform_config'])) {
+                $decoded = json_decode(
+                    $mapping['transform_config'],
+                    true
+                );
+
+                if (is_array($decoded)) {
+                    $transformConfig = $decoded;
+                }
+            }
+
+            $result[$sourceField] = [
+                'target' => $targetField,
+                'transform' => (string) (
+                    $mapping['transform'] ?? 'none'
+                ),
+                'config' => $transformConfig,
+            ];
+        }
+
+        return $result;
+    }
+
+    private function cleanupImportFile(array $import): void
+    {
+        $filePath = $import['file_path'] ?? null;
+
+        if (
+            empty($filePath) ||
+            !is_file($filePath)
+        ) {
+            return;
+        }
+
+        if (!unlink($filePath)) {
+            // No hacemos fallar la importación
+            // solamente porque no se pudo eliminar el archivo.
+            return;
+        }
+    }
+}

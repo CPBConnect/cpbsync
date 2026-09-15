@@ -22,6 +22,12 @@
 
             <div class="col-md-4 text-right">
                 <a
+                        href="{$import_url|escape:'htmlall':'UTF-8'}"
+                        class="btn btn-primary"
+                >
+                    {l s='Importar CSV' mod='cpbsync'}
+                </a>
+                <a
                         href="{$history_url|escape:'htmlall':'UTF-8'}"
                         class="btn btn-default"
                 >

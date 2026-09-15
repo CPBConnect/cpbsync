@@ -5,7 +5,6 @@ if (PHP_SAPI !== 'cli') {
     exit('Forbidden');
 }
 
-
 require_once dirname(__FILE__) . '/../../config/config.inc.php';
 require_once dirname(__FILE__) . '/../../init.php';
 require_once dirname(__FILE__) . '/cpbsync.php';
@@ -20,21 +19,18 @@ if (!$lockFile || !flock($lockFile, LOCK_EX | LOCK_NB)) {
     exit(0);
 }
 
-$module = Module::getInstanceByName('cpbsync');
-
-if (!$module) {
-    fwrite(
-        STDERR,
-        "CPB Sync no está instalado.\n"
-    );
-
-    exit(1);
-}
-
-$runner =
-    new \CPBConnect\Application\Cron\CronRunner();
-
 try {
+
+    $module = Module::getInstanceByName('cpbsync');
+
+    if (!$module) {
+        throw new \RuntimeException(
+            'CPB Sync no está instalado.'
+        );
+    }
+
+    $runner =
+        new \CPBConnect\Application\Cron\CronRunner();
 
     $results = $runner->run();
 
@@ -69,17 +65,19 @@ try {
 
     fwrite(
         STDERR,
-        'CPB Sync Cron ERROR: ' .
-        $e->getMessage() .
-        PHP_EOL
+        'CPB Sync Cron ERROR: '
+        . $e->getMessage()
+        . PHP_EOL
     );
 
     $exitCode = 1;
 
 } finally {
 
-    flock($lockFile, LOCK_UN);
-    fclose($lockFile);
+    if ($lockFile) {
+        flock($lockFile, LOCK_UN);
+        fclose($lockFile);
+    }
 }
 
 exit($exitCode);

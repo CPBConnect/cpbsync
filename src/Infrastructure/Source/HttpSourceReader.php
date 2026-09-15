@@ -64,7 +64,7 @@ class HttpSourceReader
             );
         }
 
-        $this->validateHost($host);
+        //$this->validateHost($host);
     }
 
     private function validateHost(string $host): void

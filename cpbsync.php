@@ -14,6 +14,11 @@ use CPBConnect\Application\Source\CsvSourceService;
 use CPBConnect\Infrastructure\Persistence\MappingRepository;
 use CPBConnect\Infrastructure\Persistence\SourceRepository;
 use CPBConnect\Infrastructure\Persistence\SyncLogRepository;
+use CPBConnect\Infrastructure\Persistence\DatabaseInstaller;
+use CPBConnect\Application\Import\ImportBatchProcessor;
+use CPBConnect\Infrastructure\Persistence\ImportRepository;
+use CPBConnect\Infrastructure\Source\CsvSourceReader;
+use CPBConnect\Application\Import\ImportFileStorage;
 
 class CpbSync extends Module
 {
@@ -49,110 +54,18 @@ class CpbSync extends Module
 
     public function install(): bool
     {
+        $installer = new DatabaseInstaller();
+
         return parent::install()
-                      && $this->installDatabase();
-    }
-
-    private function installDatabase(): bool
-    {
-        $sql = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'cpbsync_sync_log` (
-            `id_log` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-            `id_source` INT UNSIGNED NOT NULL,
-            `status` VARCHAR(32) NOT NULL,
-            `execution_type` VARCHAR(16) NOT NULL DEFAULT "manual",
-            `total` INT UNSIGNED NOT NULL DEFAULT 0,
-            `created` INT UNSIGNED NOT NULL DEFAULT 0,
-            `updated` INT UNSIGNED NOT NULL DEFAULT 0,
-            `skipped` INT UNSIGNED NOT NULL DEFAULT 0,
-            `errors` INT UNSIGNED NOT NULL DEFAULT 0,
-            `details` LONGTEXT NULL,
-            `date_add` DATETIME NOT NULL,
-            PRIMARY KEY (`id_log`),
-            KEY `idx_cpbsync_sync_log_source` (`id_source`),
-            KEY `idx_cpbsync_sync_log_date` (`date_add`)
-        ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8mb4;';
-
-        if (!Db::getInstance()->execute($sql)) {
-            return false;
-        }
-
-        $sql = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'cpbsync_source` (
-            `id_source` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-            `name` VARCHAR(255) NOT NULL,
-            `type` VARCHAR(32) NOT NULL,
-            `url` TEXT NOT NULL,
-            `frequency` VARCHAR(32) NOT NULL,
-            `active` TINYINT(1) NOT NULL DEFAULT 1,
-            `date_add` DATETIME NOT NULL,
-            `date_upd` DATETIME NOT NULL,
-            PRIMARY KEY (`id_source`)
-        ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8mb4;';
-
-        if (!Db::getInstance()->execute($sql)) {
-            return false;
-        }
-
-        $sql = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'cpbsync_mapping` (
-            `id_mapping` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-            `id_source` INT UNSIGNED NOT NULL,
-            `source_field` VARCHAR(255) NOT NULL,
-            `target_field` VARCHAR(255) NOT NULL,
-            `transform` VARCHAR(64) NOT NULL DEFAULT "none",
-            `transform_config` TEXT NULL,
-            `date_add` DATETIME NOT NULL,
-            `date_upd` DATETIME NOT NULL,
-            PRIMARY KEY (`id_mapping`),
-            KEY `idx_cpbsync_mapping_source` (`id_source`)
-        ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8mb4;';
-
-        if (!Db::getInstance()->execute($sql)) {
-            return false;
-        }
-
-        $sql = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'cpbsync_product_meta` (
-            `id_meta` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-            `id_product` INT UNSIGNED NOT NULL,
-            `field` VARCHAR(64) NOT NULL,
-            `source_value` TEXT NOT NULL,
-            `date_add` DATETIME NOT NULL,
-            `date_upd` DATETIME NOT NULL,
-            PRIMARY KEY (`id_meta`),
-            UNIQUE KEY `uniq_cpbsync_product_field` (`id_product`, `field`),
-            KEY `idx_cpbsync_product` (`id_product`)
-        ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8mb4;';
-
-        return Db::getInstance()->execute($sql);
+               && $installer->install();
     }
 
     public function uninstall(): bool
     {
-        return  $this->uninstallDatabase()
-                && parent::uninstall();
-    }
+        $installer = new DatabaseInstaller();
 
-    private function uninstallDatabase(): bool
-    {
-        $sql = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'cpbsync_sync_log`';
-
-        if (!Db::getInstance()->execute($sql)) {
-            return false;
-        }
-
-        $sql = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'cpbsync_product_meta`';
-
-        if (!Db::getInstance()->execute($sql)) {
-            return false;
-        }
-
-        $sql = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'cpbsync_mapping`';
-
-        if (!Db::getInstance()->execute($sql)) {
-            return false;
-        }
-
-        $sql = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'cpbsync_source`';
-
-        return Db::getInstance()->execute($sql);
+        return $installer->uninstall()
+               && parent::uninstall();
     }
 
     public function getContent()
@@ -195,6 +108,17 @@ class CpbSync extends Module
 
             case 'history_detail':
                 return $this->historyDetail();
+
+            case 'import':
+                return $this->renderImport();
+
+            case 'upload_import':
+                echo $this->uploadImport();
+                exit;
+
+            case 'process_import':
+                echo $this->processImport();
+                exit;
 
             default:
                 return $this->renderSources();
@@ -1065,6 +989,12 @@ class CpbSync extends Module
             );
         }
 
+        $importUrl = $this->context->link->getAdminLink(
+            'AdminModules'
+        );
+        $importUrl .= '&configure=' . $this->name;
+        $importUrl .= '&cpbsync_action=import';
+
         unset($source);
 
         $this->context->smarty->assign([
@@ -1072,6 +1002,7 @@ class CpbSync extends Module
                                            'sources' => $sources,
                                            'source_form_url' => $this->getSourceFormUrl(),
                                            'history_url' => $this->getHistoryUrl(),
+                                           'import_url' => $importUrl,
                                        ]);
 
         return $this->context->smarty->fetch(
@@ -1284,6 +1215,219 @@ class CpbSync extends Module
             $message,
             $parameters,
             'Modules.Cpbsync.Admin'
+        );
+    }
+
+    private function createImport(int $sourceId): int
+    {
+        $sourceRepository = new SourceRepository();
+        $source = $sourceRepository->findById($sourceId);
+
+        if ($source === null) {
+            throw new \RuntimeException(
+                'La fuente no existe.'
+            );
+        }
+
+        $csvSourceReader = new CsvSourceReader();
+
+        $total = $csvSourceReader->countRows(
+            $source['url']
+        );
+
+        $importRepository = new ImportRepository();
+
+        return $importRepository->create(
+            $sourceId,
+            $total
+        );
+    }
+
+    private function renderImport(
+        ?int $importId = null
+    ): string {
+        $sources = (new SourceRepository())->findAll();
+
+        $processUrl = $this->context->link->getAdminLink(
+            'AdminModules'
+        );
+
+        $processUrl .= '&configure=' . $this->name;
+        $processUrl .= '&cpbsync_action=process_import';
+
+        $this->context->smarty->assign([
+                                           'sources' => $sources,
+                                           'import_id' => $importId,
+                                           'process_url' => $processUrl,
+                                           'back_url' => $this->getAdminUrl(),
+                                       ]);
+
+        return $this->display(
+            __FILE__,
+            'views/templates/admin/import.tpl'
+        );
+    }
+
+    private function uploadImport(): string
+    {
+        $sourceId = (int) Tools::getValue('id_source');
+
+        if ($sourceId <= 0) {
+            return $this->jsonResponse([
+                                           'success' => false,
+                                           'message' => 'Debes seleccionar una fuente.',
+                                       ]);
+        }
+
+        if (
+            !isset($_FILES['import_file'])
+            || !is_array($_FILES['import_file'])
+        ) {
+            return $this->jsonResponse([
+                                           'success' => false,
+                                           'message' => 'Debes seleccionar un archivo CSV.',
+                                       ]);
+        }
+
+        try {
+            $sourceRepository = new SourceRepository();
+
+            $source = $sourceRepository->findById($sourceId);
+
+            if ($source === null) {
+                throw new \RuntimeException(
+                    'La fuente seleccionada no existe.'
+                );
+            }
+
+            $fileStorage = new ImportFileStorage();
+
+            $filePath = $fileStorage->store(
+                $_FILES['import_file']
+            );
+
+            $csvSourceReader = new CsvSourceReader();
+
+            $total = $csvSourceReader->countFileRows(
+                $filePath
+            );
+
+            if ($total <= 0) {
+                throw new \RuntimeException(
+                    'El archivo CSV no contiene productos.'
+                );
+            }
+
+            $importRepository = new ImportRepository();
+
+            $importId = $importRepository->create(
+                $sourceId,
+                $total,
+                $filePath,
+                'manual'
+            );
+
+            return $this->jsonResponse([
+                                           'success' => true,
+                                           'import_id' => $importId,
+                                           'total' => $total,
+                                       ]);
+
+        } catch (\Throwable $exception) {
+            return $this->jsonResponse([
+                                           'success' => false,
+                                           'message' => $exception->getMessage(),
+                                       ]);
+        }
+    }
+
+    private function processImport(): string
+    {
+        $importId = (int) Tools::getValue('import_id');
+
+        if ($importId <= 0) {
+            return $this->jsonResponse([
+                                           'success' => false,
+                                           'message' => 'La importación no es válida.',
+                                       ]);
+        }
+
+        try {
+            $processor = new ImportBatchProcessor(
+                new SourceRepository(),
+                new MappingRepository(),
+                new ImportRepository(),
+                new CsvSourceReader(),
+                new ProductMapper(),
+                new ProductSync()
+            );
+
+            $import = $processor->process($importId);
+
+            $total = (int) $import['total'];
+            $processed = (int) $import['processed'];
+
+            $progress = $total > 0
+                ? (int) round(($processed / $total) * 100)
+                : 100;
+
+            return $this->jsonResponse([
+                                           'success' => true,
+                                           'id_import' => (int) $import['id_import'],
+                                           'status' => $import['status'],
+                                           'total' => $total,
+                                           'processed' => $processed,
+                                           'success_count' => (int) $import['success'],
+                                           'errors' => (int) $import['errors'],
+                                           'progress' => $progress,
+                                       ]);
+
+        } catch (\Throwable $exception) {
+            return $this->jsonResponse([
+                                           'success' => false,
+                                           'message' => $exception->getMessage(),
+                                       ]);
+        }
+    }
+
+    private function renderImportProgress(
+        array $import
+    ): string {
+        $percentage = 0;
+
+        if ((int) $import['total'] > 0) {
+            $percentage = (int) round(
+                (
+                    (int) $import['processed']
+                    / (int) $import['total']
+                ) * 100
+            );
+        }
+
+        return $this->displayConfirmation(
+            'Importación #'
+            . $import['id_import']
+            . '. Procesados: '
+            . $import['processed']
+            . '/'
+            . $import['total']
+            . '. Exitosos: '
+            . $import['success']
+            . '. Errores: '
+            . $import['errors']
+            . '. Progreso: '
+            . $percentage
+            . '%.'
+        );
+    }
+
+    private function jsonResponse(array $data): string
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        return json_encode(
+            $data,
+            JSON_UNESCAPED_UNICODE
         );
     }
 }
