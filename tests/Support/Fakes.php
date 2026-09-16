@@ -1,0 +1,394 @@
+<?php
+
+/**
+ * Dobles de prueba: repositorios y colaboradores en memoria.
+ *
+ * Extienden las clases reales (sin llamar a su constructor) para
+ * poder usar los servicios de verdad en las pruebas.
+ */
+
+use CPBConnect\Application\Import\ImportBatchProcessor;
+use CPBConnect\Application\Product\ProductDryRun;
+use CPBConnect\Application\Product\ProductMapper;
+use CPBConnect\Application\Product\ProductSync;
+use CPBConnect\Application\Source\CsvSourceService;
+use CPBConnect\Infrastructure\Persistence\ImportRepository;
+use CPBConnect\Infrastructure\Persistence\MappingRepository;
+use CPBConnect\Infrastructure\Persistence\SourceRepository;
+use CPBConnect\Infrastructure\Persistence\SyncLogRepository;
+use CPBConnect\Infrastructure\Source\CsvSourceReader;
+use CPBConnect\Application\Import\ImportFileStorage;
+use CPBConnect\Presentation\Admin\AdminShellInterface;
+
+class FakeShell implements AdminShellInterface
+{
+    public array $assigned = [];
+    public array $errors = [];
+    public array $confirmations = [];
+    public array $rendered = [];
+    public array $emitted = [];
+
+    /**
+     * Catálogo de traducción simulado: [texto fuente => traducción].
+     */
+    public array $catalogue = [];
+
+    public function assign(array $data): void
+    {
+        $this->assigned[] = $data;
+    }
+
+    public function fetch(string $template): string
+    {
+        $this->rendered[] = $template;
+
+        return 'fetch:' . $template;
+    }
+
+    public function display(string $template): string
+    {
+        $this->rendered[] = $template;
+
+        return 'display:' . $template;
+    }
+
+    public function translate(
+        string $message,
+        array $parameters = []
+    ): string {
+        $translated = $this->catalogue[$message] ?? $message;
+
+        return $parameters === []
+            ? $translated
+            : strtr($translated, $parameters);
+    }
+
+    public function addError(
+        string $message,
+        array $parameters = []
+    ): void {
+        $this->errors[] = $this->translate($message, $parameters);
+    }
+
+    public function addConfirmation(
+        string $message,
+        array $parameters = []
+    ): void {
+        $this->confirmations[] = $this->translate(
+            $message,
+            $parameters
+        );
+    }
+
+    public function translateMessages(array $messages): array
+    {
+        $translated = [];
+
+        foreach ($messages as $message) {
+            $translated[] = $this->translate((string) $message);
+        }
+
+        return $translated;
+    }
+
+    public function json(array $data): string
+    {
+        return (string) json_encode(
+            $data,
+            JSON_UNESCAPED_UNICODE
+        );
+    }
+
+    public function emitJson(array $data): void
+    {
+        $this->emitted[] = $data;
+    }
+
+    public function lastAssignment(): array
+    {
+        if ($this->assigned === []) {
+            return [];
+        }
+
+        return $this->assigned[count($this->assigned) - 1];
+    }
+
+    public function lastTemplate(): ?string
+    {
+        if ($this->rendered === []) {
+            return null;
+        }
+
+        return $this->rendered[count($this->rendered) - 1];
+    }
+}
+
+class FakeSourceRepository extends SourceRepository
+{
+    /** @var array<int, array<string, mixed>> */
+    public array $sources = [];
+
+    public array $created = [];
+    public array $updated = [];
+    public array $deleted = [];
+
+    public function __construct()
+    {
+    }
+
+    public function create(array $data): int
+    {
+        $this->created[] = $data;
+
+        return 10;
+    }
+
+    public function findAll(): array
+    {
+        return array_values($this->sources);
+    }
+
+    public function findById(int $id): ?array
+    {
+        return $this->sources[$id] ?? null;
+    }
+
+    public function update(int $id, array $data): bool
+    {
+        $this->updated[] = [$id, $data];
+
+        return true;
+    }
+
+    public function delete(int $id): bool
+    {
+        $this->deleted[] = $id;
+
+        return true;
+    }
+}
+
+class FakeCsvSourceService extends CsvSourceService
+{
+    public array $urls = [];
+    public array $result = [
+        'headers' => [],
+        'rows' => [],
+        'total' => 0,
+    ];
+    public ?Throwable $error = null;
+
+    public function __construct()
+    {
+    }
+
+    public function read(string $url): array
+    {
+        $this->urls[] = $url;
+
+        if ($this->error !== null) {
+            throw $this->error;
+        }
+
+        return $this->result;
+    }
+}
+
+class FakeMappingRepository extends MappingRepository
+{
+    public array $mappings = [];
+    public array $replaced = [];
+
+    public function __construct()
+    {
+    }
+
+    public function findBySourceId(int $sourceId): array
+    {
+        return $this->mappings;
+    }
+
+    public function replaceForSource(
+        int $sourceId,
+        array $mappings
+    ): void {
+        $this->replaced[] = [$sourceId, $mappings];
+    }
+}
+
+class FakeSyncLogRepository extends SyncLogRepository
+{
+    /** @var array<int, array<string, mixed>> */
+    public array $logs = [];
+
+    public array $created = [];
+    public int $nextId = 1;
+
+    public function __construct()
+    {
+    }
+
+    public function create(
+        int $sourceId,
+        array $result,
+        string $executionType = 'manual'
+    ): int {
+        $this->created[] = [
+            'id_source' => $sourceId,
+            'result' => $result,
+            'execution_type' => $executionType,
+        ];
+
+        return $this->nextId++;
+    }
+
+    public function findById(int $id): ?array
+    {
+        return $this->logs[$id] ?? null;
+    }
+
+    public function findAll(int $limit = 50): array
+    {
+        return array_slice(array_values($this->logs), 0, $limit);
+    }
+}
+
+class FakeImportRepository extends ImportRepository
+{
+    public array $created = [];
+
+    public function __construct()
+    {
+    }
+
+    public function create(
+        int $sourceId,
+        int $total,
+        ?string $filePath = null,
+        string $executionType = 'manual'
+    ): int {
+        $this->created[] = [
+            'id_source' => $sourceId,
+            'total' => $total,
+            'file_path' => $filePath,
+            'execution_type' => $executionType,
+        ];
+
+        return 7;
+    }
+}
+
+class FakeCsvSourceReader extends CsvSourceReader
+{
+    public int $rows = 0;
+
+    public function __construct()
+    {
+    }
+
+    public function countFileRows(string $path): int
+    {
+        return $this->rows;
+    }
+}
+
+class FakeImportFileStorage extends ImportFileStorage
+{
+    public function __construct()
+    {
+    }
+
+    public function store(array $file): string
+    {
+        return '/tmp/cpbsync-import.csv';
+    }
+}
+
+class FakeImportBatchProcessor extends ImportBatchProcessor
+{
+    public array $result = [
+        'id_import' => 7,
+        'status' => 'processing',
+        'total' => 10,
+        'processed' => 5,
+        'success' => 4,
+        'errors' => 1,
+    ];
+
+    public ?Throwable $error = null;
+
+    public function __construct()
+    {
+    }
+
+    public function process(int $importId): array
+    {
+        if ($this->error !== null) {
+            throw $this->error;
+        }
+
+        return $this->result;
+    }
+}
+
+class FakeProductMapper extends ProductMapper
+{
+    public array $mapped = [];
+
+    public function __construct()
+    {
+    }
+
+    public function map(array $rows, array $mapping): array
+    {
+        $this->mapped[] = [$rows, $mapping];
+
+        return $rows;
+    }
+}
+
+class FakeProductDryRun extends ProductDryRun
+{
+    public array $calls = [];
+
+    public array $result = [['number' => 1]];
+
+    public function __construct()
+    {
+    }
+
+    public function run(
+        array $rows,
+        array $mapping,
+        int $limit = 5
+    ): array {
+        $this->calls[] = [$rows, $mapping, $limit];
+
+        return $this->result;
+    }
+}
+
+class FakeProductSync extends ProductSync
+{
+    public array $synced = [];
+
+    public array $result = [
+        'total' => 1,
+        'created' => 1,
+        'updated' => 0,
+        'skipped' => 0,
+        'errors' => 0,
+        'items' => [],
+    ];
+
+    public function __construct()
+    {
+    }
+
+    public function sync(array $products): array
+    {
+        $this->synced[] = $products;
+
+        return $this->result;
+    }
+}

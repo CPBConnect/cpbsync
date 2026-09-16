@@ -35,13 +35,13 @@ class ProductImageDownloader
 
         if ($content === false || $content === '') {
             throw new RuntimeException(
-                'No fue posible descargar la imagen.'
+                'The image could not be downloaded.'
             );
         }
 
         if (strlen($content) > self::MAX_FILE_SIZE) {
             throw new RuntimeException(
-                'La imagen supera el tamaño máximo permitido de 5 MB.'
+                'The image exceeds the maximum allowed size of 5 MB.'
             );
         }
 
@@ -54,7 +54,7 @@ class ProductImageDownloader
 
         if ($tmpFile === false) {
             throw new RuntimeException(
-                'No fue posible crear el archivo temporal.'
+                'The temporary file could not be created.'
             );
         }
 
@@ -67,7 +67,7 @@ class ProductImageDownloader
             @unlink($tmpFile);
 
             throw new RuntimeException(
-                'No fue posible guardar la imagen temporal.'
+                'The temporary image could not be saved.'
             );
         }
 
@@ -78,7 +78,7 @@ class ProductImageDownloader
     {
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
             throw new RuntimeException(
-                'La URL de la imagen no es válida.'
+                'The image URL is not valid.'
             );
         }
 
@@ -86,7 +86,7 @@ class ProductImageDownloader
 
         if ($parts === false) {
             throw new RuntimeException(
-                'La URL de la imagen no es válida.'
+                'The image URL is not valid.'
             );
         }
 
@@ -94,7 +94,7 @@ class ProductImageDownloader
 
         if (!in_array($scheme, ['http', 'https'], true)) {
             throw new RuntimeException(
-                'La imagen debe utilizar HTTP o HTTPS.'
+                'The image must use HTTP or HTTPS.'
             );
         }
 
@@ -102,7 +102,7 @@ class ProductImageDownloader
 
         if ($host === '') {
             throw new RuntimeException(
-                'La URL de la imagen no contiene un host válido.'
+                'The image URL does not contain a valid host.'
             );
         }
 
@@ -114,7 +114,7 @@ class ProductImageDownloader
         if (filter_var($host, FILTER_VALIDATE_IP)) {
             if ($this->isBlockedIp($host)) {
                 throw new RuntimeException(
-                    'La URL de la imagen apunta a una dirección no permitida.'
+                    'The image URL points to a disallowed address.'
                 );
             }
 
@@ -147,14 +147,14 @@ class ProductImageDownloader
 
         if (empty($addresses)) {
             throw new RuntimeException(
-                'No fue posible resolver el host de la imagen.'
+                'The image host could not be resolved.'
             );
         }
 
         foreach ($addresses as $address) {
             if ($this->isBlockedIp($address)) {
                 throw new RuntimeException(
-                    'La URL de la imagen apunta a una dirección no permitida.'
+                    'The image URL points to a disallowed address.'
                 );
             }
         }
@@ -175,7 +175,7 @@ class ProductImageDownloader
 
         if ($imageInfo === false) {
             throw new RuntimeException(
-                'El contenido descargado no es una imagen válida.'
+                'The downloaded content is not a valid image.'
             );
         }
 
@@ -190,7 +190,7 @@ class ProductImageDownloader
 
         if (!in_array($mimeType, $allowedMimeTypes, true)) {
             throw new RuntimeException(
-                'El formato de imagen no está permitido.'
+                'The image format is not allowed.'
             );
         }
     }

@@ -10,13 +10,13 @@ class StockTransformer
 
         if ($value === '') {
             throw new \RuntimeException(
-                'El stock no puede estar vacío.'
+                'The stock cannot be empty.'
             );
         }
 
         if (!preg_match('/^-?\d+(?:[.,]\d+)?/', $value, $matches)) {
             throw new \RuntimeException(
-                'El stock no tiene un formato válido.'
+                'The stock format is not valid.'
             );
         }
 

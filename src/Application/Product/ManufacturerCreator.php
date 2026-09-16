@@ -12,7 +12,7 @@ class ManufacturerCreator
 
         if ($name === '') {
             throw new \RuntimeException(
-                'No se puede crear un fabricante sin nombre.'
+                'A manufacturer cannot be created without a name.'
             );
         }
 
@@ -23,7 +23,7 @@ class ManufacturerCreator
 
         if (!$manufacturer->add()) {
             throw new \RuntimeException(
-                'No fue posible crear el fabricante en PrestaShop.'
+                'The manufacturer could not be created in PrestaShop.'
             );
         }
 

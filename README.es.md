@@ -234,13 +234,25 @@ Para utilizar la sincronización automática, configura la frecuencia deseada y 
 
 ```text
 cpbsync/
-├── config/
 ├── controllers/
 ├── src/
 │   ├── Application/
-│   ├── Domain/
-│   └── Infrastructure/
+│   │   ├── Import/
+│   │   ├── Mapping/
+│   │   ├── Product/
+│   │   ├── Source/
+│   │   ├── Sync/
+│   │   ├── Transform/
+│   │   └── Validation/
+│   ├── Infrastructure/
+│   │   ├── Persistence/
+│   │   ├── PrestaShop/
+│   │   └── Source/
+│   └── Presentation/
+│       └── Admin/
+│           └── Handler/
 ├── tests/
+├── tools/
 ├── translations/
 ├── views/
 ├── composer.json
@@ -249,7 +261,62 @@ cpbsync/
 └── cron.php
 ```
 
-El módulo utiliza una estructura por capas que separa la lógica de aplicación, dominio, infraestructura e integración con PrestaShop.
+El módulo utiliza una estructura por capas que separa la lógica de aplicación, la infraestructura y la integración con PrestaShop:
+
+* **Application** contiene los casos de uso: fuentes, mapping, transformaciones, sincronización de productos e historial.
+* **Infrastructure** contiene la persistencia, los lectores de catálogos y los adaptadores de PrestaShop.
+* **Presentation** contiene las acciones del back office y su enrutado. `cpbsync.php` sólo conserva el ciclo de vida del módulo y delega cada `cpbsync_action` en la capa de presentación.
+
+## Pruebas
+
+La suite de pruebas se ejecuta sin una instalación de PrestaShop:
+
+```bash
+php tests/run.php
+```
+
+o, con Composer:
+
+```bash
+composer test
+```
+
+## Traducciones
+
+CPB Sync utiliza el sistema de traducción nuevo de PrestaShop (dominios de traducción) y no depende de los ficheros de diccionario clásicos.
+
+* Todos los textos pertenecen al dominio `Modules.Cpbsync.Admin`.
+* El código PHP traduce con `trans()` / `getTranslator()->trans()`; las plantillas Smarty usan `{l s='...' d='Modules.Cpbsync.Admin'}`.
+* El módulo declara `isUsingNewTranslationSystem()`, por lo que aparece en **Internacional > Traducciones > Modificar traducciones**.
+
+Los catálogos de traducción se distribuyen como ficheros XLIFF:
+
+```text
+translations/
+├── en-US/
+│   └── ModulesCpbsyncAdmin.en-US.xlf
+├── es-ES/
+│   └── ModulesCpbsyncAdmin.es-ES.xlf
+└── translations-to-do.csv
+```
+
+Los textos originales están en inglés y el español se ofrece como traducción.
+
+Para añadir otro idioma, copia uno de los ficheros XLIFF a `translations/<locale>/ModulesCpbsyncAdmin.<locale>.xlf`, actualiza `target-language` y traduce los elementos `<target>`. PrestaShop carga estos ficheros durante la instalación del módulo; si los editas después, reinstala el módulo o limpia la caché.
+
+`translations/translations-to-do.csv` es un glosario legible con todos los textos y su traducción al español.
+
+Para comprobar que no falta ningún texto en los catálogos:
+
+```bash
+php tools/check-translations.php
+```
+
+o, con Composer:
+
+```bash
+composer check-translations
+```
 
 ## Versión actual
 

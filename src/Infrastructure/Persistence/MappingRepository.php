@@ -22,7 +22,7 @@ class MappingRepository
     ): int {
         if ($sourceId <= 0) {
             throw new \InvalidArgumentException(
-                'El ID de la fuente no es válido.'
+                'The source ID is not valid.'
             );
         }
 
@@ -82,7 +82,7 @@ class MappingRepository
     ): void {
         if ($sourceId <= 0) {
             throw new \InvalidArgumentException(
-                'El ID de la fuente no es válido.'
+                'The source ID is not valid.'
             );
         }
 
@@ -96,7 +96,7 @@ class MappingRepository
                 'id_source = ' . $sourceId
             )) {
                 throw new \RuntimeException(
-                    'No fue posible eliminar el mapping anterior.'
+                    'The previous mapping could not be deleted.'
                 );
             }
 
@@ -127,7 +127,7 @@ class MappingRepository
 
                 if (!$result) {
                     throw new \RuntimeException(
-                        'No fue posible guardar uno de los mappings.'
+                        'One of the mappings could not be saved.'
                     );
                 }
             }

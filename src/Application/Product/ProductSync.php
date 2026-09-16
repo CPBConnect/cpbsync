@@ -60,7 +60,7 @@ class ProductSync
 
                     if (!\Validate::isLoadedObject($existingProduct)) {
                         throw new \RuntimeException(
-                            'No fue posible cargar el producto existente.'
+                            'The existing product could not be loaded.'
                         );
                     }
 
@@ -91,7 +91,7 @@ class ProductSync
 
                     if (!$updated) {
                         throw new \RuntimeException(
-                            'No fue posible actualizar el producto.'
+                            'The product could not be updated.'
                         );
                     }
 

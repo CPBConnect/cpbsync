@@ -1,6 +1,6 @@
 <div class="panel">
     <h3>
-        {l s='Importar productos' mod='cpbsync'}
+        {l s='Import products' d='Modules.Cpbsync.Admin'}
     </h3>
 
     <form
@@ -17,7 +17,7 @@
 
         <div class="form-group">
             <label for="id_source">
-                {l s='Fuente' mod='cpbsync'}
+                {l s='Source' d='Modules.Cpbsync.Admin'}
             </label>
 
             <select
@@ -27,7 +27,7 @@
                     required
             >
                 <option value="">
-                    {l s='Selecciona una fuente' mod='cpbsync'}
+                    {l s='Select a source' d='Modules.Cpbsync.Admin'}
                 </option>
 
                 {foreach from=$sources item=source}
@@ -40,7 +40,7 @@
 
         <div class="form-group">
             <label for="import_file">
-                {l s='Archivo CSV' mod='cpbsync'}
+                {l s='CSV file' d='Modules.Cpbsync.Admin'}
             </label>
 
             <input
@@ -57,14 +57,14 @@
                 class="btn btn-default"
         >
             <i class="icon-arrow-left"></i>
-            Volver
+            {l s='Back' d='Modules.Cpbsync.Admin'}
         </a>
         <button
                 type="submit"
                 class="btn btn-primary"
                 id="cpbsync-import-submit"
         >
-            {l s='Subir e iniciar importación' mod='cpbsync'}
+            {l s='Upload and start import' d='Modules.Cpbsync.Admin'}
         </button>
     </form>
 
@@ -73,7 +73,7 @@
             style="display:none; margin-top:20px;"
     >
         <h4>
-            {l s='Procesando importación' mod='cpbsync'}
+            {l s='Processing import' d='Modules.Cpbsync.Admin'}
         </h4>
 
         <div class="progress">
@@ -93,7 +93,7 @@
 
         <p>
             <strong>
-                {l s='Exitosos:' mod='cpbsync'}
+                {l s='Successful:' d='Modules.Cpbsync.Admin'}
             </strong>
 
             <span id="cpbsync-success">
@@ -103,7 +103,7 @@
 
         <p>
             <strong>
-                {l s='Errores:' mod='cpbsync'}
+                {l s='Errors:' d='Modules.Cpbsync.Admin'}
             </strong>
 
             <span id="cpbsync-errors">
@@ -121,6 +121,14 @@
 <script>
     window.cpbsyncImportId = {$import_id|default:0|intval};
     window.cpbsyncProcessUrl = '{$process_url|escape:'javascript'}';
+
+    window.cpbsyncMessages = {
+        uploading: '{$import_messages.uploading|escape:'javascript'}',
+        uploaded: '{$import_messages.uploaded|escape:'javascript'}',
+        completed: '{$import_messages.completed|escape:'javascript'}',
+        failed: '{$import_messages.failed|escape:'javascript'}',
+        failedTitle: '{$import_messages.failedTitle|escape:'javascript'}'
+    };
 </script>
 
 <script src="{$module_dir}views/js/import.js"></script>

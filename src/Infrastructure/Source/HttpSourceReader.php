@@ -31,7 +31,7 @@ class HttpSourceReader
 
         if ($content === false) {
             throw new RuntimeException(
-                'No fue posible obtener el contenido de la fuente.'
+                'The source content could not be retrieved.'
             );
         }
 
@@ -44,7 +44,7 @@ class HttpSourceReader
 
         if ($parts === false) {
             throw new RuntimeException(
-                'La URL de la fuente no es válida.'
+                'The source URL is not valid.'
             );
         }
 
@@ -52,7 +52,7 @@ class HttpSourceReader
 
         if (!in_array($scheme, ['http', 'https'], true)) {
             throw new RuntimeException(
-                'La fuente debe utilizar HTTP o HTTPS.'
+                'The source must use HTTP or HTTPS.'
             );
         }
 
@@ -60,7 +60,7 @@ class HttpSourceReader
 
         if ($host === '') {
             throw new RuntimeException(
-                'La URL de la fuente no contiene un host válido.'
+                'The source URL does not contain a valid host.'
             );
         }
 
@@ -72,7 +72,7 @@ class HttpSourceReader
         if (filter_var($host, FILTER_VALIDATE_IP)) {
             if ($this->isBlockedIp($host)) {
                 throw new RuntimeException(
-                    'La URL de la fuente apunta a una dirección no permitida.'
+                    'The source URL points to a disallowed address.'
                 );
             }
 
@@ -95,14 +95,14 @@ class HttpSourceReader
 
         if (empty($addresses)) {
             throw new RuntimeException(
-                'No fue posible resolver el host de la fuente.'
+                'The source host could not be resolved.'
             );
         }
 
         foreach ($addresses as $address) {
             if ($this->isBlockedIp($address)) {
                 throw new RuntimeException(
-                    'La URL de la fuente apunta a una dirección no permitida.'
+                    'The source URL points to a disallowed address.'
                 );
             }
         }

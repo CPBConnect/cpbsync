@@ -10,12 +10,12 @@ class ProductValidator
 
         // Reference
         if (empty($product['reference'])) {
-            $errors[] = 'El campo reference es obligatorio.';
+            $errors[] = 'The reference field is required.';
         }
 
         // Name
         if (empty($product['name'])) {
-            $errors[] = 'El campo name es obligatorio.';
+            $errors[] = 'The name field is required.';
         }
 
         // Price
@@ -26,7 +26,7 @@ class ProductValidator
                 (float) $product['price'] < 0
             )
         ) {
-            $errors[] = 'El campo price debe ser un número mayor o igual a 0.';
+            $errors[] = 'The price field must be a number greater than or equal to 0.';
         }
 
         // Quantity
@@ -37,7 +37,7 @@ class ProductValidator
                 FILTER_VALIDATE_INT
             ) === false
         ) {
-            $errors[] = 'El campo quantity debe ser un número entero.';
+            $errors[] = 'The quantity field must be an integer.';
         }
 
         // EAN13
@@ -45,14 +45,14 @@ class ProductValidator
             if (
                 !preg_match('/^\d{13}$/', (string) $product['ean13'])
             ) {
-                $errors[] = 'El campo ean13 debe contener exactamente 13 dígitos.';
+                $errors[] = 'The ean13 field must contain exactly 13 digits.';
             }
         }
 
         // Image
         if (!empty($product['image'])) {
             if (!filter_var($product['image'], FILTER_VALIDATE_URL)) {
-                $errors[] = 'El campo image debe contener una URL válida.';
+                $errors[] = 'The image field must contain a valid URL.';
             }
         }
 

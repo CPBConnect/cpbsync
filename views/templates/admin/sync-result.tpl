@@ -1,21 +1,21 @@
 <div class="panel">
     <div class="panel-heading">
         <i class="icon-refresh"></i>
-        {l s='Resultado de sincronización' mod='cpbsync'}
+        {l s='Synchronization result' d='Modules.Cpbsync.Admin'}
     </div>
 
     <div class="alert alert-info">
-        <strong>{l s='Sincronización completada' mod='cpbsync'}/strong>
+        <strong>{l s='Synchronization completed' d='Modules.Cpbsync.Admin'}</strong>
     </div>
 
     {if isset($log_id)}
         <div class="alert alert-info">
             <strong>
-                {l s='Ejecución' mod='cpbsync'} #{$log_id}
+                {l s='Run' d='Modules.Cpbsync.Admin'} #{$log_id}
             </strong>
 
             <p>
-                {l s='Esta sincronización quedó registrada en el historial.' mod='cpbsync'}
+                {l s='This synchronization was recorded in the history.' d='Modules.Cpbsync.Admin'}
             </p>
         </div>
     {/if}
@@ -24,7 +24,7 @@
 
         <div class="col-md-2">
             <div class="well text-center">
-                <strong>{l s='Total' mod='cpbsync'}</strong>
+                <strong>{l s='Total' d='Modules.Cpbsync.Admin'}</strong>
                 <br>
                 {$result.total}
             </div>
@@ -32,7 +32,7 @@
 
         <div class="col-md-2">
             <div class="alert alert-success text-center">
-                <strong>{l s='Creado' mod='cpbsync'}</strong><br>
+                <strong>{l s='Created' d='Modules.Cpbsync.Admin'}</strong><br>
                 <span style="font-size: 24px;">
                     {$result.created}
                 </span>
@@ -41,7 +41,7 @@
 
         <div class="col-md-2">
             <div class="alert alert-info text-center">
-                <strong>{l s='Actualizado' mod='cpbsync'}</strong><br>
+                <strong>{l s='Updated' d='Modules.Cpbsync.Admin'}</strong><br>
                 <span style="font-size: 24px;">
             {$result.updated}
         </span>
@@ -50,7 +50,7 @@
 
         <div class="col-md-2">
             <div class="alert alert-warning text-center">
-                <strong>{l s='Omitido' mod='cpbsync'}</strong><br>
+                <strong>{l s='Skipped' d='Modules.Cpbsync.Admin'}</strong><br>
                 <span style="font-size: 24px;">
                     {$result.skipped}
                 </span>
@@ -59,7 +59,7 @@
 
         <div class="col-md-2">
             <div class="alert alert-danger text-center">
-                <strong>{l s='Errores' mod='cpbsync'}</strong><br>
+                <strong>{l s='Errors' d='Modules.Cpbsync.Admin'}</strong><br>
                 <span style="font-size: 24px;">
                     {$result.errors}
                 </span>
@@ -70,10 +70,10 @@
     <table class="table">
         <thead>
         <tr>
-            <th>{l s='Referencia' mod='cpbsync'}</th>
-            <th>{l s='Estado' mod='cpbsync'}</th>
-            <th>{l s='ID PrestaShop' mod='cpbsync'}</th>
-            <th>{l s='Detalle' mod='cpbsync'}</th>
+            <th>{l s='Reference' d='Modules.Cpbsync.Admin'}</th>
+            <th>{l s='Status' d='Modules.Cpbsync.Admin'}</th>
+            <th>{l s='PrestaShop ID' d='Modules.Cpbsync.Admin'}</th>
+            <th>{l s='Detail' d='Modules.Cpbsync.Admin'}</th>
         </tr>
         </thead>
 
@@ -87,19 +87,19 @@
                 <td>
                     {if $item.status === 'created'}
                         <span class="label label-success">
-                            {l s='Creado' mod='cpbsync'}
+                            {l s='Created' d='Modules.Cpbsync.Admin'}
                         </span>
                     {elseif $item.status === 'updated'}
                         <span class="label label-info">
-                            {l s='Actualizado' mod='cpbsync'}
+                            {l s='Updated' d='Modules.Cpbsync.Admin'}
                         </span>
                     {elseif $item.status === 'skipped'}
                         <span class="label label-warning">
-                            {l s='Omitido' mod='cpbsync'}
+                            {l s='Skipped' d='Modules.Cpbsync.Admin'}
                         </span>
                     {else}
                         <span class="label label-danger">
-                            {l s='Errores' mod='cpbsync'}
+                            {l s='Errors' d='Modules.Cpbsync.Admin'}
                         </span>
                     {/if}
                 </td>
@@ -133,7 +133,7 @@
     <div class="panel-footer">
         <a href="{$back_url}" class="btn btn-default">
             <i class="icon-arrow-left"></i>
-            {l s='Volver al mapping' mod='cpbsync'}
+            {l s='Back to mapping' d='Modules.Cpbsync.Admin'}
         </a>
     </div>
 </div>

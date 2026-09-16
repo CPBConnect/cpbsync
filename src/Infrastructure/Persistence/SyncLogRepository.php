@@ -58,7 +58,7 @@ class SyncLogRepository
 
         if (!$success) {
             throw new \RuntimeException(
-                'No fue posible guardar el log de sincronización.'
+                'The synchronization log could not be saved.'
             );
         }
 

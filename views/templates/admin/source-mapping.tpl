@@ -2,13 +2,13 @@
 
     <div class="panel-heading">
         <i class="icon-random"></i>
-        {l s='Mapear campos' mod='cpbsync'}
+        {l s='Map fields' d='Modules.Cpbsync.Admin'}
     </div>
 
     <div class="panel-body">
 
         <div class="alert alert-info">
-            {l s='Asigna cada campo de la fuente al campo correspondiente de PrestaShop.' mod='cpbsync'}
+            {l s='Assign each source field to the matching PrestaShop field.' d='Modules.Cpbsync.Admin'}
         </div>
 
         <form
@@ -29,13 +29,13 @@
                     <thead>
                     <tr>
                         <th>
-                            {l s='Campo proveedor' mod='cpbsync'}
+                            {l s='Supplier field' d='Modules.Cpbsync.Admin'}
                         </th>
                         <th>
-                            {l s='Campo PrestaShop' mod='cpbsync'}
+                            {l s='PrestaShop field' d='Modules.Cpbsync.Admin'}
                         </th>
                         <th>
-                            {l s='Transformación' mod='cpbsync'}
+                            {l s='Transformation' d='Modules.Cpbsync.Admin'}
                         </th>
                     </tr>
                     </thead>
@@ -94,7 +94,7 @@
                                 >
 
                                     <option value="">
-                                        {l s='-- No mapear --' mod='cpbsync'}
+                                        {l s='-- Do not map --' d='Modules.Cpbsync.Admin'}
                                     </option>
 
                                     <option
@@ -170,14 +170,14 @@
                                             class="form-control"
                                     >
                                         <option value="">
-                                            {l s='-- Ninguna --' mod='cpbsync'}
+                                            {l s='-- None --' d='Modules.Cpbsync.Admin'}
                                         </option>
 
                                         <option
                                                 value="normalize_price"
                                                 {if $selected_transformation == 'normalize_price'}selected{/if}
                                         >
-                                            {l s='Normalizar precio' mod='cpbsync'}
+                                            {l s='Normalize price' d='Modules.Cpbsync.Admin'}
                                         </option>
                                     </select>
                                 {elseif $selected_target == 'quantity'}
@@ -186,14 +186,14 @@
                                             class="form-control"
                                     >
                                         <option value="">
-                                            {l s='-- Ninguna --' mod='cpbsync'}
+                                            {l s='-- None --' d='Modules.Cpbsync.Admin'}
                                         </option>
 
                                         <option
                                                 value="normalize_stock"
                                                 {if $selected_transformation == 'normalize_stock'}selected{/if}
                                         >
-                                            {l s='Normalizar stock' mod='cpbsync'}
+                                            {l s='Normalize stock' d='Modules.Cpbsync.Admin'}
                                         </option>
                                     </select>
                                 {elseif $selected_target == 'name'
@@ -204,21 +204,21 @@
                                             class="form-control js-transformation"
                                     >
                                         <option value="">
-                                            {l s='-- Ninguna --' mod='cpbsync'}
+                                            {l s='-- None --' d='Modules.Cpbsync.Admin'}
                                         </option>
 
                                         <option
                                                 value="normalize_text"
                                                 {if $selected_transformation == 'normalize_text'}selected{/if}
                                         >
-                                            {l s='Normalizar texto' mod='cpbsync'}
+                                            {l s='Normalize text' d='Modules.Cpbsync.Admin'}
                                         </option>
 
                                         <option
                                                 value="replace_text"
                                                 {if $selected_transformation == 'replace_text'}selected{/if}
                                         >
-                                            {l s='Reemplazar texto' mod='cpbsync'}
+                                            {l s='Replace text' d='Modules.Cpbsync.Admin'}
                                         </option>
                                     </select>
 
@@ -229,28 +229,28 @@
 
                                         <div class="col-md-6">
                                             <label>
-                                                {l s='Buscar' mod='cpbsync'}
+                                                {l s='Search' d='Modules.Cpbsync.Admin'}
                                             </label>
 
                                             <input
                                                     type="text"
                                                     name="transformation_search[{$header|escape:'htmlall':'UTF-8'}]"
                                                     class="form-control"
-                                                    placeholder="Texto a buscar"
+                                                    placeholder="Text to search"
                                                     value="{$saved_transformation_configs[$header]['search']|default:''|escape:'htmlall':'UTF-8'}"
                                             >
                                         </div>
 
                                         <div class="col-md-6">
                                             <label>
-                                                {l s='Reemplazar por' mod='cpbsync'}
+                                                {l s='Replace with' d='Modules.Cpbsync.Admin'}
                                             </label>
 
                                             <input
                                                     type="text"
                                                     name="transformation_replace[{$header|escape:'htmlall':'UTF-8'}]"
                                                     class="form-control"
-                                                    placeholder="Nuevo texto"
+                                                    placeholder="New text"
                                                     value="{$saved_transformation_configs[$header]['replace']|default:''|escape:'htmlall':'UTF-8'}"
                                             >
                                         </div>
@@ -259,7 +259,7 @@
 
                                 {else}
                                     <span class="text-muted">
-                                        {l s='No disponible' mod='cpbsync'}
+                                        {l s='Not available' d='Modules.Cpbsync.Admin'}
                                     </span>
                                 {/if}
 
@@ -281,7 +281,7 @@
                     class="btn btn-default"
             >
                 <i class="icon-arrow-left"></i>
-                {l s='Volver' mod='cpbsync'}
+                {l s='Back' d='Modules.Cpbsync.Admin'}
             </a>
 
             <button
@@ -289,16 +289,16 @@
                     class="btn btn-primary"
             >
                 <i class="icon-save"></i>
-                {l s='Guardar mapping' mod='cpbsync'}
+                {l s='Save mapping' d='Modules.Cpbsync.Admin'}
             </button>
 
             <a href="{$dry_run_url}" class="btn btn-outline-primary">
-                Ejecutar Dry Run
+                {l s='Run Dry Run' d='Modules.Cpbsync.Admin'}
             </a>
 
             <a href="{$sync_url}" class="btn btn-primary">
                 <i class="icon-refresh"></i>
-                Ejecutar Sync
+                {l s='Run Sync' d='Modules.Cpbsync.Admin'}
             </a>
 
         </form>

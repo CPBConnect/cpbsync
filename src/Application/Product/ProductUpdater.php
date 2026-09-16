@@ -27,7 +27,7 @@ class ProductUpdater
 
         if (!\Validate::isLoadedObject($product)) {
             throw new \RuntimeException(
-                'El producto no existe en PrestaShop.'
+                'The product does not exist in PrestaShop.'
             );
         }
 

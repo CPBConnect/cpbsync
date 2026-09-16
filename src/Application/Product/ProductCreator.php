@@ -25,13 +25,13 @@ class ProductCreator
     {
         if (empty($data['reference'])) {
             throw new \RuntimeException(
-                'No se puede crear un producto sin reference.'
+                'A product cannot be created without a reference.'
             );
         }
 
         if (empty($data['name'])) {
             throw new \RuntimeException(
-                'No se puede crear un producto sin name.'
+                'A product cannot be created without a name.'
             );
         }
 
@@ -44,7 +44,7 @@ class ProductCreator
 
         if (!$product->add()) {
             throw new \RuntimeException(
-                'No fue posible crear el producto en PrestaShop.'
+                'The product could not be created in PrestaShop.'
             );
         }
 

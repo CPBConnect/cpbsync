@@ -116,7 +116,7 @@ class CronRunner
     {
         if ($source['type'] !== 'csv') {
             throw new \RuntimeException(
-                'Por ahora solo se pueden ejecutar fuentes CSV.'
+                'Only CSV sources can be run for now.'
             );
         }
 
@@ -142,7 +142,7 @@ class CronRunner
 
             if ($total === 0) {
                 throw new \RuntimeException(
-                    'La fuente CSV no contiene registros.'
+                    'The CSV source contains no records.'
                 );
             }
 
@@ -153,7 +153,7 @@ class CronRunner
 
             if (empty($mappings)) {
                 throw new \RuntimeException(
-                    'La fuente no tiene un mapping configurado.'
+                    'The source has no mapping configured.'
                 );
             }
 
@@ -173,7 +173,7 @@ class CronRunner
 
         if ($import === null) {
             throw new \RuntimeException(
-                'No fue posible obtener la importación.'
+                'The import could not be retrieved.'
             );
         }
 

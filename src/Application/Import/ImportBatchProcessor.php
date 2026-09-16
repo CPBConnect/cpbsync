@@ -46,7 +46,7 @@ class ImportBatchProcessor
 
         if ($import === null) {
             throw new RuntimeException(
-                'La importación no existe.'
+                'The import does not exist.'
             );
         }
 
@@ -74,7 +74,7 @@ class ImportBatchProcessor
 
         if ($source === null) {
             throw new RuntimeException(
-                'La fuente no existe.'
+                'The source does not exist.'
             );
         }
 
@@ -86,7 +86,7 @@ class ImportBatchProcessor
 
         if ($mappings === []) {
             throw new RuntimeException(
-                'No existen mappings para la fuente.'
+                'There are no mappings for the source.'
             );
         }
 

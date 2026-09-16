@@ -35,7 +35,7 @@ class ProductImageApplier
 
         if ($idProduct <= 0) {
             throw new \RuntimeException(
-                'No se puede aplicar una imagen a un producto sin ID.'
+                'An image cannot be applied to a product without an ID.'
             );
         }
 

@@ -15,7 +15,7 @@ $lockFile = fopen(
 );
 
 if (!$lockFile || !flock($lockFile, LOCK_EX | LOCK_NB)) {
-    echo "CPB Sync Cron ya está ejecutándose.\n";
+    echo "CPB Sync cron is already running.\n";
     exit(0);
 }
 
@@ -25,7 +25,7 @@ try {
 
     if (!$module) {
         throw new \RuntimeException(
-            'CPB Sync no está instalado.'
+            'CPB Sync is not installed.'
         );
     }
 
@@ -38,7 +38,7 @@ try {
 
         if ($result['status'] === 'error') {
             echo sprintf(
-                "Fuente %d: ERROR - %s\n",
+                "Source %d: ERROR - %s\n",
                 $result['id_source'],
                 $result['error']
             );
@@ -49,7 +49,7 @@ try {
         $sync = $result['result'];
 
         echo sprintf(
-            "Fuente %d: total=%d created=%d updated=%d skipped=%d errors=%d\n",
+            "Source %d: total=%d created=%d updated=%d skipped=%d errors=%d\n",
             $result['id_source'],
             $sync['total'],
             $sync['created'],
@@ -65,7 +65,7 @@ try {
 
     fwrite(
         STDERR,
-        'CPB Sync Cron ERROR: '
+        'CPB Sync cron ERROR: '
         . $e->getMessage()
         . PHP_EOL
     );
