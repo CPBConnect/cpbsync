@@ -8,13 +8,19 @@ class ProductSync
     private ProductUpdater $updater;
     private ProductValidator $validator;
     private ProductStateInterface $state;
+    private ProductImageProviderInterface $images;
 
-    public function __construct(?ProductStateInterface $state = null)
-    {
-        $this->creator = new ProductCreator();
-        $this->updater = new ProductUpdater();
-        $this->validator = new ProductValidator();
+    public function __construct(
+        ?ProductStateInterface $state = null,
+        ?ProductImageProviderInterface $images = null
+    ) {
         $this->state = $state ?? ProductStateFactory::create();
+
+        $this->images = $images ?? ProductImageProviderFactory::create();
+
+        $this->creator = new ProductCreator($this->images);
+        $this->updater = new ProductUpdater($this->images);
+        $this->validator = new ProductValidator();
     }
 
     public function sync(array $products): array
@@ -30,6 +36,29 @@ class ProductSync
 
         $this->state->prepare($products);
 
+        /*
+         * Las imágenes que van a hacer falta se preparan antes de
+         * recorrer el lote, para poder descargarlas en paralelo.
+         */
+        $this->images->prefetch($products);
+
+        try {
+            return $this->processProducts($products, $result);
+        } finally {
+            $this->images->cleanup();
+        }
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $products
+     * @param array<string, mixed> $result
+     *
+     * @return array<string, mixed>
+     */
+    private function processProducts(
+        array $products,
+        array $result
+    ): array {
         foreach ($products as $product) {
 
             try {

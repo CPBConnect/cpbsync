@@ -2,43 +2,45 @@
 
 namespace CPBConnect\Application\Product;
 
+use CPBConnect\Infrastructure\Source\HttpFetcher;
+use CPBConnect\Infrastructure\Source\HttpRequestException;
 use RuntimeException;
 
 class ProductImageDownloader
 {
     private const MAX_FILE_SIZE = 5242880; // 5 MB
 
+    private HttpFetcher $fetcher;
+
+    public function __construct(?HttpFetcher $fetcher = null)
+    {
+        $this->fetcher = $fetcher ?? new HttpFetcher(
+            fn (string $url) => $this->validateUrl($url),
+            ['Accept' => 'image/jpeg,image/png,image/gif,image/webp,*/*']
+        );
+    }
+
     public function download(string $url): string
     {
-        $url = trim($url);
+        return $this->save($this->fetch(trim($url)));
+    }
 
-        $this->validateUrl($url);
+    /**
+     * Comprueba que la URL de imagen es admisible.
+     *
+     * Se expone para que una descarga en paralelo pueda validar cada
+     * URL antes de lanzarla, en lugar de saltarse la protección.
+     */
+    public function validateImageUrl(string $url): void
+    {
+        $this->validateUrl(trim($url));
+    }
 
-        $context = stream_context_create([
-                                             'http' => [
-                                                 'method' => 'GET',
-                                                 'timeout' => 30,
-                                                 'ignore_errors' => true,
-                                                 'follow_location' => 0,
-                                                 'header' => [
-                                                     'User-Agent: CPB Sync/0.1',
-                                                     'Accept: image/jpeg,image/png,image/gif,image/webp,*/*',
-                                                 ],
-                                             ],
-                                         ]);
-
-        $content = @file_get_contents(
-            $url,
-            false,
-            $context
-        );
-
-        if ($content === false || $content === '') {
-            throw new RuntimeException(
-                'The image could not be downloaded.'
-            );
-        }
-
+    /**
+     * Valida el contenido descargado y lo guarda en un temporal.
+     */
+    public function save(string $content): string
+    {
         if (strlen($content) > self::MAX_FILE_SIZE) {
             throw new RuntimeException(
                 'The image exceeds the maximum allowed size of 5 MB.'
@@ -72,6 +74,20 @@ class ProductImageDownloader
         }
 
         return $tmpFile;
+    }
+
+    /**
+     * Obtiene la imagen por HTTP, siguiendo redirecciones.
+     */
+    private function fetch(string $url): string
+    {
+        try {
+            return $this->fetcher->request($url);
+        } catch (HttpRequestException $e) {
+            throw new RuntimeException(
+                'The image could not be downloaded.'
+            );
+        }
     }
 
     private function validateUrl(string $url): void

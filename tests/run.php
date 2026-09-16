@@ -13,6 +13,7 @@ use CPBConnect\Application\Import\ImportService;
 use CPBConnect\Application\Mapping\MappingConfigurationBuilder;
 use CPBConnect\Application\Mapping\MappingInputValidator;
 use CPBConnect\Application\Mapping\MappingSaver;
+use CPBConnect\Application\Product\ProductImageProviderFactory;
 use CPBConnect\Application\Product\ProductStateFactory;
 use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use CPBConnect\Application\Source\SourceService;
@@ -857,6 +858,16 @@ same(
         : 'CPBConnect\\Application\\Product\\CatalogProductState',
     get_class($stateFactory),
     'la fábrica elige el estado según el paquete instalado'
+);
+
+same(
+    class_exists(
+        'CPBConnect\\Premium\\Application\\Product\\ParallelImageProvider'
+    )
+        ? 'CPBConnect\\Premium\\Application\\Product\\ParallelImageProvider'
+        : 'CPBConnect\\Application\\Product\\SynchronousImageProvider',
+    get_class(ProductImageProviderFactory::create()),
+    'la fábrica elige el proveedor de imágenes según el paquete'
 );
 
 if (class_exists(XmlReader::class)) {

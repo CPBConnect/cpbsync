@@ -69,10 +69,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * Source readers declare their own batch size, so a paginated source only fetches the pages a batch needs.
 * `ProductStateInterface` with a default implementation, so the synchronization engine can resolve and compare existing products through a replaceable strategy.
 * `ProductStateRepository`, which resolves many product references and stored values in a single query.
+* `HttpFetcher`, which centralizes the HTTP mechanics (redirects, headers, query parameters) shared by sources and images.
+* `ProductImageProviderInterface` with a default implementation, so the image download can be replaced without touching the synchronization engine.
 
 ### Fixed
 
 * The module did not follow HTTP redirects, so a source answering 301/302/307/308 was reported as "the source is empty". Redirects are now followed (up to three hops) and every hop is validated with the same rules as the original URL.
+* Images behind an HTTP redirect could not be downloaded, because the image downloader had its own HTTP code that ignored redirects. It now shares `HttpFetcher`.
 * `DatabaseInstaller` was missing its `use Db;` import, so the module could not be installed at all.
 * `install()` now creates the database tables before registering the module and rolls back if registration fails, so a failed installation no longer leaves the module marked as installed without its tables.
 * `tools/check-translations.php` no longer scans the generated `build/dist/` folder.

@@ -4,11 +4,23 @@ namespace CPBConnect\Infrastructure\Source;
 
 use RuntimeException;
 
+/**
+ * Lee fuentes externas por HTTP.
+ *
+ * La mecánica de red (redirecciones, cabeceras, parámetros) vive en
+ * HttpFetcher; aquí sólo se añaden las reglas de las fuentes y sus
+ * mensajes.
+ */
 class HttpSourceReader
 {
-    private const TIMEOUT = 30;
-    private const USER_AGENT = 'CPB Sync/0.1';
-    private const MAX_REDIRECTS = 3;
+    private HttpFetcher $fetcher;
+
+    public function __construct(?HttpFetcher $fetcher = null)
+    {
+        $this->fetcher = $fetcher ?? new HttpFetcher(
+            fn (string $url) => $this->validateUrl($url)
+        );
+    }
 
     public function read(string $url): string
     {
@@ -17,9 +29,6 @@ class HttpSourceReader
 
     /**
      * Realiza una petición HTTP siguiendo las redirecciones.
-     *
-     * Cada salto se valida con las mismas reglas que la URL original,
-     * así que una redirección no puede llevar a un destino no admitido.
      *
      * @param array<string, string> $headers
      * @param array<string, int|float|string> $parameters
@@ -31,196 +40,32 @@ class HttpSourceReader
         array $parameters = [],
         ?string $body = null
     ): string {
-        $target = $this->appendParameters($url, $parameters);
-        $redirects = 0;
-
-        while (true) {
-            $this->validateUrl($target);
-
-            $options = [
-                'method' => strtoupper($method),
-                'timeout' => self::TIMEOUT,
-                'ignore_errors' => true,
-                'follow_location' => 0,
-                'header' => implode(
-                    "\r\n",
-                    array_merge(
-                        $this->defaultHeaders(),
-                        $this->formatHeaders($headers)
-                    )
-                ),
-            ];
-
-            if ($body !== null) {
-                $options['content'] = $body;
-            }
-
-            $context = stream_context_create(['http' => $options]);
-
-            $content = @file_get_contents(
-                $target,
-                false,
-                $context
+        try {
+            return $this->fetcher->request(
+                $url,
+                $method,
+                $headers,
+                $parameters,
+                $body
             );
-
-            if ($content === false) {
-                throw new RuntimeException(
-                    'The source content could not be retrieved.'
-                );
-            }
-
-            $responseHeaders = $http_response_header ?? [];
-            $status = $this->statusFrom($responseHeaders);
-
-            if ($status >= 300 && $status < 400) {
-                $location = $this->locationFrom($responseHeaders);
-
-                if ($location === null
-                    || ++$redirects > self::MAX_REDIRECTS
-                ) {
-                    throw new RuntimeException(
-                        'The source redirected too many times.'
-                    );
-                }
-
-                $target = $this->absoluteUrl($target, $location);
-
-                continue;
-            }
-
-            if ($status >= 400) {
-                throw new RuntimeException(
-                    'The source responded with an error status code.'
-                );
-            }
-
-            return $content;
+        } catch (HttpRequestException $e) {
+            throw new RuntimeException(
+                $this->messageFor($e->getReason())
+            );
         }
     }
 
-    /**
-     * @return array<int, string>
-     */
-    private function defaultHeaders(): array
+    private function messageFor(string $reason): string
     {
-        return [
-            'User-Agent: ' . self::USER_AGENT,
-            'Accept: text/csv,application/csv,text/plain,*/*',
-        ];
-    }
-
-    /**
-     * @param array<string, string> $headers
-     *
-     * @return array<int, string>
-     */
-    private function formatHeaders(array $headers): array
-    {
-        $formatted = [];
-
-        foreach ($headers as $name => $value) {
-            $name = trim((string) $name);
-
-            if ($name === '') {
-                continue;
-            }
-
-            $formatted[] = $name . ': ' . trim((string) $value);
+        if ($reason === HttpRequestException::ERROR_STATUS) {
+            return 'The source responded with an error status code.';
         }
 
-        return $formatted;
-    }
-
-    /**
-     * @param array<string, int|float|string> $parameters
-     */
-    private function appendParameters(
-        string $url,
-        array $parameters
-    ): string {
-        if ($parameters === []) {
-            return $url;
+        if ($reason === HttpRequestException::TOO_MANY_REDIRECTS) {
+            return 'The source redirected too many times.';
         }
 
-        $query = http_build_query($parameters);
-
-        if ($query === '') {
-            return $url;
-        }
-
-        return $url
-               . (str_contains($url, '?') ? '&' : '?')
-               . $query;
-    }
-
-    /**
-     * Código de estado de la respuesta.
-     *
-     * @param array<int, string> $responseHeaders
-     */
-    private function statusFrom(array $responseHeaders): int
-    {
-        $status = 0;
-
-        foreach ($responseHeaders as $header) {
-            if (preg_match(
-                '#^HTTP/\S+\s+(\d{3})#',
-                (string) $header,
-                $matches
-            )) {
-                $status = (int) $matches[1];
-            }
-        }
-
-        return $status;
-    }
-
-    /**
-     * Destino indicado por una redirección.
-     *
-     * @param array<int, string> $responseHeaders
-     */
-    private function locationFrom(array $responseHeaders): ?string
-    {
-        foreach ($responseHeaders as $header) {
-            if (preg_match(
-                '#^location:\s*(.+)$#i',
-                trim((string) $header),
-                $matches
-            )) {
-                return trim($matches[1]);
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Convierte un destino relativo en absoluto.
-     */
-    private function absoluteUrl(string $base, string $location): string
-    {
-        if (preg_match('#^https?://#i', $location)) {
-            return $location;
-        }
-
-        $parts = parse_url($base);
-        $prefix = ($parts['scheme'] ?? 'http')
-                  . '://'
-                  . ($parts['host'] ?? '');
-
-        if (isset($parts['port'])) {
-            $prefix .= ':' . $parts['port'];
-        }
-
-        if (str_starts_with($location, '/')) {
-            return $prefix . $location;
-        }
-
-        $path = $parts['path'] ?? '/';
-        $directory = rtrim(dirname($path), '/');
-
-        return $prefix . $directory . '/' . $location;
+        return 'The source content could not be retrieved.';
     }
 
     private function validateUrl(string $url): void

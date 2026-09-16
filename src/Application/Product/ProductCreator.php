@@ -12,12 +12,13 @@ class ProductCreator
     private ProductImageApplier $imageApplier;
     private ProductStockApplier $stockApplier;
 
-    public function __construct()
-    {
+    public function __construct(
+        ?ProductImageProviderInterface $images = null
+    ) {
         $this->dataApplier = new ProductDataApplier();
         $this->manufacturerApplier = new ProductManufacturerApplier();
         $this->categoryApplier = new ProductCategoryApplier();
-        $this->imageApplier = new ProductImageApplier();
+        $this->imageApplier = new ProductImageApplier($images);
         $this->stockApplier = new ProductStockApplier();
     }
 
