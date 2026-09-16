@@ -87,6 +87,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * `tools/check-translations.php` no longer scans the generated `build/dist/` folder.
 * An empty list at `record_path` means "no records" instead of an error.
 * The thumbnail error message was cut in the catalogues (`The thumbnail "`), so it could never match the message thrown at runtime. The message is now complete and translatable: `The thumbnail could not be generated.`
+* The phase breakdown of a run (reading the source, applying the mapping, writing products) was never translated: the wordings were looked up from an array, where the translation check could not see them. A run of a few milliseconds also showed every phase as `0 s`, so phases now use three decimals.
 * `history.tpl` and `history-detail.tpl` contained hardcoded text with no translation tags; every wording is now wrapped in `{l}`.
 * Missing `</strong>` closing tag in `sync-result.tpl`.
 * Product image downloader reported a stale Spanish wording.

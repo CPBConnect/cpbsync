@@ -50,6 +50,10 @@
         <source>An image cannot be applied to a product without an ID.</source>
         <target>An image cannot be applied to a product without an ID.</target>
       </trans-unit>
+      <trans-unit id="0d4f61eed1" resname="Applying the mapping">
+        <source>Applying the mapping</source>
+        <target>Applying the mapping</target>
+      </trans-unit>
       <trans-unit id="c5db1fa156" resname="Are you sure you want to delete this source?">
         <source>Are you sure you want to delete this source?</source>
         <target>Are you sure you want to delete this source?</target>
@@ -373,6 +377,10 @@
       <trans-unit id="94296b0206" resname="Products processed">
         <source>Products processed</source>
         <target>Products processed</target>
+      </trans-unit>
+      <trans-unit id="7c8bc2148b" resname="Reading the source">
+        <source>Reading the source</source>
+        <target>Reading the source</target>
       </trans-unit>
       <trans-unit id="3d84314a79" resname="Recent runs">
         <source>Recent runs</source>
@@ -965,6 +973,10 @@
       <trans-unit id="68a5c8bfac" resname="With errors">
         <source>With errors</source>
         <target>With errors</target>
+      </trans-unit>
+      <trans-unit id="6a62fd917f" resname="Writing products">
+        <source>Writing products</source>
+        <target>Writing products</target>
       </trans-unit>
       <trans-unit id="134e15b442" resname="You have no sources configured yet.">
         <source>You have no sources configured yet.</source>

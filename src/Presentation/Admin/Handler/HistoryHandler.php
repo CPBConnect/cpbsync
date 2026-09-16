@@ -126,8 +126,9 @@ class HistoryHandler
     /**
      * Desglose de tiempos por fase, con nombres traducidos.
      *
-     * Las fases se guardan en milisegundos; aquí pasan a segundos,
-     * que es como se muestran.
+     * Las fases se guardan en milisegundos y se muestran en segundos;
+     * con dos decimales una fase de 3 ms aparecía como 0 s, así que
+     * se usan tres.
      *
      * @param mixed $json
      *
@@ -145,12 +146,6 @@ class HistoryHandler
             return [];
         }
 
-        $labels = [
-            'read' => 'Reading the source',
-            'map' => 'Applying the mapping',
-            'sync' => 'Writing products',
-        ];
-
         $phases = [];
 
         foreach ($decoded as $name => $milliseconds) {
@@ -159,14 +154,34 @@ class HistoryHandler
             }
 
             $phases[] = [
-                'name' => $this->shell->translate(
-                    $labels[$name] ?? (string) $name
-                ),
-                'seconds' => round(((int) $milliseconds) / 1000, 2),
+                'name' => $this->phaseLabel((string) $name),
+                'seconds' => round(((int) $milliseconds) / 1000, 3),
             ];
         }
 
         return $phases;
+    }
+
+    /**
+     * Nombre traducido de una fase.
+     *
+     * La traducción se pide con el texto literal a la vista: dentro de
+     * un array la comprobación de traducciones no la encontraría.
+     */
+    private function phaseLabel(string $name): string
+    {
+        switch ($name) {
+            case 'read':
+                return $this->shell->translate('Reading the source');
+
+            case 'map':
+                return $this->shell->translate('Applying the mapping');
+
+            case 'sync':
+                return $this->shell->translate('Writing products');
+        }
+
+        return $name;
     }
 
     /**
