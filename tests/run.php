@@ -20,6 +20,7 @@ use CPBConnect\Application\Sync\SourceSyncService;
 use CPBConnect\Application\Sync\SyncHistoryService;
 use CPBConnect\Infrastructure\PrestaShop\ModuleAdminShell;
 use CPBConnect\Premium\Application\Source\Reader\JsonReader;
+use CPBConnect\Premium\Application\Source\Reader\RestApiReader;
 use CPBConnect\Premium\Application\Source\Reader\XmlReader;
 use CPBConnect\Presentation\Admin\AdminActionRouter;
 use CPBConnect\Presentation\Admin\AdminLinkBuilder;
@@ -962,6 +963,16 @@ if (!class_exists(XmlReader::class)) {
         'JSON: respeta record_path'
     );
 
+    $json->content = '{"data":{"items":[]}}';
+
+    same(
+        0,
+        $json->read($jsonSource + [
+            'config' => json_encode(['record_path' => 'data.items']),
+        ])['total'],
+        'JSON: una lista vacía son cero registros'
+    );
+
     $json->content = '{"meta":{"page":1}}';
     throws(
         static fn () => $json->read($jsonSource),
@@ -975,6 +986,213 @@ if (!class_exists(XmlReader::class)) {
         'The JSON source could not be parsed.',
         'JSON: informa de un documento inválido'
     );
+
+    /*
+     * APIs REST
+     */
+
+    $restSource = [
+        'type' => 'rest',
+        'url' => 'https://api.example.com/v1/products',
+    ];
+
+    $http = new FakeHttpReader();
+    $rest = new RestApiReader($http);
+
+    $http->responses = ['{"data":{"items":[{"sku":"A"},{"sku":"B"}]}}'];
+    $http->requests = [];
+
+    $result = $rest->read($restSource + [
+        'config' => json_encode(['record_path' => 'data.items']),
+    ]);
+
+    same(2, $result['total'], 'REST: lee la lista indicada en record_path');
+    same(
+        'https://api.example.com/v1/products',
+        $http->requests[0]['url'],
+        'REST: usa la URL de la fuente'
+    );
+    same('GET', $http->requests[0]['method'], 'REST: usa GET por defecto');
+    same(
+        'application/json',
+        $http->requests[0]['headers']['Accept'],
+        'REST: pide JSON por defecto'
+    );
+    same(
+        [],
+        $http->requests[0]['parameters'],
+        'REST: sin paginación no añade parámetros'
+    );
+
+    $http->responses = ['{"data":{"items":[]}}'];
+    $http->requests = [];
+
+    $rest->read($restSource + [
+        'config' => json_encode([
+            'record_path' => 'data.items',
+            'params' => ['lang' => 'es'],
+            'headers' => ['X-Store' => '1'],
+            'auth' => ['type' => 'bearer', 'token' => 'abc123'],
+        ]),
+    ]);
+
+    same(
+        'Bearer abc123',
+        $http->requests[0]['headers']['Authorization'],
+        'REST: autenticación por token'
+    );
+    same(
+        '1',
+        $http->requests[0]['headers']['X-Store'],
+        'REST: cabeceras propias'
+    );
+    same(
+        ['lang' => 'es'],
+        $http->requests[0]['parameters'],
+        'REST: parámetros propios'
+    );
+
+    $http->responses = ['{"data":{"items":[]}}'];
+    $http->requests = [];
+
+    $rest->read($restSource + [
+        'config' => json_encode([
+            'record_path' => 'data.items',
+            'auth' => [
+                'type' => 'basic',
+                'username' => 'u',
+                'password' => 'p',
+            ],
+        ]),
+    ]);
+
+    same(
+        'Basic ' . base64_encode('u:p'),
+        $http->requests[0]['headers']['Authorization'],
+        'REST: autenticación básica'
+    );
+
+    $http->responses = ['{"data":{"items":[]}}'];
+    $http->requests = [];
+
+    $rest->read($restSource + [
+        'config' => json_encode([
+            'record_path' => 'data.items',
+            'auth' => [
+                'type' => 'header',
+                'header' => 'X-Api-Key',
+                'value' => 'k',
+            ],
+        ]),
+    ]);
+
+    same(
+        'k',
+        $http->requests[0]['headers']['X-Api-Key'],
+        'REST: clave en cabecera'
+    );
+
+    $pageConfig = json_encode([
+        'record_path' => 'data.items',
+        'pagination' => [
+            'type' => 'page',
+            'page_size' => 2,
+        ],
+    ]);
+
+    $http->responses = [
+        '{"data":{"items":[{"sku":"A"},{"sku":"B"}]}}',
+        '{"data":{"items":[{"sku":"C"}]}}',
+    ];
+    $http->requests = [];
+
+    $result = $rest->read($restSource + ['config' => $pageConfig]);
+
+    same(3, $result['total'], 'REST: recorre todas las páginas');
+    same(
+        2,
+        count($http->requests),
+        'REST: para al recibir una página incompleta'
+    );
+    same(
+        ['page' => 1, 'per_page' => 2],
+        $http->requests[0]['parameters'],
+        'REST: primera página'
+    );
+    same(
+        ['page' => 2, 'per_page' => 2],
+        $http->requests[1]['parameters'],
+        'REST: segunda página'
+    );
+
+    $http->responses = ['{"data":{"items":[{"sku":"C"},{"sku":"D"}]}}'];
+    $http->requests = [];
+
+    $rows = $rest->readBatch(
+        $restSource + ['config' => $pageConfig],
+        2,
+        2
+    );
+
+    same(
+        1,
+        count($http->requests),
+        'REST: el lote sólo pide las páginas necesarias'
+    );
+    same(
+        ['page' => 2, 'per_page' => 2],
+        $http->requests[0]['parameters'],
+        'REST: pide la página que contiene el lote'
+    );
+    same(['sku' => 'C'], $rows[0], 'REST: devuelve el lote solicitado');
+
+    $http->responses = ['{"items":[{"sku":"A"}]}'];
+    $http->requests = [];
+
+    $rest->read($restSource + [
+        'config' => json_encode([
+            'record_path' => 'items',
+            'pagination' => [
+                'type' => 'offset',
+                'page_size' => 50,
+            ],
+        ]),
+    ]);
+
+    same(
+        ['offset' => 0, 'limit' => 50],
+        $http->requests[0]['parameters'],
+        'REST: paginación por desplazamiento'
+    );
+
+    $http->responses = ['{"meta":{"total":42},"items":[]}'];
+    $http->requests = [];
+
+    same(
+        42,
+        $rest->countRows($restSource + [
+            'config' => json_encode([
+                'record_path' => 'items',
+                'pagination' => [
+                    'type' => 'page',
+                    'total_path' => 'meta.total',
+                ],
+            ]),
+        ]),
+        'REST: lee el total del documento'
+    );
+
+    $http->error = new RuntimeException(
+        'The source responded with an error status code.'
+    );
+
+    throws(
+        static fn () => $rest->read($restSource),
+        'The source responded with an error status code.',
+        'REST: propaga los errores HTTP'
+    );
+
+    $http->error = null;
 }
 
 /*

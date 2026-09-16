@@ -65,6 +65,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * `SourceReaderFactory`, the single place where an installed package registers the readers it ships.
 * `config` column on `cpbsync_source`, with the `upgrade-1.1.0.php` migration, for source-specific settings such as the record path of XML or JSON catalogs.
 * Manual import now accepts the file extensions declared by the registered readers.
+* `HttpSourceReader::request()` accepts a method, headers, query parameters and body, so authenticated APIs can be reached without duplicating the URL validation.
+* Source readers declare their own batch size, so a paginated source only fetches the pages a batch needs.
+
+### Fixed
+
+* `tools/check-translations.php` no longer scans the generated `build/dist/` folder.
+* An empty list at `record_path` means "no records" instead of an error.
 
 ### Changed
 

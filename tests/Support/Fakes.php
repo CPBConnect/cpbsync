@@ -16,6 +16,7 @@ use CPBConnect\Infrastructure\Persistence\ImportRepository;
 use CPBConnect\Infrastructure\Persistence\MappingRepository;
 use CPBConnect\Infrastructure\Persistence\SourceRepository;
 use CPBConnect\Infrastructure\Persistence\SyncLogRepository;
+use CPBConnect\Infrastructure\Source\HttpSourceReader;
 use CPBConnect\Application\Import\ImportFileStorage;
 use CPBConnect\Presentation\Admin\AdminShellInterface;
 
@@ -401,5 +402,42 @@ class FakeProductSync extends ProductSync
         $this->synced[] = $products;
 
         return $this->result;
+    }
+}
+
+class FakeHttpReader extends HttpSourceReader
+{
+    /** @var array<int, array<string, mixed>> */
+    public array $requests = [];
+
+    /** @var array<int, string> */
+    public array $responses = [];
+
+    public ?Throwable $error = null;
+
+    public function __construct()
+    {
+    }
+
+    public function request(
+        string $url,
+        string $method = 'GET',
+        array $headers = [],
+        array $parameters = [],
+        ?string $body = null
+    ): string {
+        $this->requests[] = [
+            'url' => $url,
+            'method' => $method,
+            'headers' => $headers,
+            'parameters' => $parameters,
+            'body' => $body,
+        ];
+
+        if ($this->error !== null) {
+            throw $this->error;
+        }
+
+        return array_shift($this->responses) ?? '{}';
     }
 }

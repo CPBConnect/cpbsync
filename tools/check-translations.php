@@ -48,6 +48,7 @@ function extractWordings(string $root, string $domain): array
             || str_starts_with($relative, 'tests' . DIRECTORY_SEPARATOR)
             || str_starts_with($relative, 'tools' . DIRECTORY_SEPARATOR)
             || str_starts_with($relative, 'translations' . DIRECTORY_SEPARATOR)
+            || str_starts_with($relative, 'build' . DIRECTORY_SEPARATOR)
         ) {
             continue;
         }
