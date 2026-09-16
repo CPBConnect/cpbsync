@@ -24,7 +24,7 @@ class CategoryCreator
 
         $category->link_rewrite = [
             (int) \Configuration::get('PS_LANG_DEFAULT') =>
-                \Tools::link_rewrite($name),
+                \Tools::str2url($name),
         ];
 
         $category->id_parent =
