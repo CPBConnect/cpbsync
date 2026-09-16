@@ -15,6 +15,7 @@ use CPBConnect\Application\Mapping\MappingApplier;
 use CPBConnect\Application\Mapping\MappingInputValidator;
 use CPBConnect\Application\Mapping\MappingSaver;
 use CPBConnect\Application\Product\ProductImageProviderFactory;
+use CPBConnect\Application\Product\ImageList;
 use CPBConnect\Application\Product\ProductStateFactory;
 use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use CPBConnect\Application\Source\SourceService;
@@ -1417,6 +1418,85 @@ same(
         : 'CPBConnect\\Application\\Product\\SynchronousImageProvider',
     get_class(ProductImageProviderFactory::create()),
     'la fábrica elige el proveedor de imágenes según el paquete'
+);
+
+/*
+ * ---------------------------------------------------------------------
+ * Lista de imágenes
+ * ---------------------------------------------------------------------
+ */
+
+section('ImageList');
+
+same(
+    ['https://cdn.test/a.jpg'],
+    ImageList::parse('https://cdn.test/a.jpg'),
+    'una sola URL'
+);
+
+same(
+    ['https://cdn.test/a.jpg', 'https://cdn.test/b.jpg'],
+    ImageList::parse(
+        'https://cdn.test/a.jpg, https://cdn.test/b.jpg'
+    ),
+    'varias URLs separadas por comas'
+);
+
+same(
+    ['https://cdn.test/a.jpg', 'https://cdn.test/b.jpg'],
+    ImageList::parse(
+        "https://cdn.test/a.jpg\nhttps://cdn.test/b.jpg"
+    ),
+    'varias URLs una por línea'
+);
+
+same(
+    [
+        'https://cdn.test/a.jpg',
+        'https://cdn.test/b.jpg',
+        'https://cdn.test/c.jpg',
+    ],
+    ImageList::parse(
+        'https://cdn.test/a.jpg | https://cdn.test/b.jpg ;'
+        . ' https://cdn.test/c.jpg'
+    ),
+    'varias URLs con separadores mezclados'
+);
+
+same(
+    ['https://cdn.test/a.jpg?w=1,2&h=3'],
+    ImageList::parse('https://cdn.test/a.jpg?w=1,2&h=3'),
+    'una URL con comas en los parámetros no se parte'
+);
+
+same(
+    ['https://cdn.test/a.jpg', 'https://cdn.test/b.jpg'],
+    ImageList::parse(
+        'https://cdn.test/a.jpg, https://cdn.test/a.jpg,'
+        . ' https://cdn.test/b.jpg'
+    ),
+    'quita las URLs repetidas'
+);
+
+same(
+    ['https://cdn.test/a.jpg'],
+    ImageList::parse('sin-url, https://cdn.test/a.jpg, tambien-mal'),
+    'descarta lo que no es una URL'
+);
+
+same([], ImageList::parse('   '), 'un valor vacío no tiene imágenes');
+same([], ImageList::parse('sin-url'), 'un valor sin URLs no tiene imágenes');
+
+$many = [];
+
+for ($i = 0; $i < 30; $i++) {
+    $many[] = 'https://cdn.test/' . $i . '.jpg';
+}
+
+same(
+    ImageList::MAX_IMAGES,
+    count(ImageList::parse(implode(',', $many))),
+    'corta la lista en el máximo de imágenes'
 );
 
 if (class_exists(XmlReader::class)) {

@@ -83,6 +83,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * Repeated values (several images, several attributes) are numbered from zero and the first one is also kept without a number, so mapping `image` works whether the supplier sends one image or five.
 * An XML element that has both children and its own text keeps its markup (`<description>Texto <b>con</b> marcado</description>`), because that is how HTML descriptions arrive.
 * The mapping form suggests the PrestaShop field for the usual column names, including nested ones (`price.value` → price, `images.0` → image) and the Spanish equivalents (`precio`, `marca`, `categoría`). It only suggests, and only while the source has no mapping saved, so saving never maps a field the user did not choose.
+* A product can now import several images. The image field is read as a list (separated by commas, semicolons, pipes or line breaks, up to 20 per product), a single URL with commas in its parameters is not split, and every image is downloaded and thumbnailed. Nested catalogs expose `images.0`, `images.1`… and the paid edition can join them with the "Join fields" transformation.
+* Only the first image of a product is the cover, as PrestaShop does.
 
 ### Fixed
 
@@ -99,6 +101,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * Price normalization rejected any price carrying a currency symbol or letters (`10,50 €`, `10.50 EUR`), which is how most supplier catalogs send them, so the whole product failed. It now strips anything that is not part of the number and detects whether the decimal separator is the comma or the dot (the last one wins when both appear), with `decimal_separator` and `thousands_separator` settings for catalogs that need them spelled out.
 * Creating a category from a source always failed with `Call to undefined method Tools::link_rewrite()`, which does not exist in PrestaShop 8 and 9, so any product mapped to a new category was reported as an error (and left half created). It now uses `Tools::str2url()`.
 * Synced products were created without `link_rewrite`, so they had no friendly URL: PrestaShop does not generate it when the product is created from code. It is now built from the product name, and only when it is missing, so URLs that the shop has already customised are left alone.
+* Importing a second image for the same product failed with `Duplicate entry ... for key 'id_product'`: `image_shop` keeps one row per image and shop with a unique index on (product, shop, cover), and PrestaShop stores `NULL` —not `0`— for the images that are not the cover. Every image tried to be the cover, so the product ended up with one image and an error.
+* Replacing an image from cron (or any command line run) aborted the product with `Call to a member function get() on null`: `Image::delete()` reads the watermark setting from the Symfony container, which only exists inside the back office, so the deletion was left half done with the thumbnails still on disk. The module now deletes the rows and the files itself when PrestaShop's own deletion is not available, and renumbers the positions like PrestaShop does.
 * `history.tpl` and `history-detail.tpl` contained hardcoded text with no translation tags; every wording is now wrapped in `{l}`.
 * Missing `</strong>` closing tag in `sync-result.tpl`.
 * Product image downloader reported a stale Spanish wording.
