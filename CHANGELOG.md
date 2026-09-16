@@ -49,7 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 * Cron execution is restricted to the command line interface.
 
-## [Unreleased]
+## [1.2.0] - 2026-09-16
 
 ### Added
 
@@ -131,3 +131,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * The unused `module_name` Smarty variable assigned by the sources page.
 
 [1.0.0]: https://github.com/CPBConnect/cpbsync/releases/tag/v1.0.0
+[1.2.0]: https://github.com/CPBConnect/cpbsync/releases/tag/v1.2.0

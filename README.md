@@ -4,7 +4,7 @@
 
 CPB Sync is a PrestaShop module developed by **CPBConnect** that allows store administrators to synchronize product information from external catalogs with their PrestaShop store.
 
-Version **1.0.0** focuses on reliable CSV-based product synchronization with configurable mappings, transformations, validation, Dry Run, batch processing, synchronization history, and automated execution through cron.
+Version **1.2.0** synchronizes CSV catalogs with configurable mappings, transformations, validation, Dry Run, batch processing, synchronization history and automated execution through cron. The paid edition adds XML, JSON and REST sources, incremental synchronization, nested catalogs, advanced transformations and a monitoring dashboard.
 
 ## ❤️ Support CPB Sync
 
@@ -17,13 +17,13 @@ If CPB Sync is useful to you, consider supporting its continued development.
 ## Features
 
 - 📥 Import product catalogs from CSV sources
-- 🔗 Configurable source-to-PrestaShop field mapping
+- 🔗 Configurable source-to-PrestaShop field mapping, with the target field suggested for the usual column names
 - 🔄 Configurable data transformations
 - 🧪 Dry Run before applying changes
 - 📦 Product creation and updates
 - ⏭️ Automatically skip products without changes
-- 🖼️ Product image synchronization
-- 📊 Synchronization results and history
+- 🖼️ Product image synchronization, with several images per product
+- 📊 Synchronization results and history, with duration, peak memory and time per phase
 - 📈 Batch processing with progress tracking
 - ⏰ Scheduled synchronization through cron
 - ✅ Product data validation
@@ -35,7 +35,7 @@ If CPB Sync is useful to you, consider supporting its continued development.
 
 ### CSV
 
-CPB Sync 1.0.0 currently supports CSV catalogs.
+The free version reads CSV catalogs.
 
 Example:
 
@@ -46,6 +46,8 @@ ABC002,Product Two,Another description,49.99,5,Category B,Brand B,https://exampl
 ```
 
 CSV fields can be mapped to supported PrestaShop product fields.
+
+XML, JSON and REST API sources are part of the paid edition.
 
 ## Mapping
 
@@ -69,15 +71,26 @@ A source field can also have a transformation applied before synchronization.
 
 ## Transformations
 
-The current version includes:
+The free version includes:
 
 - No transformation
-- Price normalization
+- Price normalization (with currency symbols and both decimal conventions: `1.234,56` and `1,234.56`)
 - Stock normalization
 - Text normalization
 - Text replacement
 
 Transformations allow external catalog data to be adapted before it is synchronized with PrestaShop.
+
+The paid edition adds fifteen more: value maps, default values, fallback fields, joining fields, prefixes and suffixes, arithmetic with rounding, regular expression extraction and replacement, yes/no conversion, shortening, slugs, capitalisation, HTML removal, taking one part of a value and keeping only digits.
+
+## Images
+
+The image field accepts a list, so a product can import several images: separated by commas, semicolons, pipes or line breaks, up to 20 per product.
+
+- Only the first image is the cover; the rest are imported without one, as PrestaShop does.
+- Images are downloaded before the previous ones are deleted, so a supplier that stops responding does not leave the product without images.
+- A broken link does not prevent the others: the product is saved as long as one image could be fetched.
+- Nested catalogs (paid edition) expose the images as `images.0`, `images.1`…, which can be joined with the "Join fields" transformation.
 
 ## Dry Run
 
@@ -121,7 +134,10 @@ Each synchronization records:
 - Updated products
 - Skipped products
 - Errors
+- Duration, peak memory and the time spent in each phase (reading the source, applying the mapping and writing products)
 - Detailed synchronization results
+
+The history keeps the summary of every run plus a sample of the processed products (200 by default), so an hourly cron on a large catalog does not grow the database without bound.
 
 ## Cron
 
@@ -238,6 +254,16 @@ After installation:
 
 For automatic synchronization, configure the desired frequency and add the CPB Sync cron command to the server's scheduler.
 
+### After updating the module
+
+Clear the PrestaShop cache (**Advanced Parameters > Performance**) so the new translations and templates are loaded. From the command line:
+
+```bash
+php bin/console cache:clear --env=prod
+```
+
+Run PrestaShop console commands as the web server user (`www-data`), not as root: the cache directories they create must belong to the user that serves the store.
+
 ## Project structure
 
 ```text
@@ -328,35 +354,45 @@ composer check-translations
 
 ## Current version
 
-**Version:** 1.0.0
+**Version:** 1.2.0
 
-CPB Sync 1.0.0 is the first public release of the project.
+Version 1.2.0 completes the product synchronization workflow and fixes the issues found while testing it against a real PrestaShop 9 store. Since 1.0.0:
 
-This version provides a complete CSV-based product synchronization workflow, including manual imports, batch processing, validation, Dry Run, synchronization history, and scheduled execution through cron.
+- Sources, mapping, transformations, Dry Run and history now live in separate layers, so the module can grow without touching the synchronization engine.
+- Every run records its duration, peak memory and phase breakdown, and the history keeps a bounded sample of products instead of all of them.
+- The whole interface is translatable (English and Spanish catalogues ship with the module).
+- Products are created with a friendly URL and new categories can be created from a source.
+- Image import supports several images per product.
+- The price, stock and text transformations accept the formats real supplier catalogs use.
+
+See the `CHANGELOG.md` file for the complete list.
 
 ## Roadmap
 
-Future versions may include:
+The paid edition covers the XML, JSON and REST sources, incremental synchronization, nested catalogs, advanced transformations and the monitoring dashboard. What is still on the roadmap:
 
-- XML sources
-- JSON sources
-- REST API integrations
-- Incremental synchronization
-- Advanced transformation rules
 - Additional synchronization options
-- Improved logging and monitoring
 - Additional scheduling options
-- Premium features
 
 The roadmap may evolve according to user feedback and real-world requirements.
 
 ## Free version
 
-CPB Sync 1.0.0 is provided free of charge.
+CPB Sync 1.2.0 is provided free of charge.
 
-The free version provides the complete CSV synchronization workflow available in the 1.0.0 release.
+The free version provides the complete CSV synchronization workflow: sources, mapping, transformations, Dry Run, batch processing, image import, history and scheduled execution through cron.
 
-Future versions may introduce additional premium features while maintaining the functionality included in the free version.
+## Paid edition
+
+The paid edition adds, on top of the free version:
+
+- **XML, JSON and REST API sources**, with nested catalogs flattened into columns that can be mapped (`price.value`, `categories.0.name`, `Цены.Цена.ЦенаЗаЕдиницу`).
+- **Incremental synchronization**: products without changes are skipped. Measured on PrestaShop 9.0.0 with 200 products, a re-sync goes from 3.5 ms and 4.1 queries per product to 0.5 ms and 0.2 queries.
+- **Parallel image downloads**: 3.5× faster with 8 downloads at a time.
+- **Fifteen advanced transformations**: value maps, default values, fallback fields, joining fields, prefixes and suffixes, arithmetic with rounding, regular expressions, yes/no conversion, shortening, slugs, capitalisation, HTML removal, taking one part of a value and keeping only digits.
+- **A monitoring dashboard**: periods, counters, most frequent errors, history size and retention.
+
+Both editions share the same code base: the free package is generated from it and contains no paid code.
 
 ## Contributing
 
