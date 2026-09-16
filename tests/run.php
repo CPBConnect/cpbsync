@@ -11,6 +11,7 @@ require_once __DIR__ . '/Support/Fakes.php';
 
 use CPBConnect\Application\Import\ImportService;
 use CPBConnect\Application\Mapping\MappingConfigurationBuilder;
+use CPBConnect\Application\Mapping\MappingApplier;
 use CPBConnect\Application\Mapping\MappingInputValidator;
 use CPBConnect\Application\Mapping\MappingSaver;
 use CPBConnect\Application\Product\ProductImageProviderFactory;
@@ -496,6 +497,124 @@ same(
         []
     ),
     'ignora los campos sin mapear'
+);
+
+/*
+ * ---------------------------------------------------------------------
+ * MappingApplier
+ * ---------------------------------------------------------------------
+ */
+
+section('MappingApplier');
+
+$mappingApplier = new MappingApplier();
+
+$mapping = [
+    'sku' => [
+        'target' => 'reference',
+        'transform' => 'none',
+    ],
+    'nombre' => [
+        'target' => 'name',
+        'transform' => 'normalize_text',
+    ],
+    'precio' => [
+        'target' => 'price',
+        'transform' => 'normalize_price',
+    ],
+    'stock' => [
+        'target' => 'quantity',
+        'transform' => 'normalize_stock',
+    ],
+    'descripcion' => [
+        'target' => 'description',
+        'transform' => 'replace_text',
+        'config' => ['search' => 'IVA', 'replace' => ''],
+    ],
+    'sobra' => [
+        'target' => '',
+        'transform' => 'none',
+    ],
+];
+
+$row = [
+    'sku' => 'A-1',
+    'nombre' => "  Producto   con   espacios  ",
+    'precio' => '1.234,56',
+    'stock' => '3 unidades',
+    'descripcion' => 'Precio con IVA incluido',
+    'sobra' => 'x',
+];
+
+$mapped = $mappingApplier->apply($row, $mapping);
+
+same('A-1', $mapped['reference'], 'copia los campos sin transformación');
+same(
+    'Producto con espacios',
+    $mapped['name'],
+    'normaliza el texto al sincronizar'
+);
+same(1234.56, $mapped['price'], 'normaliza el precio');
+same(3, $mapped['quantity'], 'normaliza el stock');
+same(
+    'Precio con  incluido',
+    $mapped['description'],
+    'aplica el reemplazo de texto'
+);
+same(5, count($mapped), 'ignora los campos sin destino');
+
+$dryRun = $mappingApplier->applyWithOriginals($row, $mapping);
+
+same(
+    'Producto con espacios',
+    $dryRun['name']['value'],
+    'el Dry Run normaliza el texto'
+);
+same(
+    "  Producto   con   espacios  ",
+    $dryRun['name']['original'],
+    'el Dry Run conserva el valor original'
+);
+same(true, $dryRun['name']['changed'], 'marca el campo como cambiado');
+
+same(
+    $mapped['name'],
+    $dryRun['name']['value'],
+    'el Dry Run y la sincronización dan el mismo resultado'
+);
+same(
+    $mapped['quantity'],
+    $dryRun['quantity']['value'],
+    'el stock coincide en los dos recorridos'
+);
+same(
+    false,
+    $dryRun['reference']['changed'],
+    'un campo sin transformación no cambia'
+);
+
+// Formato antiguo: el mapeo es directamente el campo destino.
+same(
+    ['reference' => 'A-1'],
+    $mappingApplier->apply($row, ['sku' => 'reference']),
+    'acepta el mapeo como cadena'
+);
+same(
+    [
+        'reference' => [
+            'original' => 'A-1',
+            'value' => 'A-1',
+            'changed' => false,
+        ],
+    ],
+    $mappingApplier->applyWithOriginals($row, ['sku' => 'reference']),
+    'acepta el mapeo como cadena en el Dry Run'
+);
+
+same(
+    [],
+    $mappingApplier->apply($row, ['no_existe' => 'reference']),
+    'ignora los campos que no vienen en la fila'
 );
 
 /*
