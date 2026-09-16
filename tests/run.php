@@ -13,12 +13,14 @@ use CPBConnect\Application\Import\ImportService;
 use CPBConnect\Application\Mapping\MappingConfigurationBuilder;
 use CPBConnect\Application\Mapping\MappingInputValidator;
 use CPBConnect\Application\Mapping\MappingSaver;
+use CPBConnect\Application\Product\ProductStateFactory;
 use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use CPBConnect\Application\Source\SourceService;
 use CPBConnect\Application\Source\SourceValidator;
 use CPBConnect\Application\Sync\SourceSyncService;
 use CPBConnect\Application\Sync\SyncHistoryService;
 use CPBConnect\Infrastructure\PrestaShop\ModuleAdminShell;
+use CPBConnect\Premium\Application\Product\IncrementalProductState;
 use CPBConnect\Premium\Application\Source\Reader\JsonReader;
 use CPBConnect\Premium\Application\Source\Reader\RestApiReader;
 use CPBConnect\Premium\Application\Source\Reader\XmlReader;
@@ -843,6 +845,20 @@ same(
  * ---------------------------------------------------------------------
  */
 
+section('Estado de producto');
+
+$stateFactory = ProductStateFactory::create();
+
+same(
+    class_exists(
+        'CPBConnect\\Premium\\Application\\Product\\IncrementalProductState'
+    )
+        ? 'CPBConnect\\Premium\\Application\\Product\\IncrementalProductState'
+        : 'CPBConnect\\Application\\Product\\CatalogProductState',
+    get_class($stateFactory),
+    'la fábrica elige el estado según el paquete instalado'
+);
+
 if (class_exists(XmlReader::class)) {
     class TestableXmlReader extends XmlReader
     {
@@ -1193,6 +1209,110 @@ if (!class_exists(XmlReader::class)) {
     );
 
     $http->error = null;
+
+    /*
+     * Sincronización incremental
+     */
+
+    $stateRepository = new FakeProductStateRepository();
+    $stateRepository->ids = ['SKU-1' => 10, 'SKU-2' => 11];
+
+    $metaRepository = new FakeProductMetaRepository();
+
+    $fallbackState = new FakeCatalogProductState();
+    $fallbackState->changes = [11 => false];
+
+    $incremental = new IncrementalProductState(
+        $stateRepository,
+        $metaRepository,
+        $fallbackState
+    );
+
+    $product = [
+        'reference' => 'SKU-1',
+        'name' => 'Producto uno',
+        'price' => '19.99',
+    ];
+
+    same(
+        null,
+        $incremental->findExistingId('SKU-1'),
+        'sin preparar delega en el estado por defecto'
+    );
+
+    $incremental->prepare([$product]);
+
+    same(
+        ['ids', 'values'],
+        array_column($stateRepository->calls, 0),
+        'precarga identificadores y huellas en bloque'
+    );
+    same(
+        10,
+        $incremental->findExistingId('SKU-1'),
+        'resuelve el id de producto por referencia'
+    );
+    same(
+        null,
+        $incremental->findExistingId('SKU-9'),
+        'devuelve null si la referencia no existe'
+    );
+
+    same(
+        false,
+        $incremental->hasChanges(11, $product),
+        'sin huella guardada compara como siempre'
+    );
+    same(
+        [11],
+        $fallbackState->asked,
+        'consulta al estado por defecto cuando no hay huella'
+    );
+
+    $incremental->remember($product, 10);
+
+    same(1, count($metaRepository->saved), 'guarda la huella');
+    same(10, $metaRepository->saved[0][0], 'la guarda en el producto correcto');
+    same('hash', $metaRepository->saved[0][1], 'la guarda en el campo hash');
+
+    $hash = $metaRepository->saved[0][2];
+
+    $storedRepository = new FakeProductStateRepository();
+    $storedRepository->ids = ['SKU-1' => 10];
+    $storedRepository->values = [10 => $hash];
+
+    $second = new IncrementalProductState(
+        $storedRepository,
+        new FakeProductMetaRepository(),
+        new FakeCatalogProductState()
+    );
+
+    $second->prepare([$product]);
+
+    same(
+        false,
+        $second->hasChanges(10, $product),
+        'los mismos datos no son un cambio'
+    );
+    same(
+        true,
+        $second->hasChanges(10, [
+            'reference' => 'SKU-1',
+            'name' => 'Producto uno',
+            'price' => '29.99',
+        ]),
+        'un precio distinto sí es un cambio'
+    );
+    same(
+        true,
+        $second->hasChanges(10, [
+            'reference' => 'SKU-1',
+            'name' => 'Producto uno',
+            'price' => '19.99',
+            'description' => 'Nueva descripción',
+        ]),
+        'un campo nuevo también es un cambio'
+    );
 }
 
 /*

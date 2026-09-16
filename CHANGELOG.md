@@ -67,6 +67,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * Manual import now accepts the file extensions declared by the registered readers.
 * `HttpSourceReader::request()` accepts a method, headers, query parameters and body, so authenticated APIs can be reached without duplicating the URL validation.
 * Source readers declare their own batch size, so a paginated source only fetches the pages a batch needs.
+* `ProductStateInterface` with a default implementation, so the synchronization engine can resolve and compare existing products through a replaceable strategy.
+* `ProductStateRepository`, which resolves many product references and stored values in a single query.
 
 ### Fixed
 
@@ -80,6 +82,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 * `SourceValidator`, `SourceService`, `CronRunner` and `ImportBatchProcessor` no longer assume CSV: they resolve the reader from the registry.
 * The source form lists every available source type instead of a single hardcoded option.
+* `ProductSync` no longer loads each existing product by itself: it asks the product state, which may answer for the whole batch at once.
 * `cpbsync.php` now only keeps the module lifecycle and delegates every `cpbsync_action` to the presentation layer.
 * Source reading and mapping loading are no longer duplicated between Dry Run and synchronization.
 * Mapping form validation and mapping persistence are separated from the controller code.
