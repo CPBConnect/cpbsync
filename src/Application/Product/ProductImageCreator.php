@@ -29,7 +29,15 @@ class ProductImageCreator
         $image->position =
             Image::getHighestPosition($idProduct) + 1;
 
-        $image->cover = 1;
+        /*
+         * Sólo la primera imagen del producto es la portada: PrestaShop
+         * guarda una fila por imagen y tienda en image_shop, con un
+         * índice único sobre (producto, tienda, portada), y las que no
+         * son portada van con NULL.
+         */
+        $isCover = !Image::getCover($idProduct);
+
+        $image->cover = $isCover ? true : null;
 
         if (!$image->add()) {
             throw new \RuntimeException(
@@ -39,14 +47,16 @@ class ProductImageCreator
 
         $idShop = (int) \Context::getContext()->shop->id;
 
-        \Db::getInstance()->update(
-            'image_shop',
-            [
-                'cover' => 1,
-            ],
-            'id_image = ' . (int) $image->id .
-            ' AND id_shop = ' . $idShop
-        );
+        if ($isCover) {
+            \Db::getInstance()->update(
+                'image_shop',
+                [
+                    'cover' => 1,
+                ],
+                'id_image = ' . (int) $image->id .
+                ' AND id_shop = ' . $idShop
+            );
+        }
 
         $imagePath = $image->getPathForCreation();
 
