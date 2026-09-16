@@ -87,6 +87,10 @@ function extractWordings(string $root, string $domain): array
             "/->addConfirmation\(\s*'((?:[^'\\\\]|\\\\.)+)'/s",
             "/new ValidationError\(\s*'((?:[^'\\\\]|\\\\.)+)'/s",
             "/throw new \\\\?[A-Za-z\\\\]*Exception\(\s*'((?:[^'\\\\]|\\\\.)+)'/s",
+            // Campos y opciones de las transformaciones: las etiquetas
+            // son textos de interfaz aunque vivan en un array.
+            "/'label' => '((?:[^'\\\\]|\\\\.)+)'/s",
+            "/'hint' => '((?:[^'\\\\]|\\\\.)+)'/s",
         ];
 
         foreach ($patterns as $pattern) {

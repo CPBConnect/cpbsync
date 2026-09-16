@@ -76,6 +76,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * Duration column in the history list, and duration, memory, phase breakdown and a truncation notice in the run detail.
 * The paid edition adds a monitoring dashboard with a period selector, summary counters, the most frequent errors, the size of the stored history and a retention purge.
 * `AdminActionsInterface`, the extension point the main router consults before treating an unknown action as non-existent.
+* Transformation registry (`TransformerInterface`, `AbstractTransformer`, `TransformerRegistry`, `TransformerFactory`): a transformation only declares its name, its label, the fields it needs and how it converts a value, and the synchronization engine no longer carries a hardcoded list of transformations.
+* The mapping form builds the transformation list and its configuration fields from that registry, and offers each field only the transformations that apply to it, without reloading the page.
+* The paid edition adds fifteen transformations on top of the four basic ones: value maps, default values, fallback fields, joining fields, prefixes and suffixes, arithmetic with rounding, regular expression extraction and replacement, yes/no conversion, shortening, slugs, capitalisation, HTML removal, taking one part of a value, and keeping only digits.
 
 ### Fixed
 
@@ -88,6 +91,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * An empty list at `record_path` means "no records" instead of an error.
 * The thumbnail error message was cut in the catalogues (`The thumbnail "`), so it could never match the message thrown at runtime. The message is now complete and translatable: `The thumbnail could not be generated.`
 * The phase breakdown of a run (reading the source, applying the mapping, writing products) was never translated: the wordings were looked up from an array, where the translation check could not see them. A run of a few milliseconds also showed every phase as `0 s`, so phases now use three decimals.
+* Text normalization was applied in the Dry Run but not in the real synchronization: the transformation dispatch was written twice, in `MappingApplier::apply()` and `MappingApplier::applyWithOriginals()`, and the first one had no case for it. Both paths now share a single dispatch, so the Dry Run can no longer promise a result that the synchronization does not produce.
+* Price normalization rejected any price carrying a currency symbol or letters (`10,50 €`, `10.50 EUR`), which is how most supplier catalogs send them, so the whole product failed. It now strips anything that is not part of the number and detects whether the decimal separator is the comma or the dot (the last one wins when both appear), with `decimal_separator` and `thousands_separator` settings for catalogs that need them spelled out.
 * `history.tpl` and `history-detail.tpl` contained hardcoded text with no translation tags; every wording is now wrapped in `{l}`.
 * Missing `</strong>` closing tag in `sync-result.tpl`.
 * Product image downloader reported a stale Spanish wording.
@@ -106,6 +111,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * Everything shown in the back office is now translatable: source form validation errors, import JSON responses, JavaScript messages, product validation errors in the Dry Run, synchronization results and history details.
 * The synchronization history keeps the summary of every run plus a limited sample of the processed products (200 by default) instead of every one of them, so an hourly cron on a large catalog no longer grows the database without bound: 50,000 products used to add about 4.3 MB per run, roughly 103 MB a day.
 * `tools/check-translations.php` also extracts wordings that carry `sprintf=`/`js=` parameters and messages thrown from `switch` branches, which were invisible to it before.
+* The transformation configuration is now generic (`transformation_config[field][option]`), so a new transformation needs no change in the validator, the saver, the handler or the template. Existing mappings keep working: `replace_text` still stores `search` and `replace`.
+* `tools/check-translations.php` also reads the labels and hints declared by the transformation fields.
 
 ### Removed
 

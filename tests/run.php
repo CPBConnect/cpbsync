@@ -11,6 +11,7 @@ require_once __DIR__ . '/Support/Fakes.php';
 
 use CPBConnect\Application\Import\ImportService;
 use CPBConnect\Application\Mapping\MappingConfigurationBuilder;
+use CPBConnect\Application\Mapping\MappingApplier;
 use CPBConnect\Application\Mapping\MappingInputValidator;
 use CPBConnect\Application\Mapping\MappingSaver;
 use CPBConnect\Application\Product\ProductImageProviderFactory;
@@ -21,6 +22,7 @@ use CPBConnect\Application\Source\SourceValidator;
 use CPBConnect\Application\Sync\SourceSyncService;
 use CPBConnect\Application\Sync\SyncHistoryService;
 use CPBConnect\Application\Sync\SyncMetrics;
+use CPBConnect\Application\Transform\TransformerFactory;
 use CPBConnect\Infrastructure\PrestaShop\ModuleAdminShell;
 use CPBConnect\Premium\Application\Monitoring\SyncMonitoringService;
 use CPBConnect\Premium\Application\Product\IncrementalProductState;
@@ -483,7 +485,7 @@ same(
     $mappingValidator->validate(
         ['sku' => 'reference', 'precio' => 'price'],
         ['precio' => 'replace_text'],
-        ['precio' => 'USD']
+        ['precio' => ['search' => 'USD']]
     ),
     'acepta replace_text con texto de búsqueda'
 );
@@ -500,6 +502,521 @@ same(
 
 /*
  * ---------------------------------------------------------------------
+ * MappingApplier
+ * ---------------------------------------------------------------------
+ */
+
+section('MappingApplier');
+
+$mappingApplier = new MappingApplier();
+
+$mapping = [
+    'sku' => [
+        'target' => 'reference',
+        'transform' => 'none',
+    ],
+    'nombre' => [
+        'target' => 'name',
+        'transform' => 'normalize_text',
+    ],
+    'precio' => [
+        'target' => 'price',
+        'transform' => 'normalize_price',
+    ],
+    'stock' => [
+        'target' => 'quantity',
+        'transform' => 'normalize_stock',
+    ],
+    'descripcion' => [
+        'target' => 'description',
+        'transform' => 'replace_text',
+        'config' => ['search' => 'IVA', 'replace' => ''],
+    ],
+    'sobra' => [
+        'target' => '',
+        'transform' => 'none',
+    ],
+];
+
+$row = [
+    'sku' => 'A-1',
+    'nombre' => "  Producto   con   espacios  ",
+    'precio' => '1.234,56',
+    'stock' => '3 unidades',
+    'descripcion' => 'Precio con IVA incluido',
+    'sobra' => 'x',
+];
+
+$mapped = $mappingApplier->apply($row, $mapping);
+
+same('A-1', $mapped['reference'], 'copia los campos sin transformación');
+same(
+    'Producto con espacios',
+    $mapped['name'],
+    'normaliza el texto al sincronizar'
+);
+same(1234.56, $mapped['price'], 'normaliza el precio');
+same(3, $mapped['quantity'], 'normaliza el stock');
+same(
+    'Precio con  incluido',
+    $mapped['description'],
+    'aplica el reemplazo de texto'
+);
+same(5, count($mapped), 'ignora los campos sin destino');
+
+$dryRun = $mappingApplier->applyWithOriginals($row, $mapping);
+
+same(
+    'Producto con espacios',
+    $dryRun['name']['value'],
+    'el Dry Run normaliza el texto'
+);
+same(
+    "  Producto   con   espacios  ",
+    $dryRun['name']['original'],
+    'el Dry Run conserva el valor original'
+);
+same(true, $dryRun['name']['changed'], 'marca el campo como cambiado');
+
+same(
+    $mapped['name'],
+    $dryRun['name']['value'],
+    'el Dry Run y la sincronización dan el mismo resultado'
+);
+same(
+    $mapped['quantity'],
+    $dryRun['quantity']['value'],
+    'el stock coincide en los dos recorridos'
+);
+same(
+    false,
+    $dryRun['reference']['changed'],
+    'un campo sin transformación no cambia'
+);
+
+// Formato antiguo: el mapeo es directamente el campo destino.
+same(
+    ['reference' => 'A-1'],
+    $mappingApplier->apply($row, ['sku' => 'reference']),
+    'acepta el mapeo como cadena'
+);
+same(
+    [
+        'reference' => [
+            'original' => 'A-1',
+            'value' => 'A-1',
+            'changed' => false,
+        ],
+    ],
+    $mappingApplier->applyWithOriginals($row, ['sku' => 'reference']),
+    'acepta el mapeo como cadena en el Dry Run'
+);
+
+same(
+    [],
+    $mappingApplier->apply($row, ['no_existe' => 'reference']),
+    'ignora los campos que no vienen en la fila'
+);
+
+/*
+ * ---------------------------------------------------------------------
+ * Transformaciones
+ * ---------------------------------------------------------------------
+ */
+
+section('Transformaciones');
+
+$transformers = TransformerFactory::create();
+
+/**
+ * Busca una transformación y falla si no está registrada.
+ */
+$transformer = static function (string $name) use ($transformers) {
+    $found = $transformers->find($name);
+
+    if ($found === null) {
+        throw new RuntimeException('Falta la transformación ' . $name);
+    }
+
+    return $found;
+};
+
+$catalogRow = [
+    'sku' => 'A-1',
+    'marca' => 'Acme',
+    'ean' => '123-456',
+    'categorias' => 'Ropa|Zapatos',
+    'descripcion' => '<p>Texto <b>con</b> marcado</p>',
+];
+
+truthy(
+    $transformers->has('normalize_price')
+    && $transformers->has('normalize_stock')
+    && $transformers->has('normalize_text')
+    && $transformers->has('replace_text'),
+    'el núcleo registra sus cuatro transformaciones'
+);
+
+// Precio: formatos que antes se rechazaban.
+$price = $transformer('normalize_price');
+
+same(
+    10.5,
+    $price->transform('10,50 €', [], []),
+    'acepta el precio con el símbolo de euro'
+);
+same(
+    10.5,
+    $price->transform('10.50 EUR', [], []),
+    'acepta el precio con el código de moneda'
+);
+same(
+    1234.56,
+    $price->transform('1,234.56', [], []),
+    'detecta el formato con la coma de miles'
+);
+same(
+    1234.56,
+    $price->transform('1.234,56', [], []),
+    'detecta el formato con el punto de miles'
+);
+same(
+    1234.56,
+    $price->transform(
+        '1,234.56',
+        ['decimal_separator' => '.', 'thousands_separator' => ','],
+        []
+    ),
+    'respeta los separadores configurados'
+);
+throws(
+    static fn () => $price->transform('12.34.56', [], []),
+    'The price format is not valid.',
+    'rechaza un precio con dos decimales'
+);
+
+same(
+    'Acme',
+    $transformer('replace_text')->transform(
+        'Acme S.L.',
+        ['search' => ' S.L.', 'replace' => ''],
+        []
+    ),
+    'replace_text quita el texto indicado'
+);
+
+if (!class_exists(
+    'CPBConnect\\Premium\\Application\\Transform\\PremiumTransformerRegistry'
+)) {
+    // Sin la edición de pago sólo quedan las básicas.
+    same(4, count($transformers->all()), 'el paquete gratuito no trae más');
+
+    /*
+     * -----------------------------------------------------------------
+     * Fin de las pruebas
+     * -----------------------------------------------------------------
+     */
+} else {
+    section('Transformaciones avanzadas');
+
+    truthy(
+        count($transformers->all()) >= 19,
+        'la edición de pago amplía el registro'
+    );
+
+    same(
+        '1',
+        $transformer('map_values')->transform(
+            'En stock',
+            ['map' => "En stock=1\nAgotado=0"],
+            []
+        ),
+        'map_values traduce el valor'
+    );
+    same(
+        'Otro',
+        $transformer('map_values')->transform(
+            'Otro',
+            ['map' => 'En stock=1'],
+            []
+        ),
+        'map_values deja el valor si no hay regla'
+    );
+    same(
+        'You must provide at least one value to map for the "%field%" field.',
+        $transformer('map_values')->validate([], 'stock')->getMessage(),
+        'map_values exige reglas'
+    );
+
+    same(
+        'Sin marca',
+        $transformer('default_value')->transform(
+            '  ',
+            ['value' => 'Sin marca'],
+            []
+        ),
+        'default_value cubre los valores vacíos'
+    );
+    same(
+        'Acme',
+        $transformer('default_value')->transform(
+            'Acme',
+            ['value' => 'Sin marca'],
+            []
+        ),
+        'default_value respeta el valor recibido'
+    );
+
+    same(
+        '123-456',
+        $transformer('fallback_fields')->transform(
+            '',
+            ['fields' => 'ean,sku'],
+            $catalogRow
+        ),
+        'fallback_fields usa otro campo de la fila'
+    );
+    same(
+        'A-1',
+        $transformer('fallback_fields')->transform(
+            '',
+            ['fields' => 'no_existe,sku'],
+            $catalogRow
+        ),
+        'fallback_fields salta los campos que no existen'
+    );
+
+    same(
+        'Camiseta - Acme',
+        $transformer('concat')->transform(
+            'Camiseta',
+            ['fields' => 'marca', 'separator' => ' - '],
+            $catalogRow
+        ),
+        'concat junta el valor con otro campo'
+    );
+    same(
+        'Acme',
+        $transformer('concat')->transform(
+            '',
+            ['fields' => 'marca', 'separator' => ' - '],
+            $catalogRow
+        ),
+        'concat no deja separadores sueltos'
+    );
+
+    same(
+        '[A-1]',
+        $transformer('affix')->transform(
+            'A-1',
+            ['prefix' => '[', 'suffix' => ']'],
+            []
+        ),
+        'affix añade prefijo y sufijo'
+    );
+    same(
+        '',
+        $transformer('affix')->transform(
+            '',
+            ['prefix' => '[', 'suffix' => ']'],
+            []
+        ),
+        'affix no inventa un valor vacío'
+    );
+
+    $arithmetic = $transformer('arithmetic');
+
+    same(
+        12.71,
+        $arithmetic->transform(
+            '10.5',
+            ['operation' => 'multiply', 'value' => '1.21', 'round' => '2'],
+            []
+        ),
+        'arithmetic multiplica y redondea'
+    );
+    same(
+        6.0,
+        $arithmetic->transform(
+            '12',
+            ['operation' => 'divide', 'value' => '2'],
+            []
+        ),
+        'arithmetic divide'
+    );
+    same(
+        9.0,
+        $arithmetic->transform(
+            '10',
+            ['operation' => 'subtract', 'value' => '1'],
+            []
+        ),
+        'arithmetic resta'
+    );
+    same(
+        'You cannot divide by zero in the "%field%" field.',
+        $arithmetic->validate(
+            ['operation' => 'divide', 'value' => '0'],
+            'price'
+        )->getMessage(),
+        'arithmetic no permite dividir por cero'
+    );
+    same(
+        'You must provide a number for the "%field%" field.',
+        $arithmetic->validate(
+            ['operation' => 'multiply', 'value' => 'dos'],
+            'price'
+        )->getMessage(),
+        'arithmetic exige un número'
+    );
+
+    same(
+        '123',
+        $transformer('regex_extract')->transform(
+            'ABC-123-XYZ',
+            ['pattern' => '/([0-9]+)/', 'group' => '1'],
+            []
+        ),
+        'regex_extract saca el grupo indicado'
+    );
+    same(
+        '',
+        $transformer('regex_extract')->transform(
+            'ABC',
+            ['pattern' => '/([0-9]+)/', 'group' => '1'],
+            []
+        ),
+        'regex_extract devuelve vacío si no hay coincidencia'
+    );
+    same(
+        'The pattern is not valid for the "%field%" field.',
+        $transformer('regex_extract')->validate(
+            ['pattern' => 'sin-delimitadores'],
+            'reference'
+        )->getMessage(),
+        'regex_extract rechaza un patrón inválido'
+    );
+
+    same(
+        'Camiseta azul',
+        $transformer('regex_replace')->transform(
+            'Camiseta   azul',
+            ['pattern' => '/\s+/', 'replacement' => ' '],
+            []
+        ),
+        'regex_replace normaliza con una expresión'
+    );
+
+    same(
+        1,
+        $transformer('boolean')->transform('sí', [], []),
+        'boolean reconoce los valores afirmativos'
+    );
+    same(
+        0,
+        $transformer('boolean')->transform('agotado', [], []),
+        'boolean deja el resto en cero'
+    );
+
+    same(
+        'abcd...',
+        $transformer('truncate')->transform(
+            'abcdefgh',
+            ['length' => '4', 'suffix' => '...'],
+            []
+        ),
+        'truncate recorta y añade el sufijo'
+    );
+    same(
+        'abc',
+        $transformer('truncate')->transform(
+            'abc',
+            ['length' => '4', 'suffix' => '...'],
+            []
+        ),
+        'truncate no toca los textos cortos'
+    );
+    same(
+        'You must provide the maximum length for the "%field%" field.',
+        $transformer('truncate')->validate([], 'name')->getMessage(),
+        'truncate exige la longitud'
+    );
+
+    same(
+        'camiseta-azul-nino',
+        $transformer('slug')->transform(
+            'Camiseta Azul Niño',
+            ['separator' => '-'],
+            []
+        ),
+        'slug quita acentos y espacios'
+    );
+
+    same(
+        'CAMISETA',
+        $transformer('case_format')->transform(
+            'camiseta',
+            ['mode' => 'upper'],
+            []
+        ),
+        'case_format pone en mayúsculas'
+    );
+    same(
+        'Camiseta Azul',
+        $transformer('case_format')->transform(
+            'camiseta azul',
+            ['mode' => 'title'],
+            []
+        ),
+        'case_format capitaliza cada palabra'
+    );
+
+    same(
+        'Texto con marcado',
+        $transformer('strip_html')->transform(
+            '<p>Texto <b>con</b> marcado</p>',
+            [],
+            []
+        ),
+        'strip_html deja el texto sin etiquetas'
+    );
+
+    same(
+        'Zapatos',
+        $transformer('split_part')->transform(
+            'Ropa|Zapatos',
+            ['separator' => '|', 'index' => '2'],
+            []
+        ),
+        'split_part devuelve la parte pedida'
+    );
+    same(
+        '',
+        $transformer('split_part')->transform(
+            'Ropa',
+            ['separator' => '|', 'index' => '2'],
+            []
+        ),
+        'split_part devuelve vacío si no hay esa parte'
+    );
+    same(
+        'The part number of the "%field%" field must be 1 or greater.',
+        $transformer('split_part')->validate(
+            ['separator' => '|', 'index' => '0'],
+            'category'
+        )->getMessage(),
+        'split_part exige una parte válida'
+    );
+
+    same(
+        '123456',
+        $transformer('only_digits')->transform('123-456', [], []),
+        'only_digits deja sólo los números'
+    );
+}
+
+/*
+ * ---------------------------------------------------------------------
  * MappingSaver
  * ---------------------------------------------------------------------
  */
@@ -513,8 +1030,7 @@ $mappingSaver->save(
     3,
     ['sku' => 'reference', 'precio' => 'price', 'vacio' => ''],
     ['precio' => 'replace_text'],
-    ['precio' => 'USD '],
-    ['precio' => '']
+    ['precio' => ['search' => 'USD ', 'replace' => '']]
 );
 
 same(1, count($mappingRepository->replaced), 'persiste el mapping');
@@ -548,7 +1064,6 @@ $mappingSaver->save(
     4,
     ['sku' => 'reference'],
     ['sku' => '  '],
-    [],
     []
 );
 
@@ -556,6 +1071,37 @@ same(
     'none',
     $mappingRepository->replaced[1][1][0]['transform'],
     'una transformación vacía se normaliza a none'
+);
+
+// Una transformación desconocida no guarda configuración.
+$mappingSaver->save(
+    5,
+    ['sku' => 'reference'],
+    ['sku' => 'inventada'],
+    ['sku' => ['search' => 'x']]
+);
+
+same(
+    null,
+    $mappingRepository->replaced[2][1][0]['transform_config'],
+    'una transformación desconocida no guarda configuración'
+);
+
+// Sólo se guardan los campos que declara la transformación.
+$mappingSaver->save(
+    6,
+    ['precio' => 'price'],
+    ['precio' => 'normalize_price'],
+    ['precio' => ['decimal_separator' => ',', 'inventado' => 'x']]
+);
+
+same(
+    json_encode(
+        ['decimal_separator' => ',', 'thousands_separator' => ''],
+        JSON_UNESCAPED_UNICODE
+    ),
+    $mappingRepository->replaced[3][1][0]['transform_config'],
+    'guarda sólo los campos declarados por la transformación'
 );
 
 /*

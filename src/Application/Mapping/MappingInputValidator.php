@@ -2,6 +2,8 @@
 
 namespace CPBConnect\Application\Mapping;
 
+use CPBConnect\Application\Transform\TransformerFactory;
+use CPBConnect\Application\Transform\TransformerRegistry;
 use CPBConnect\Application\Validation\ValidationError;
 
 /**
@@ -21,18 +23,23 @@ class MappingInputValidator
         'ean13',
     ];
 
-    public const TRANSFORMATIONS = [
-        'none',
-        'normalize_price',
-        'normalize_stock',
-        'normalize_text',
-        'replace_text',
-    ];
+    private TransformerRegistry $transformers;
 
+    public function __construct(?TransformerRegistry $transformers = null)
+    {
+        $this->transformers = $transformers
+            ?? TransformerFactory::create();
+    }
+
+    /**
+     * @param array<string, mixed> $mapping         campo de origen => destino
+     * @param array<string, mixed> $transformations campo de origen => transformación
+     * @param array<string, mixed> $config          campo de origen => configuración
+     */
     public function validate(
         array $mapping,
         array $transformations,
-        array $search
+        array $config
     ): ?ValidationError {
         if (!$this->hasReference($mapping)) {
             return new ValidationError(
@@ -68,39 +75,53 @@ class MappingInputValidator
 
             $usedTargetFields[$targetField] = true;
 
-            $transform = MappingTransformInput::resolve(
+            $error = $this->validateTransformation(
+                (string) $sourceField,
                 $transformations,
-                $sourceField
+                $config
             );
 
-            if (!in_array(
-                $transform,
-                self::TRANSFORMATIONS,
-                true
-            )) {
-                return new ValidationError(
-                    'The transformation "%transform%" is not valid.',
-                    ['%transform%' => $transform]
-                );
-            }
-
-            if (
-                $transform === 'replace_text'
-                && trim(
-                    MappingTransformInput::readValue(
-                        $search,
-                        $sourceField
-                    )
-                ) === ''
-            ) {
-                return new ValidationError(
-                    'You must provide the text to replace for the "%field%" field.',
-                    ['%field%' => (string) $sourceField]
-                );
+            if ($error !== null) {
+                return $error;
             }
         }
 
         return null;
+    }
+
+    /**
+     * @param array<string, mixed> $transformations
+     * @param array<string, mixed> $config
+     */
+    private function validateTransformation(
+        string $sourceField,
+        array $transformations,
+        array $config
+    ): ?ValidationError {
+        $transform = MappingTransformInput::resolve(
+            $transformations,
+            $sourceField
+        );
+
+        if ($transform === 'none') {
+            return null;
+        }
+
+        $transformer = $this->transformers->find($transform);
+
+        if ($transformer === null) {
+            return new ValidationError(
+                'The transformation "%transform%" is not valid.',
+                ['%transform%' => $transform]
+            );
+        }
+
+        $posted = $config[$sourceField] ?? [];
+
+        return $transformer->validate(
+            is_array($posted) ? $posted : [],
+            $sourceField
+        );
     }
 
     private function hasReference(array $mapping): bool

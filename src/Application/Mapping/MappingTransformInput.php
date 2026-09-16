@@ -2,6 +2,7 @@
 
 namespace CPBConnect\Application\Mapping;
 
+use CPBConnect\Application\Transform\TransformerInterface;
 use RuntimeException;
 
 /**
@@ -30,36 +31,68 @@ final class MappingTransformInput
 
     public static function readValue(array $values, $key): string
     {
-        return isset($values[$key]) ? (string) $values[$key] : '';
+        if (!isset($values[$key]) || !is_scalar($values[$key])) {
+            return '';
+        }
+
+        return (string) $values[$key];
     }
 
     /**
-     * Construye la configuración JSON de la transformación.
+     * Recoge la configuración enviada, quedándose sólo con los campos
+     * que declara la transformación.
+     *
+     * @param array<string, mixed> $posted
+     *
+     * @return array<string, string>
      */
-    public static function buildConfig(
-        string $transform,
-        array $search,
-        array $replace,
-        $sourceField
-    ): ?string {
-        if ($transform !== 'replace_text') {
+    public static function collectConfig(
+        TransformerInterface $transformer,
+        array $posted
+    ): array {
+        $config = [];
+
+        foreach ($transformer->describe()['fields'] as $field) {
+            $name = (string) ($field['name'] ?? '');
+
+            if ($name === '') {
+                continue;
+            }
+
+            $value = self::readValue($posted, $name);
+
+            // Los valores se guardan tal cual (un espacio puede ser
+            // significativo), pero el valor por defecto sólo entra si
+            // el campo viene vacío.
+            if (trim($value) === '' && isset($field['default'])) {
+                $value = (string) $field['default'];
+            }
+
+            $config[$name] = $value;
+        }
+
+        return $config;
+    }
+
+    /**
+     * Configuración serializada para guardarla con el mapeo.
+     *
+     * @param array<string, string> $config
+     */
+    public static function encodeConfig(array $config): ?string
+    {
+        if ($config === []) {
             return null;
         }
 
-        $config = json_encode(
-            [
-                'search' => self::readValue($search, $sourceField),
-                'replace' => self::readValue($replace, $sourceField),
-            ],
-            JSON_UNESCAPED_UNICODE
-        );
+        $encoded = json_encode($config, JSON_UNESCAPED_UNICODE);
 
-        if ($config === false) {
+        if ($encoded === false) {
             throw new RuntimeException(
                 'The transformation configuration could not be saved.'
             );
         }
 
-        return $config;
+        return $encoded;
     }
 }
