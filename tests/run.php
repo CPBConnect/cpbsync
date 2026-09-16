@@ -13,11 +13,14 @@ use CPBConnect\Application\Import\ImportService;
 use CPBConnect\Application\Mapping\MappingConfigurationBuilder;
 use CPBConnect\Application\Mapping\MappingInputValidator;
 use CPBConnect\Application\Mapping\MappingSaver;
+use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use CPBConnect\Application\Source\SourceService;
 use CPBConnect\Application\Source\SourceValidator;
 use CPBConnect\Application\Sync\SourceSyncService;
 use CPBConnect\Application\Sync\SyncHistoryService;
 use CPBConnect\Infrastructure\PrestaShop\ModuleAdminShell;
+use CPBConnect\Premium\Application\Source\Reader\JsonReader;
+use CPBConnect\Premium\Application\Source\Reader\XmlReader;
 use CPBConnect\Presentation\Admin\AdminActionRouter;
 use CPBConnect\Presentation\Admin\AdminLinkBuilder;
 use CPBConnect\Presentation\Admin\Handler\HistoryHandler;
@@ -80,6 +83,25 @@ function throws(callable $callback, string $expectedMessage, string $name): void
 }
 
 /**
+ * Registro de lectores simulados.
+ *
+ * @return array{0: SourceReaderRegistry, 1: array<string, FakeSourceReader>}
+ */
+function makeReaders(string ...$types): array
+{
+    $registry = new SourceReaderRegistry();
+    $readers = [];
+
+    foreach ($types as $type) {
+        $reader = new FakeSourceReader($type);
+        $registry->register($reader);
+        $readers[$type] = $reader;
+    }
+
+    return [$registry, $readers];
+}
+
+/**
  * Crea el juego completo de handlers con dobles en memoria.
  *
  * @return array{shell: FakeShell, handlers: array, doubles: array}
@@ -90,16 +112,19 @@ function buildAdminStack(): array
     $links = new AdminLinkBuilder('cpbsync');
 
     $sourceRepository = new FakeSourceRepository();
-    $csvSource = new FakeCsvSourceService();
+    $csvSource = new FakeSourceReader();
+
+    $readers = new SourceReaderRegistry();
+    $readers->register($csvSource);
+
     $sourceService = new SourceService(
         $sourceRepository,
-        $csvSource
+        $readers
     );
 
     $mappingRepository = new FakeMappingRepository();
     $logRepository = new FakeSyncLogRepository();
     $importRepository = new FakeImportRepository();
-    $reader = new FakeCsvSourceReader();
     $storage = new FakeImportFileStorage();
     $processor = new FakeImportBatchProcessor();
     $mapper = new FakeProductMapper();
@@ -110,7 +135,8 @@ function buildAdminStack(): array
         $shell,
         $links,
         $sourceService,
-        new SourceValidator()
+        new SourceValidator($readers),
+        $readers
     );
 
     $mappingHandler = new MappingHandler(
@@ -156,7 +182,7 @@ function buildAdminStack(): array
         new ImportService(
             $sourceRepository,
             $importRepository,
-            $reader,
+            $readers,
             $storage,
             $processor
         )
@@ -174,11 +200,11 @@ function buildAdminStack(): array
         'doubles' => [
             'sourceRepository' => $sourceRepository,
             'csvSource' => $csvSource,
+            'readers' => $readers,
             'sourceService' => $sourceService,
             'mappingRepository' => $mappingRepository,
             'logRepository' => $logRepository,
             'importRepository' => $importRepository,
-            'reader' => $reader,
             'storage' => $storage,
             'processor' => $processor,
             'mapper' => $mapper,
@@ -272,7 +298,9 @@ truthy(
 
 section('SourceValidator');
 
-$validator = new SourceValidator();
+[$readerRegistry] = makeReaders('csv');
+
+$validator = new SourceValidator($readerRegistry);
 
 same(
     null,
@@ -307,15 +335,22 @@ same(
     'exige el nombre'
 );
 
+$typeError = $validator->validate([
+    'name' => 'Proveedor A',
+    'type' => 'xml',
+    'url' => 'https://example.com/a.xml',
+    'frequency' => 'manual',
+]);
+
 same(
-    'Only CSV sources are supported in this version.',
-    $validator->validate([
-        'name' => 'Proveedor A',
-        'type' => 'xml',
-        'url' => 'https://example.com/a.xml',
-        'frequency' => 'manual',
-    ])->getMessage(),
-    'exige el tipo csv'
+    'The source type "%type%" is not supported.',
+    $typeError->getMessage(),
+    'exige un tipo de fuente soportado'
+);
+same(
+    ['%type%' => 'xml'],
+    $typeError->getParameters(),
+    'identifica el tipo de fuente no soportado'
 );
 
 same(
@@ -525,8 +560,9 @@ same(
 section('SourceService');
 
 $sourceRepository = new FakeSourceRepository();
-$csvSource = new FakeCsvSourceService();
-$sourceService = new SourceService($sourceRepository, $csvSource);
+[$registry, $registeredReaders] = makeReaders('csv');
+$csvSource = $registeredReaders['csv'];
+$sourceService = new SourceService($sourceRepository, $registry);
 
 $csvSource->result = [
     'headers' => ['sku'],
@@ -541,9 +577,9 @@ $read = $sourceService->read([
 
 same([['sku' => 'A']], $read['rows'], 'lee el catálogo de la fuente');
 same(
-    ['https://example.com/catalogo.csv'],
-    $csvSource->urls,
-    'pasa la URL al lector CSV'
+    'https://example.com/catalogo.csv',
+    $csvSource->readSources[0]['url'],
+    'pasa la fuente completa al lector'
 );
 
 throws(
@@ -551,8 +587,8 @@ throws(
         'type' => 'xml',
         'url' => 'https://example.com/catalogo.xml',
     ]),
-    'Only CSV sources can be used for now.',
-    'rechaza fuentes que no son CSV'
+    'The source type is not supported.',
+    'rechaza fuentes con un tipo no registrado'
 );
 
 same(null, $sourceService->find(0), 'ignora identificadores no válidos');
@@ -639,7 +675,8 @@ throws(
 section('SourceSyncService');
 
 $sourceRepository = new FakeSourceRepository();
-$csvSource = new FakeCsvSourceService();
+[$registry, $registeredReaders] = makeReaders('csv');
+$csvSource = $registeredReaders['csv'];
 $mappingRepository = new FakeMappingRepository();
 $logRepository = new FakeSyncLogRepository();
 $mapper = new FakeProductMapper();
@@ -671,7 +708,7 @@ $mappingRepository->mappings = [
 ];
 
 $syncService = new SourceSyncService(
-    new SourceService($sourceRepository, $csvSource),
+    new SourceService($sourceRepository, $registry),
     $mappingRepository,
     new MappingConfigurationBuilder(),
     $mapper,
@@ -707,10 +744,12 @@ same(
 );
 same(1, $syncResult['log_id'], 'devuelve el id del log');
 
+[$lonelyRegistry] = makeReaders('csv');
+
 $noSource = new SourceSyncService(
     new SourceService(
         new FakeSourceRepository(),
-        new FakeCsvSourceService()
+        $lonelyRegistry
     ),
     $mappingRepository,
     new MappingConfigurationBuilder(),
@@ -726,11 +765,14 @@ throws(
     'falla si la fuente no existe'
 );
 
-$emptyCsv = new FakeCsvSourceService();
+$emptyCsv = new FakeSourceReader();
 $emptyCsv->result = ['headers' => ['sku'], 'rows' => [], 'total' => 0];
 
+$emptyRegistry = new SourceReaderRegistry();
+$emptyRegistry->register($emptyCsv);
+
 $emptyRows = new SourceSyncService(
-    new SourceService($sourceRepository, $emptyCsv),
+    new SourceService($sourceRepository, $emptyRegistry),
     $mappingRepository,
     new MappingConfigurationBuilder(),
     $mapper,
@@ -746,7 +788,7 @@ throws(
 );
 
 $noMapping = new SourceSyncService(
-    new SourceService($sourceRepository, $csvSource),
+    new SourceService($sourceRepository, $registry),
     new FakeMappingRepository(),
     new MappingConfigurationBuilder(),
     $mapper,
@@ -760,6 +802,180 @@ throws(
     'The source has no mapping configured.',
     'falla si falta el mapping'
 );
+
+/*
+ * ---------------------------------------------------------------------
+ * Registro de lectores
+ * ---------------------------------------------------------------------
+ */
+
+section('SourceReaderRegistry');
+
+[$twoReaders, $twoRegistered] = makeReaders('csv', 'xml');
+
+same(
+    ['csv', 'xml'],
+    $twoReaders->allowedTypes(),
+    'enumera los tipos registrados'
+);
+same(
+    ['csv' => 'CSV', 'xml' => 'XML'],
+    $twoReaders->types(),
+    'devuelve tipo y etiqueta para el formulario'
+);
+same(
+    ['csv', 'xml'],
+    $twoReaders->fileExtensions(),
+    'reúne las extensiones admitidas'
+);
+truthy($twoReaders->has('xml'), 'reconoce un tipo registrado');
+same(null, $twoReaders->get('json'), 'devuelve null si el tipo no existe');
+same(
+    $twoRegistered['xml'],
+    $twoReaders->get('xml'),
+    'devuelve el lector del tipo solicitado'
+);
+
+/*
+ * ---------------------------------------------------------------------
+ * Lectores de pago
+ * ---------------------------------------------------------------------
+ */
+
+if (class_exists(XmlReader::class)) {
+    class TestableXmlReader extends XmlReader
+    {
+        public string $content = '';
+
+        protected function fetchContent(string $url): string
+        {
+            return $this->content;
+        }
+    }
+
+    class TestableJsonReader extends JsonReader
+    {
+        public string $content = '';
+
+        protected function fetchContent(string $url): string
+        {
+            return $this->content;
+        }
+    }
+}
+
+section('Lectores XML y JSON (edición de pago)');
+
+if (!class_exists(XmlReader::class)) {
+    echo "  (omitido: el paquete instalado es la edición gratuita)\n";
+} else {
+    $source = ['type' => 'xml', 'url' => 'https://example.com/a.xml'];
+
+    $xml = new TestableXmlReader();
+    $xml->content = '<catalog>'
+                    . '<product><sku>A</sku><name>Uno</name></product>'
+                    . '<product><sku>B</sku><name>Dos</name></product>'
+                    . '</catalog>';
+
+    $result = $xml->read($source);
+
+    same(['sku', 'name'], $result['headers'], 'XML: detecta las columnas');
+    same(2, $result['total'], 'XML: detecta el registro repetido');
+    same('B', $result['rows'][1]['sku'], 'XML: lee los valores');
+
+    $xml->content = '<catalog><products>'
+                    . '<product><sku>A</sku></product>'
+                    . '<product><sku>B</sku></product>'
+                    . '</products></catalog>';
+
+    same(
+        2,
+        $xml->read($source)['total'],
+        'XML: desciende a un contenedor anidado'
+    );
+
+    $xml->content = '<root><list><item><sku>A</sku></item></list></root>';
+
+    same(
+        1,
+        $xml->read($source + [
+            'config' => json_encode(
+                ['record_path' => '/root/list/item']
+            ),
+        ])['total'],
+        'XML: respeta record_path'
+    );
+
+    $xml->content = '<catalog>'
+                    . '<product><sku>A</sku>'
+                    . '<attrs><color>rojo</color></attrs></product>'
+                    . '<product><sku>B</sku>'
+                    . '<attrs><color>azul</color></attrs></product>'
+                    . '</catalog>';
+
+    same(
+        '<color>rojo</color>',
+        $xml->read($source)['rows'][0]['attrs'],
+        'XML: conserva el marcado interno'
+    );
+
+    $xml->content = 'esto no es xml';
+    throws(
+        static fn () => $xml->read($source),
+        'The XML source could not be parsed.',
+        'XML: informa de un documento inválido'
+    );
+
+    $xml->content = '<root><a>1</a></root>';
+    throws(
+        static fn () => $xml->read($source),
+        'The XML source does not contain a list of records.',
+        'XML: exige una lista de registros'
+    );
+
+    $jsonSource = ['type' => 'json', 'url' => 'https://example.com/a.json'];
+
+    $json = new TestableJsonReader();
+    $json->content = '[{"sku":"A","price":"1"},{"sku":"B","price":"2"}]';
+
+    $result = $json->read($jsonSource);
+
+    same(['sku', 'price'], $result['headers'], 'JSON: detecta las columnas');
+    same(2, $result['total'], 'JSON: lee una lista en la raíz');
+    same('B', $result['rows'][1]['sku'], 'JSON: lee los valores');
+
+    $json->content = '{"meta":{"page":1},"products":[{"sku":"A"}]}';
+
+    same(
+        1,
+        $json->read($jsonSource)['total'],
+        'JSON: encuentra la lista dentro del objeto'
+    );
+
+    $json->content = '{"data":{"items":[{"sku":"A"},{"sku":"B"}]}}';
+
+    same(
+        2,
+        $json->read($jsonSource + [
+            'config' => json_encode(['record_path' => 'data.items']),
+        ])['total'],
+        'JSON: respeta record_path'
+    );
+
+    $json->content = '{"meta":{"page":1}}';
+    throws(
+        static fn () => $json->read($jsonSource),
+        'The JSON source does not contain a list of records.',
+        'JSON: exige una lista de registros'
+    );
+
+    $json->content = '{esto no es json';
+    throws(
+        static fn () => $json->read($jsonSource),
+        'The JSON source could not be parsed.',
+        'JSON: informa de un documento inválido'
+    );
+}
 
 /*
  * ---------------------------------------------------------------------
@@ -1354,11 +1570,11 @@ $shell = $stack['shell'];
 $importHandler = $stack['handlers']['import'];
 $sourceRepository = $stack['doubles']['sourceRepository'];
 $importRepository = $stack['doubles']['importRepository'];
-$reader = $stack['doubles']['reader'];
+$reader = $stack['doubles']['csvSource'];
 $processor = $stack['doubles']['processor'];
 
 $sourceRepository->sources = [
-    1 => ['id_source' => 1, 'name' => 'Proveedor A'],
+    1 => ['id_source' => 1, 'name' => 'Proveedor A', 'type' => 'csv'],
 ];
 
 Tools::set([]);
@@ -1394,7 +1610,7 @@ $_FILES['import_file'] = [
     'error' => UPLOAD_ERR_OK,
 ];
 
-$reader->rows = 25;
+$reader->fileRows = 25;
 
 $response = $importHandler->upload();
 same(true, $response['success'], 'sube el archivo');
@@ -1407,11 +1623,11 @@ same(
     'marca la importación como manual'
 );
 
-$reader->rows = 0;
+$reader->fileRows = 0;
 $response = $importHandler->upload();
 same(false, $response['success'], 'un CSV vacío no se importa');
 same(
-    'The CSV file contains no products.',
+    'The file contains no products.',
     $response['message'],
     'explica que el CSV está vacío'
 );

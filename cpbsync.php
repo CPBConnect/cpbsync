@@ -24,7 +24,7 @@ class CpbSync extends Module
     {
         $this->name = 'cpbsync';
         $this->tab = 'administration';
-        $this->version = '1.0.0';
+        $this->version = '1.1.0';
         $this->author = 'CPBConnect';
         $this->need_instance = 0;
         $this->bootstrap = true;

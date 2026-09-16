@@ -2,6 +2,7 @@
 
 namespace CPBConnect\Application\Source;
 
+use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use CPBConnect\Application\Validation\ValidationError;
 
 /**
@@ -16,9 +17,10 @@ class SourceValidator
         'daily',
     ];
 
-    public const ALLOWED_TYPES = [
-        'csv',
-    ];
+    public function __construct(
+        private SourceReaderRegistry $readers
+    ) {
+    }
 
     public function validate(array $data): ?ValidationError
     {
@@ -43,9 +45,10 @@ class SourceValidator
             );
         }
 
-        if (!in_array($type, self::ALLOWED_TYPES, true)) {
+        if (!$this->readers->has($type)) {
             return new ValidationError(
-                'Only CSV sources are supported in this version.'
+                'The source type "%type%" is not supported.',
+                ['%type%' => $type]
             );
         }
 
@@ -58,6 +61,18 @@ class SourceValidator
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
             return new ValidationError(
                 'The source URL is not valid.'
+            );
+        }
+
+        $config = trim((string) ($data['config'] ?? ''));
+
+        if (
+            $config !== ''
+            && json_decode($config, true) === null
+            && json_last_error() !== JSON_ERROR_NONE
+        ) {
+            return new ValidationError(
+                'The additional configuration must be valid JSON.'
             );
         }
 

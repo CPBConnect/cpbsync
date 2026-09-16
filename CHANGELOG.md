@@ -61,9 +61,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * `isUsingNewTranslationSystem()` so the module opts into the new PrestaShop translation interface.
 * `translations/translations-to-do.csv` as a human-readable glossary of every wording and its Spanish translation.
 * `tools/check-translations.php` to verify that no wording is missing from the catalogues (`composer check-translations`).
+* Source reader extension API (`SourceReaderInterface`, `AbstractSourceReader`, `SourceReaderRegistry`, `CsvReader`) so new source types can be added without duplicating the synchronization engine.
+* `SourceReaderFactory`, the single place where an installed package registers the readers it ships.
+* `config` column on `cpbsync_source`, with the `upgrade-1.1.0.php` migration, for source-specific settings such as the record path of XML or JSON catalogs.
+* Manual import now accepts the file extensions declared by the registered readers.
 
 ### Changed
 
+* `SourceValidator`, `SourceService`, `CronRunner` and `ImportBatchProcessor` no longer assume CSV: they resolve the reader from the registry.
+* The source form lists every available source type instead of a single hardcoded option.
 * `cpbsync.php` now only keeps the module lifecycle and delegates every `cpbsync_action` to the presentation layer.
 * Source reading and mapping loading are no longer duplicated between Dry Run and synchronization.
 * Mapping form validation and mapping persistence are separated from the controller code.

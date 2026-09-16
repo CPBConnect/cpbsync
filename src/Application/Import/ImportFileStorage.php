@@ -2,14 +2,16 @@
 
 namespace CPBConnect\Application\Import;
 
+use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use RuntimeException;
 
 class ImportFileStorage
 {
     private string $directory;
 
-    public function __construct()
-    {
+    public function __construct(
+        private SourceReaderRegistry $readers
+    ) {
         $this->directory = _PS_MODULE_DIR_
                            . 'cpbsync/var/imports/';
     }
@@ -38,9 +40,9 @@ class ImportFileStorage
             pathinfo($file['name'], PATHINFO_EXTENSION)
         );
 
-        if ($extension !== 'csv') {
+        if (!$this->isAllowedExtension($extension)) {
             throw new RuntimeException(
-                'Only CSV files are allowed.'
+                'The file type is not allowed.'
             );
         }
 
@@ -55,7 +57,7 @@ class ImportFileStorage
             }
         }
 
-        $filename = uniqid('import_', true) . '.csv';
+        $filename = uniqid('import_', true) . '.' . $extension;
 
         $destination = $this->directory . $filename;
 
@@ -64,10 +66,19 @@ class ImportFileStorage
             $destination
         )) {
             throw new RuntimeException(
-                'The CSV file could not be saved.'
+                'The file could not be saved.'
             );
         }
 
         return $destination;
+    }
+
+    private function isAllowedExtension(string $extension): bool
+    {
+        return in_array(
+            $extension,
+            $this->readers->fileExtensions(),
+            true
+        );
     }
 }

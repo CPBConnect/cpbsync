@@ -38,6 +38,10 @@
         <source>Add source</source>
         <target>Agregar fuente</target>
       </trans-unit>
+      <trans-unit id="d5d90263bc" resname="Additional configuration (JSON)">
+        <source>Additional configuration (JSON)</source>
+        <target>Configuración adicional (JSON)</target>
+      </trans-unit>
       <trans-unit id="c5c374fffd" resname="An error occurred while uploading the file.">
         <source>An error occurred while uploading the file.</source>
         <target>Ocurrió un error al subir el archivo.</target>
@@ -250,21 +254,9 @@
         <source>One of the mappings could not be saved.</source>
         <target>No fue posible guardar uno de los mappings.</target>
       </trans-unit>
-      <trans-unit id="5b68e1e8a7" resname="Only CSV files are allowed.">
-        <source>Only CSV files are allowed.</source>
-        <target>Solo se permiten archivos CSV.</target>
-      </trans-unit>
-      <trans-unit id="078709196f" resname="Only CSV sources are supported in this version.">
-        <source>Only CSV sources are supported in this version.</source>
-        <target>En esta versión solo se admiten fuentes CSV.</target>
-      </trans-unit>
-      <trans-unit id="55f58cda25" resname="Only CSV sources can be run for now.">
-        <source>Only CSV sources can be run for now.</source>
-        <target>Por ahora solo se pueden ejecutar fuentes CSV.</target>
-      </trans-unit>
-      <trans-unit id="e317175b66" resname="Only CSV sources can be used for now.">
-        <source>Only CSV sources can be used for now.</source>
-        <target>Por ahora solo se pueden utilizar fuentes CSV.</target>
+      <trans-unit id="534394c888" resname="Optional. XML and JSON sources use the record_path setting to locate the records.">
+        <source>Optional. XML and JSON sources use the record_path setting to locate the records.</source>
+        <target>Opcional. Las fuentes XML y JSON usan el ajuste record_path para localizar los registros.</target>
       </trans-unit>
       <trans-unit id="f3c92c209d" resname="Original">
         <source>Original</source>
@@ -418,10 +410,6 @@
         <source>The CSV file contains duplicated headers.</source>
         <target>El archivo CSV contiene encabezados duplicados.</target>
       </trans-unit>
-      <trans-unit id="ec105a776b" resname="The CSV file contains no products.">
-        <source>The CSV file contains no products.</source>
-        <target>El archivo CSV no contiene productos.</target>
-      </trans-unit>
       <trans-unit id="54c2696ae5" resname="The CSV file could not be opened.">
         <source>The CSV file could not be opened.</source>
         <target>No se pudo abrir el archivo CSV.</target>
@@ -429,10 +417,6 @@
       <trans-unit id="61948eba8f" resname="The CSV file could not be read.">
         <source>The CSV file could not be read.</source>
         <target>No se pudo leer el archivo CSV.</target>
-      </trans-unit>
-      <trans-unit id="54b1b2f0b7" resname="The CSV file could not be saved.">
-        <source>The CSV file could not be saved.</source>
-        <target>No se pudo guardar el archivo CSV.</target>
       </trans-unit>
       <trans-unit id="50fcffb04c" resname="The CSV file has no headers.">
         <source>The CSV file has no headers.</source>
@@ -442,10 +426,6 @@
         <source>The CSV file is empty.</source>
         <target>El archivo CSV está vacío.</target>
       </trans-unit>
-      <trans-unit id="d1199ba1d4" resname="The CSV source contains no records.">
-        <source>The CSV source contains no records.</source>
-        <target>La fuente CSV no contiene registros.</target>
-      </trans-unit>
       <trans-unit id="27df0c3eb3" resname="The CSV source could not be opened.">
         <source>The CSV source could not be opened.</source>
         <target>No se pudo abrir la fuente CSV.</target>
@@ -454,6 +434,18 @@
         <source>The Dry Run could not be executed: %error%</source>
         <target>No fue posible ejecutar el Dry Run: %error%</target>
       </trans-unit>
+      <trans-unit id="8cb9260fe5" resname="The JSON source could not be parsed.">
+        <source>The JSON source could not be parsed.</source>
+        <target>No se pudo interpretar la fuente JSON.</target>
+      </trans-unit>
+      <trans-unit id="5fd11c7df5" resname="The JSON source does not contain a list of records.">
+        <source>The JSON source does not contain a list of records.</source>
+        <target>La fuente JSON no contiene una lista de registros.</target>
+      </trans-unit>
+      <trans-unit id="e057f225b8" resname="The JSON source is empty.">
+        <source>The JSON source is empty.</source>
+        <target>La fuente JSON está vacía.</target>
+      </trans-unit>
       <trans-unit id="36633b3d0c" resname="The PrestaShop field &quot;%field%&quot; is assigned more than once.">
         <source>The PrestaShop field "%field%" is assigned more than once.</source>
         <target>El campo de PrestaShop "%field%" está asignado más de una vez.</target>
@@ -461,6 +453,22 @@
       <trans-unit id="06110efe1b" resname="The PrestaShop field &quot;%field%&quot; is not valid.">
         <source>The PrestaShop field "%field%" is not valid.</source>
         <target>El campo de PrestaShop "%field%" no es válido.</target>
+      </trans-unit>
+      <trans-unit id="9e8ddae6d4" resname="The XML source could not be parsed.">
+        <source>The XML source could not be parsed.</source>
+        <target>No se pudo interpretar la fuente XML.</target>
+      </trans-unit>
+      <trans-unit id="1ab5ac072e" resname="The XML source does not contain a list of records.">
+        <source>The XML source does not contain a list of records.</source>
+        <target>La fuente XML no contiene una lista de registros.</target>
+      </trans-unit>
+      <trans-unit id="fcf3a6188d" resname="The XML source is empty.">
+        <source>The XML source is empty.</source>
+        <target>La fuente XML está vacía.</target>
+      </trans-unit>
+      <trans-unit id="79ae8c0671" resname="The additional configuration must be valid JSON.">
+        <source>The additional configuration must be valid JSON.</source>
+        <target>La configuración adicional debe ser un JSON válido.</target>
       </trans-unit>
       <trans-unit id="6ce345624f" resname="The category could not be created in PrestaShop.">
         <source>The category could not be created in PrestaShop.</source>
@@ -477,6 +485,18 @@
       <trans-unit id="00f9b3cb6a" resname="The existing product could not be loaded.">
         <source>The existing product could not be loaded.</source>
         <target>No fue posible cargar el producto existente.</target>
+      </trans-unit>
+      <trans-unit id="db4a48ae8f" resname="The file contains no products.">
+        <source>The file contains no products.</source>
+        <target>El archivo no contiene productos.</target>
+      </trans-unit>
+      <trans-unit id="fecd1adae5" resname="The file could not be saved.">
+        <source>The file could not be saved.</source>
+        <target>No se pudo guardar el archivo.</target>
+      </trans-unit>
+      <trans-unit id="539d5ea859" resname="The file type is not allowed.">
+        <source>The file type is not allowed.</source>
+        <target>El tipo de archivo no está permitido.</target>
       </trans-unit>
       <trans-unit id="5848cfb134" resname="The first 5 products from the source are shown.">
         <source>The first 5 products from the source are shown.</source>
@@ -650,6 +670,10 @@
         <source>The source does not exist.</source>
         <target>La fuente no existe.</target>
       </trans-unit>
+      <trans-unit id="dbd95c4710" resname="The source file could not be read.">
+        <source>The source file could not be read.</source>
+        <target>No se pudo leer el archivo de la fuente.</target>
+      </trans-unit>
       <trans-unit id="ad266468b5" resname="The source has no mapping configured.">
         <source>The source has no mapping configured.</source>
         <target>La fuente no tiene un mapping configurado.</target>
@@ -669,6 +693,14 @@
       <trans-unit id="b34deb1e97" resname="The source name is required.">
         <source>The source name is required.</source>
         <target>El nombre de la fuente es obligatorio.</target>
+      </trans-unit>
+      <trans-unit id="ff68f2a919" resname="The source type &quot;%type%&quot; is not supported.">
+        <source>The source type "%type%" is not supported.</source>
+        <target>El tipo de fuente "%type%" no está soportado.</target>
+      </trans-unit>
+      <trans-unit id="64305e08a7" resname="The source type is not supported.">
+        <source>The source type is not supported.</source>
+        <target>El tipo de fuente no está soportado.</target>
       </trans-unit>
       <trans-unit id="9ba8fbf470" resname="The source was created successfully.">
         <source>The source was created successfully.</source>
