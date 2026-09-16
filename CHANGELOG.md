@@ -76,6 +76,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 * The module did not follow HTTP redirects, so a source answering 301/302/307/308 was reported as "the source is empty". Redirects are now followed (up to three hops) and every hop is validated with the same rules as the original URL.
 * Images behind an HTTP redirect could not be downloaded, because the image downloader had its own HTTP code that ignored redirects. It now shares `HttpFetcher`.
+* Thumbnail generation passed an extra argument to `ImageManager::resize()` that the method does not accept, raising a PHP warning for every image type and every product. In development mode that warning text could be injected into the AJAX responses of the import.
 * `DatabaseInstaller` was missing its `use Db;` import, so the module could not be installed at all.
 * `install()` now creates the database tables before registering the module and rolls back if registration fails, so a failed installation no longer leaves the module marked as installed without its tables.
 * `tools/check-translations.php` no longer scans the generated `build/dist/` folder.

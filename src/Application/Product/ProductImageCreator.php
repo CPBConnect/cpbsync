@@ -84,8 +84,7 @@ class ProductImageCreator
                 $targetHeight,
                 5,
                 $sourceWidth,
-                $sourceHeight,
-                $imageType['image_fitment']
+                $sourceHeight
             );
 
             if (!$result) {
