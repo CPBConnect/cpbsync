@@ -11,9 +11,12 @@ use CPBConnect\Application\Import\ImportBatchProcessor;
 use CPBConnect\Application\Product\ProductDryRun;
 use CPBConnect\Application\Product\ProductMapper;
 use CPBConnect\Application\Product\ProductSync;
+use CPBConnect\Application\Product\CatalogProductState;
 use CPBConnect\Application\Source\Reader\AbstractSourceReader;
 use CPBConnect\Infrastructure\Persistence\ImportRepository;
 use CPBConnect\Infrastructure\Persistence\MappingRepository;
+use CPBConnect\Infrastructure\Persistence\ProductMetaRepository;
+use CPBConnect\Infrastructure\Persistence\ProductStateRepository;
 use CPBConnect\Infrastructure\Persistence\SourceRepository;
 use CPBConnect\Infrastructure\Persistence\SyncLogRepository;
 use CPBConnect\Infrastructure\Source\HttpSourceReader;
@@ -439,5 +442,102 @@ class FakeHttpReader extends HttpSourceReader
         }
 
         return array_shift($this->responses) ?? '{}';
+    }
+}
+
+class FakeProductStateRepository extends ProductStateRepository
+{
+    /** @var array<string, int> */
+    public array $ids = [];
+
+    /** @var array<int, string> */
+    public array $values = [];
+
+    public array $calls = [];
+
+    public function __construct()
+    {
+    }
+
+    public function findIdsByReferences(array $references): array
+    {
+        $this->calls[] = ['ids', $references];
+
+        return array_intersect_key(
+            $this->ids,
+            array_flip($references)
+        );
+    }
+
+    public function findValuesByField(array $ids, string $field): array
+    {
+        $this->calls[] = ['values', $ids, $field];
+
+        return array_intersect_key(
+            $this->values,
+            array_flip($ids)
+        );
+    }
+}
+
+class FakeProductMetaRepository extends ProductMetaRepository
+{
+    public array $saved = [];
+
+    public function __construct()
+    {
+    }
+
+    public function save(
+        int $idProduct,
+        string $field,
+        string $sourceValue
+    ): bool {
+        $this->saved[] = [$idProduct, $field, $sourceValue];
+
+        return true;
+    }
+
+    public function find(int $idProduct, string $field): ?string
+    {
+        foreach (array_reverse($this->saved) as $entry) {
+            if ($entry[0] === $idProduct && $entry[1] === $field) {
+                return $entry[2];
+            }
+        }
+
+        return null;
+    }
+}
+
+class FakeCatalogProductState extends CatalogProductState
+{
+    /** @var array<int, bool> */
+    public array $changes = [];
+
+    public array $asked = [];
+
+    public function __construct()
+    {
+    }
+
+    public function prepare(array $products): void
+    {
+    }
+
+    public function findExistingId(string $reference): ?int
+    {
+        return null;
+    }
+
+    public function hasChanges(int $idProduct, array $product): bool
+    {
+        $this->asked[] = $idProduct;
+
+        return $this->changes[$idProduct] ?? true;
+    }
+
+    public function remember(array $product, int $idProduct): void
+    {
     }
 }

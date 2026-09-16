@@ -4,20 +4,23 @@ namespace CPBConnect\Application\Product;
 
 class ProductSync
 {
-    private ProductFinder $finder;
     private ProductCreator $creator;
     private ProductUpdater $updater;
     private ProductValidator $validator;
+    private ProductStateInterface $state;
+    private ProductImageProviderInterface $images;
 
-    private ProductChangeDetector $changeDetector;
+    public function __construct(
+        ?ProductStateInterface $state = null,
+        ?ProductImageProviderInterface $images = null
+    ) {
+        $this->state = $state ?? ProductStateFactory::create();
 
-    public function __construct()
-    {
-        $this->finder = new ProductFinder();
-        $this->creator = new ProductCreator();
-        $this->updater = new ProductUpdater();
+        $this->images = $images ?? ProductImageProviderFactory::create();
+
+        $this->creator = new ProductCreator($this->images);
+        $this->updater = new ProductUpdater($this->images);
         $this->validator = new ProductValidator();
-        $this->changeDetector = new ProductChangeDetector();
     }
 
     public function sync(array $products): array
@@ -31,6 +34,31 @@ class ProductSync
             'items' => [],
         ];
 
+        $this->state->prepare($products);
+
+        /*
+         * Las imágenes que van a hacer falta se preparan antes de
+         * recorrer el lote, para poder descargarlas en paralelo.
+         */
+        $this->images->prefetch($products);
+
+        try {
+            return $this->processProducts($products, $result);
+        } finally {
+            $this->images->cleanup();
+        }
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $products
+     * @param array<string, mixed> $result
+     *
+     * @return array<string, mixed>
+     */
+    private function processProducts(
+        array $products,
+        array $result
+    ): array {
         foreach ($products as $product) {
 
             try {
@@ -49,28 +77,13 @@ class ProductSync
                     continue;
                 }
 
-                $existingId =
-                    $this->finder->findByReference(
-                        (string) $product['reference']
-                    );
+                $existingId = $this->state->findExistingId(
+                    (string) $product['reference']
+                );
 
                 if ($existingId !== null) {
 
-                    $existingProduct = new \Product($existingId);
-
-                    if (!\Validate::isLoadedObject($existingProduct)) {
-                        throw new \RuntimeException(
-                            'The existing product could not be loaded.'
-                        );
-                    }
-
-                    $hasChanges =
-                        $this->changeDetector->hasChanges(
-                            $existingProduct,
-                            $product
-                        );
-
-                    if (!$hasChanges) {
+                    if (!$this->state->hasChanges($existingId, $product)) {
 
                         $result['skipped']++;
 
@@ -95,6 +108,8 @@ class ProductSync
                         );
                     }
 
+                    $this->state->remember($product, $existingId);
+
                     $result['updated']++;
 
                     $result['items'][] = [
@@ -108,6 +123,8 @@ class ProductSync
 
                 $idProduct =
                     $this->creator->create($product);
+
+                $this->state->remember($product, $idProduct);
 
                 $result['created']++;
 

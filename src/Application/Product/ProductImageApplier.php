@@ -6,14 +6,16 @@ use Product;
 
 class ProductImageApplier
 {
-    private ProductImageDownloader $downloader;
     private ProductImageCreator $creator;
+    private ProductImageProviderInterface $images;
     private \CPBConnect\Infrastructure\Persistence\ProductMetaRepository $metaRepository;
 
-    public function __construct()
-    {
-        $this->downloader = new ProductImageDownloader();
+    public function __construct(
+        ?ProductImageProviderInterface $images = null
+    ) {
         $this->creator = new ProductImageCreator();
+
+        $this->images = $images ?? new SynchronousImageProvider();
 
         $this->metaRepository =
             new \CPBConnect\Infrastructure\Persistence\ProductMetaRepository();
@@ -56,37 +58,28 @@ class ProductImageApplier
             (int) \Configuration::get('PS_LANG_DEFAULT')
         );
 
-        $tmpFile = $this->downloader->download($imageUrl);
+        $tmpFile = $this->images->localFile($imageUrl);
 
-        try {
+        foreach ($existingImages as $existingImage) {
 
-            foreach ($existingImages as $existingImage) {
-
-                $oldImage = new \Image(
-                    (int) $existingImage['id_image']
-                );
-
-                if (\Validate::isLoadedObject($oldImage)) {
-                    $oldImage->delete();
-                }
-            }
-
-            $newImageId = $this->creator->create(
-                $idProduct,
-                $tmpFile
+            $oldImage = new \Image(
+                (int) $existingImage['id_image']
             );
 
-            $this->metaRepository->save(
-                $idProduct,
-                'image',
-                $imageUrl
-            );
-
-        } finally {
-
-            if (is_file($tmpFile)) {
-                @unlink($tmpFile);
+            if (\Validate::isLoadedObject($oldImage)) {
+                $oldImage->delete();
             }
         }
+
+        $this->creator->create(
+            $idProduct,
+            $tmpFile
+        );
+
+        $this->metaRepository->save(
+            $idProduct,
+            'image',
+            $imageUrl
+        );
     }
 }
