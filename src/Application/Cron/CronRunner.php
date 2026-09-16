@@ -5,11 +5,12 @@ namespace CPBConnect\Application\Cron;
 use CPBConnect\Application\Import\ImportBatchProcessor;
 use CPBConnect\Application\Product\ProductMapper;
 use CPBConnect\Application\Product\ProductSync;
+use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use CPBConnect\Infrastructure\Persistence\ImportRepository;
 use CPBConnect\Infrastructure\Persistence\MappingRepository;
 use CPBConnect\Infrastructure\Persistence\SourceRepository;
 use CPBConnect\Infrastructure\Persistence\SyncLogRepository;
-use CPBConnect\Infrastructure\Source\CsvSourceReader;
+use CPBConnect\Infrastructure\Source\SourceReaderFactory;
 
 class CronRunner
 {
@@ -17,7 +18,7 @@ class CronRunner
     private MappingRepository $mappingRepository;
     private SyncLogRepository $logRepository;
     private ImportRepository $importRepository;
-    private CsvSourceReader $csvSourceReader;
+    private SourceReaderRegistry $readers;
     private ImportBatchProcessor $batchProcessor;
 
     public function __construct()
@@ -34,15 +35,15 @@ class CronRunner
         $this->importRepository =
             new ImportRepository();
 
-        $this->csvSourceReader =
-            new CsvSourceReader();
+        $this->readers =
+            SourceReaderFactory::create();
 
         $this->batchProcessor =
             new ImportBatchProcessor(
                 $this->sourceRepository,
                 $this->mappingRepository,
                 $this->importRepository,
-                $this->csvSourceReader,
+                $this->readers,
                 new ProductMapper(),
                 new ProductSync()
             );
@@ -114,9 +115,13 @@ class CronRunner
 
     private function runSource(array $source): array
     {
-        if ($source['type'] !== 'csv') {
+        $reader = $this->readers->get(
+            (string) ($source['type'] ?? '')
+        );
+
+        if ($reader === null) {
             throw new \RuntimeException(
-                'Only CSV sources can be run for now.'
+                'The source type is not supported.'
             );
         }
 
@@ -135,14 +140,11 @@ class CronRunner
          */
         if ($import === null) {
 
-            $total =
-                $this->csvSourceReader->countRows(
-                    $source['url']
-                );
+            $total = $reader->countRows($source);
 
             if ($total === 0) {
                 throw new \RuntimeException(
-                    'The CSV source contains no records.'
+                    'The source contains no records.'
                 );
             }
 

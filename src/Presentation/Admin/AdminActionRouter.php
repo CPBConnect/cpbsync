@@ -11,7 +11,6 @@ use CPBConnect\Application\Mapping\MappingSaver;
 use CPBConnect\Application\Product\ProductDryRun;
 use CPBConnect\Application\Product\ProductMapper;
 use CPBConnect\Application\Product\ProductSync;
-use CPBConnect\Application\Source\CsvSourceService;
 use CPBConnect\Application\Source\SourceService;
 use CPBConnect\Application\Source\SourceValidator;
 use CPBConnect\Application\Sync\SourceSyncService;
@@ -20,7 +19,7 @@ use CPBConnect\Infrastructure\Persistence\ImportRepository;
 use CPBConnect\Infrastructure\Persistence\MappingRepository;
 use CPBConnect\Infrastructure\Persistence\SourceRepository;
 use CPBConnect\Infrastructure\Persistence\SyncLogRepository;
-use CPBConnect\Infrastructure\Source\CsvSourceReader;
+use CPBConnect\Infrastructure\Source\SourceReaderFactory;
 use CPBConnect\Presentation\Admin\Handler\HistoryHandler;
 use CPBConnect\Presentation\Admin\Handler\ImportHandler;
 use CPBConnect\Presentation\Admin\Handler\MappingHandler;
@@ -57,18 +56,19 @@ final class AdminActionRouter
         $mappingRepository = new MappingRepository();
         $logRepository = new SyncLogRepository();
         $importRepository = new ImportRepository();
-        $csvSourceReader = new CsvSourceReader();
+        $readers = SourceReaderFactory::create();
 
         $sourceService = new SourceService(
             $sourceRepository,
-            new CsvSourceService()
+            $readers
         );
 
         $sourceHandler = new SourceHandler(
             $shell,
             $links,
             $sourceService,
-            new SourceValidator()
+            new SourceValidator($readers),
+            $readers
         );
 
         $mappingHandler = new MappingHandler(
@@ -85,7 +85,7 @@ final class AdminActionRouter
             $sourceRepository,
             $mappingRepository,
             $importRepository,
-            $csvSourceReader,
+            $readers,
             new ProductMapper(),
             new ProductSync()
         );
@@ -125,8 +125,8 @@ final class AdminActionRouter
                 new ImportService(
                     $sourceRepository,
                     $importRepository,
-                    $csvSourceReader,
-                    new ImportFileStorage(),
+                    $readers,
+                    new ImportFileStorage($readers),
                     $batchProcessor
                 )
             )

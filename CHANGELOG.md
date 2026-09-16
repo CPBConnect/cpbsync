@@ -61,9 +61,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * `isUsingNewTranslationSystem()` so the module opts into the new PrestaShop translation interface.
 * `translations/translations-to-do.csv` as a human-readable glossary of every wording and its Spanish translation.
 * `tools/check-translations.php` to verify that no wording is missing from the catalogues (`composer check-translations`).
+* Source reader extension API (`SourceReaderInterface`, `AbstractSourceReader`, `SourceReaderRegistry`, `CsvReader`) so new source types can be added without duplicating the synchronization engine.
+* `SourceReaderFactory`, the single place where an installed package registers the readers it ships.
+* `config` column on `cpbsync_source`, with the `upgrade-1.1.0.php` migration, for source-specific settings such as the record path of XML or JSON catalogs.
+* Manual import now accepts the file extensions declared by the registered readers.
+* `HttpSourceReader::request()` accepts a method, headers, query parameters and body, so authenticated APIs can be reached without duplicating the URL validation.
+* Source readers declare their own batch size, so a paginated source only fetches the pages a batch needs.
+
+### Fixed
+
+* The module did not follow HTTP redirects, so a source answering 301/302/307/308 was reported as "the source is empty". Redirects are now followed (up to three hops) and every hop is validated with the same rules as the original URL.
+* `DatabaseInstaller` was missing its `use Db;` import, so the module could not be installed at all.
+* `install()` now creates the database tables before registering the module and rolls back if registration fails, so a failed installation no longer leaves the module marked as installed without its tables.
+* `tools/check-translations.php` no longer scans the generated `build/dist/` folder.
+* An empty list at `record_path` means "no records" instead of an error.
 
 ### Changed
 
+* `SourceValidator`, `SourceService`, `CronRunner` and `ImportBatchProcessor` no longer assume CSV: they resolve the reader from the registry.
+* The source form lists every available source type instead of a single hardcoded option.
 * `cpbsync.php` now only keeps the module lifecycle and delegates every `cpbsync_action` to the presentation layer.
 * Source reading and mapping loading are no longer duplicated between Dry Run and synchronization.
 * Mapping form validation and mapping persistence are separated from the controller code.

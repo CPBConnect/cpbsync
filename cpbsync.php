@@ -24,7 +24,7 @@ class CpbSync extends Module
     {
         $this->name = 'cpbsync';
         $this->tab = 'administration';
-        $this->version = '1.0.0';
+        $this->version = '1.1.0';
         $this->author = 'CPBConnect';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -54,8 +54,21 @@ class CpbSync extends Module
     {
         $installer = new DatabaseInstaller();
 
-        return parent::install()
-               && $installer->install();
+        /*
+         * Las tablas se crean antes de registrar el módulo: si algo
+         * falla, no queda marcado como instalado sin sus tablas.
+         */
+        if (!$installer->install()) {
+            return false;
+        }
+
+        if (!parent::install()) {
+            $installer->uninstall();
+
+            return false;
+        }
+
+        return true;
     }
 
     /**

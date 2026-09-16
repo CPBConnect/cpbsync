@@ -2,6 +2,7 @@
 
 namespace CPBConnect\Application\Source;
 
+use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use CPBConnect\Infrastructure\Persistence\SourceRepository;
 use RuntimeException;
 
@@ -12,7 +13,7 @@ class SourceService
 {
     public function __construct(
         private SourceRepository $repository,
-        private CsvSourceService $csvSourceService
+        private SourceReaderRegistry $readers
     ) {
     }
 
@@ -40,15 +41,17 @@ class SourceService
      */
     public function read(array $source): array
     {
-        if (($source['type'] ?? '') !== 'csv') {
+        $reader = $this->readers->get(
+            (string) ($source['type'] ?? '')
+        );
+
+        if ($reader === null) {
             throw new RuntimeException(
-                'Only CSV sources can be used for now.'
+                'The source type is not supported.'
             );
         }
 
-        return $this->csvSourceService->read(
-            (string) $source['url']
-        );
+        return $reader->read($source);
     }
 
     public function create(array $data): int

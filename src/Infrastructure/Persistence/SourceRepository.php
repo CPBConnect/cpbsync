@@ -21,6 +21,7 @@ class SourceRepository
                 'name' => pSQL($data['name']),
                 'type' => pSQL($data['type']),
                 'url' => pSQL($data['url']),
+                'config' => $this->configForStorage($data),
                 'frequency' => pSQL($data['frequency']),
                 'active' => !empty($data['active']) ? 1 : 0,
                 'date_add' => date('Y-m-d H:i:s'),
@@ -65,12 +66,24 @@ class SourceRepository
                 'name' => pSQL($data['name']),
                 'type' => pSQL($data['type']),
                 'url' => pSQL($data['url']),
+                'config' => $this->configForStorage($data),
                 'frequency' => pSQL($data['frequency']),
                 'active' => !empty($data['active']) ? 1 : 0,
                 'date_upd' => date('Y-m-d H:i:s'),
             ],
             'id_source = ' . (int) $id
         );
+    }
+
+    /**
+     * La configuración adicional se guarda tal cual llegue: ya se ha
+     * validado como JSON antes de persistirla.
+     */
+    private function configForStorage(array $data): ?string
+    {
+        $config = trim((string) ($data['config'] ?? ''));
+
+        return $config === '' ? null : pSQL($config);
     }
 
     public function delete(int $id): bool

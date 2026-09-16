@@ -30,3 +30,6 @@ coverage/
 !.env.example
 
 /var/imports/*
+
+# Paquete generado por build/build-free.php
+/build/dist/

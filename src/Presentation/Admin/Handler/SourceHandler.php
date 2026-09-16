@@ -2,6 +2,7 @@
 
 namespace CPBConnect\Presentation\Admin\Handler;
 
+use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use CPBConnect\Application\Source\SourceService;
 use CPBConnect\Application\Source\SourceValidator;
 use CPBConnect\Presentation\Admin\AdminLinkBuilder;
@@ -19,7 +20,8 @@ class SourceHandler
         private AdminShellInterface $shell,
         private AdminLinkBuilder $links,
         private SourceService $sources,
-        private SourceValidator $validator
+        private SourceValidator $validator,
+        private SourceReaderRegistry $readers
     ) {
     }
 
@@ -240,6 +242,7 @@ class SourceHandler
     ): string {
         $this->shell->assign([
             'source' => $source,
+            'source_types' => $this->readers->types(),
             'cancel_url' => $this->links->home(),
             'form_action' => $formAction
                 ?? $this->links->saveSource(),
@@ -257,6 +260,7 @@ class SourceHandler
             'name' => trim((string) Tools::getValue('name')),
             'type' => (string) Tools::getValue('type'),
             'url' => trim((string) Tools::getValue('url')),
+            'config' => trim((string) Tools::getValue('config')),
             'frequency' => (string) Tools::getValue('frequency'),
             'active' => (int) Tools::getValue('active'),
         ];

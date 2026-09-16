@@ -11,12 +11,12 @@ use CPBConnect\Application\Import\ImportBatchProcessor;
 use CPBConnect\Application\Product\ProductDryRun;
 use CPBConnect\Application\Product\ProductMapper;
 use CPBConnect\Application\Product\ProductSync;
-use CPBConnect\Application\Source\CsvSourceService;
+use CPBConnect\Application\Source\Reader\AbstractSourceReader;
 use CPBConnect\Infrastructure\Persistence\ImportRepository;
 use CPBConnect\Infrastructure\Persistence\MappingRepository;
 use CPBConnect\Infrastructure\Persistence\SourceRepository;
 use CPBConnect\Infrastructure\Persistence\SyncLogRepository;
-use CPBConnect\Infrastructure\Source\CsvSourceReader;
+use CPBConnect\Infrastructure\Source\HttpSourceReader;
 use CPBConnect\Application\Import\ImportFileStorage;
 use CPBConnect\Presentation\Admin\AdminShellInterface;
 
@@ -168,29 +168,55 @@ class FakeSourceRepository extends SourceRepository
     }
 }
 
-class FakeCsvSourceService extends CsvSourceService
+class FakeSourceReader extends AbstractSourceReader
 {
-    public array $urls = [];
+    /** @var array<int, array<string, mixed>> */
+    public array $readSources = [];
+
     public array $result = [
         'headers' => [],
         'rows' => [],
         'total' => 0,
     ];
+
     public ?Throwable $error = null;
 
-    public function __construct()
-    {
+    public int $fileRows = 0;
+
+    public function __construct(
+        private string $type = 'csv'
+    ) {
     }
 
-    public function read(string $url): array
+    public function getType(): string
     {
-        $this->urls[] = $url;
+        return $this->type;
+    }
+
+    public function getLabel(): string
+    {
+        return strtoupper($this->type);
+    }
+
+    public function getFileExtensions(): array
+    {
+        return [$this->type];
+    }
+
+    public function read(array $source): array
+    {
+        $this->readSources[] = $source;
 
         if ($this->error !== null) {
             throw $this->error;
         }
 
         return $this->result;
+    }
+
+    public function countFileRows(string $path): int
+    {
+        return $this->fileRows;
     }
 }
 
@@ -275,20 +301,6 @@ class FakeImportRepository extends ImportRepository
         ];
 
         return 7;
-    }
-}
-
-class FakeCsvSourceReader extends CsvSourceReader
-{
-    public int $rows = 0;
-
-    public function __construct()
-    {
-    }
-
-    public function countFileRows(string $path): int
-    {
-        return $this->rows;
     }
 }
 
@@ -390,5 +402,42 @@ class FakeProductSync extends ProductSync
         $this->synced[] = $products;
 
         return $this->result;
+    }
+}
+
+class FakeHttpReader extends HttpSourceReader
+{
+    /** @var array<int, array<string, mixed>> */
+    public array $requests = [];
+
+    /** @var array<int, string> */
+    public array $responses = [];
+
+    public ?Throwable $error = null;
+
+    public function __construct()
+    {
+    }
+
+    public function request(
+        string $url,
+        string $method = 'GET',
+        array $headers = [],
+        array $parameters = [],
+        ?string $body = null
+    ): string {
+        $this->requests[] = [
+            'url' => $url,
+            'method' => $method,
+            'headers' => $headers,
+            'parameters' => $parameters,
+            'body' => $body,
+        ];
+
+        if ($this->error !== null) {
+            throw $this->error;
+        }
+
+        return array_shift($this->responses) ?? '{}';
     }
 }

@@ -4,21 +4,19 @@ namespace CPBConnect\Application\Import;
 
 use CPBConnect\Application\Product\ProductMapper;
 use CPBConnect\Application\Product\ProductSync;
+use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use CPBConnect\Infrastructure\Persistence\ImportRepository;
 use CPBConnect\Infrastructure\Persistence\MappingRepository;
 use CPBConnect\Infrastructure\Persistence\SourceRepository;
-use CPBConnect\Infrastructure\Source\CsvSourceReader;
 use RuntimeException;
 
 class ImportBatchProcessor
 {
-    private const BATCH_SIZE = 50;
-
     public function __construct(
         private SourceRepository $sourceRepository,
         private MappingRepository $mappingRepository,
         private ImportRepository $importRepository,
-        private CsvSourceReader $csvSourceReader,
+        private SourceReaderRegistry $readers,
         private ProductMapper $productMapper,
         private ProductSync $productSync
     ) {
@@ -97,17 +95,29 @@ class ImportBatchProcessor
 
         $offset = (int) $import['current_position'];
 
+        $reader = $this->readers->get(
+            (string) ($source['type'] ?? '')
+        );
+
+        if ($reader === null) {
+            throw new RuntimeException(
+                'The source type is not supported.'
+            );
+        }
+
+        $batchSize = max(1, $reader->getBatchSize());
+
         if (!empty($import['file_path'])) {
-            $rows = $this->csvSourceReader->readBatchFromFile(
+            $rows = $reader->readBatchFromFile(
                 $import['file_path'],
                 $offset,
-                self::BATCH_SIZE
+                $batchSize
             );
         } else {
-            $rows = $this->csvSourceReader->readBatch(
-                $source['url'],
+            $rows = $reader->readBatch(
+                $source,
                 $offset,
-                self::BATCH_SIZE
+                $batchSize
             );
         }
 

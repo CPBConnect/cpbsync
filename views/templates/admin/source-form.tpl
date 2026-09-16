@@ -37,12 +37,14 @@
 
                 <select name="type" class="form-control">
 
-                    <option
-                            value="csv"
-                            {if isset($source) && $source.type === 'csv'}selected{/if}
-                    >
-                        CSV
-                    </option>
+                    {foreach from=$source_types key=source_type item=source_label}
+                        <option
+                                value="{$source_type|escape:'htmlall':'UTF-8'}"
+                                {if isset($source) && $source.type === $source_type}selected{/if}
+                        >
+                            {$source_label|escape:'htmlall':'UTF-8'}
+                        </option>
+                    {/foreach}
 
                 </select>
             </div>
@@ -59,6 +61,23 @@
                         value="{if isset($source)}{$source.url|escape:'htmlall':'UTF-8'}{/if}"
                         placeholder="https://proveedor.com/catalogo.csv"
                 >
+            </div>
+
+            <div class="form-group">
+                <label for="config">
+                    {l s='Additional configuration (JSON)' d='Modules.Cpbsync.Admin'}
+                </label>
+
+                <textarea
+                        name="config"
+                        id="config"
+                        class="form-control"
+                        rows="2"
+                >{if isset($source)}{$source.config|escape:'htmlall':'UTF-8'}{/if}</textarea>
+
+                <p class="help-block">
+                    {l s='Optional. XML and JSON sources use the record_path setting to locate the records.' d='Modules.Cpbsync.Admin'}
+                </p>
             </div>
 
             <div class="form-group">

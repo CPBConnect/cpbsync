@@ -2,9 +2,9 @@
 
 namespace CPBConnect\Application\Import;
 
+use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use CPBConnect\Infrastructure\Persistence\ImportRepository;
 use CPBConnect\Infrastructure\Persistence\SourceRepository;
-use CPBConnect\Infrastructure\Source\CsvSourceReader;
 use RuntimeException;
 
 /**
@@ -15,14 +15,14 @@ class ImportService
     public function __construct(
         private SourceRepository $sourceRepository,
         private ImportRepository $importRepository,
-        private CsvSourceReader $csvSourceReader,
+        private SourceReaderRegistry $readers,
         private ImportFileStorage $fileStorage,
         private ImportBatchProcessor $batchProcessor
     ) {
     }
 
     /**
-     * Guarda el CSV subido y prepara la importación.
+     * Guarda el archivo subido y prepara la importación.
      *
      * @return array{import_id: int, total: int}
      */
@@ -36,13 +36,23 @@ class ImportService
             );
         }
 
+        $reader = $this->readers->get(
+            (string) ($source['type'] ?? '')
+        );
+
+        if ($reader === null) {
+            throw new RuntimeException(
+                'The source type is not supported.'
+            );
+        }
+
         $filePath = $this->fileStorage->store($file);
 
-        $total = $this->csvSourceReader->countFileRows($filePath);
+        $total = $reader->countFileRows($filePath);
 
         if ($total <= 0) {
             throw new RuntimeException(
-                'The CSV file contains no products.'
+                'The file contains no products.'
             );
         }
 

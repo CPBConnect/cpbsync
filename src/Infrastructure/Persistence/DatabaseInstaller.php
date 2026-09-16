@@ -2,6 +2,8 @@
 
 namespace CPBConnect\Infrastructure\Persistence;
 
+use Db;
+
 class DatabaseInstaller
 {
     public function install(): bool
@@ -55,6 +57,7 @@ class DatabaseInstaller
                 `name` VARCHAR(255) NOT NULL,
                 `type` VARCHAR(32) NOT NULL,
                 `url` TEXT NOT NULL,
+                `config` TEXT NULL,
                 `frequency` VARCHAR(32) NOT NULL,
                 `active` TINYINT(1) NOT NULL DEFAULT 1,
                 `date_add` DATETIME NOT NULL,
