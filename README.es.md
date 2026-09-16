@@ -4,7 +4,7 @@
 
 CPB Sync es un módulo para PrestaShop desarrollado por **CPBConnect** que permite a los administradores sincronizar información de productos desde catálogos externos con su tienda PrestaShop.
 
-La versión **1.0.0** se centra en una sincronización confiable basada en archivos CSV, con mapeos configurables, transformaciones, validación, Dry Run, procesamiento por lotes, historial de sincronizaciones y ejecución automática mediante cron.
+La versión **1.2.0** sincroniza catálogos CSV con mapeos configurables, transformaciones, validación, Dry Run, procesamiento por lotes, historial de sincronizaciones y ejecución automática mediante cron. La edición de pago añade fuentes XML, JSON y REST, sincronización incremental, catálogos anidados, transformaciones avanzadas y un panel de monitorización.
 
 ## ❤️ Apoya CPB Sync
 
@@ -17,13 +17,13 @@ Si CPB Sync te resulta útil, considera apoyar su desarrollo continuo.
 ## Características
 
 - 📥 Importación de catálogos de productos desde fuentes CSV
-- 🔗 Mapeo configurable entre campos externos y campos de PrestaShop
+- 🔗 Mapeo configurable entre campos externos y campos de PrestaShop, con el campo destino propuesto para los nombres habituales
 - 🔄 Transformaciones de datos configurables
 - 🧪 Dry Run antes de aplicar cambios
 - 📦 Creación y actualización de productos
 - ⏭️ Omisión automática de productos sin cambios
-- 🖼️ Sincronización de imágenes de productos
-- 📊 Resultados e historial de sincronizaciones
+- 🖼️ Sincronización de imágenes de productos, con varias imágenes por producto
+- 📊 Resultados e historial de sincronizaciones, con duración, pico de memoria y tiempo por fase
 - 📈 Procesamiento por lotes con seguimiento del progreso
 - ⏰ Sincronización programada mediante cron
 - ✅ Validación de datos de productos
@@ -35,7 +35,7 @@ Si CPB Sync te resulta útil, considera apoyar su desarrollo continuo.
 
 ### CSV
 
-CPB Sync 1.0.0 actualmente admite catálogos en formato CSV.
+La versión gratuita lee catálogos en formato CSV.
 
 Ejemplo:
 
@@ -46,6 +46,8 @@ ABC002,Product Two,Another description,49.99,5,Category B,Brand B,https://exampl
 ```
 
 Los campos del CSV pueden mapearse a los campos de producto compatibles con PrestaShop.
+
+Las fuentes XML, JSON y REST forman parte de la edición de pago.
 
 ## Mapeo
 
@@ -69,15 +71,26 @@ Un campo de origen también puede tener una transformación aplicada antes de la
 
 ## Transformaciones
 
-La versión actual incluye:
+La versión gratuita incluye:
 
 - Sin transformación
-- Normalización de precios
+- Normalización de precios (con símbolo de moneda y las dos convenciones decimales: `1.234,56` y `1,234.56`)
 - Normalización de stock
 - Normalización de texto
 - Reemplazo de texto
 
 Las transformaciones permiten adaptar los datos del catálogo externo antes de sincronizarlos con PrestaShop.
+
+La edición de pago añade quince más: tablas de equivalencias, valores por defecto, campos alternativos, unión de campos, prefijos y sufijos, operaciones aritméticas con redondeo, extracción y reemplazo con expresiones regulares, conversión a sí/no, acortar textos, slugs, mayúsculas y minúsculas, quitar HTML, tomar una parte del valor y quedarse sólo con los números.
+
+## Imágenes
+
+El campo de imagen admite una lista, así que un producto puede importar varias imágenes: separadas por comas, punto y coma, barras verticales o una por línea, hasta 20 por producto.
+
+- Sólo la primera imagen es la portada; el resto se importan sin portada, como hace PrestaShop.
+- Las imágenes se descargan antes de borrar las anteriores, así que un proveedor que deja de responder no deja al producto sin imágenes.
+- Un enlace roto no impide el resto: el producto se guarda si al menos se pudo traer una imagen.
+- Los catálogos anidados (edición de pago) exponen las imágenes como `images.0`, `images.1`…, que se pueden unir con la transformación «Unir campos».
 
 ## Dry Run
 
@@ -121,7 +134,10 @@ Cada sincronización registra:
 - Productos actualizados
 - Productos omitidos
 - Errores
+- Duración, pico de memoria y tiempo de cada fase (lectura de la fuente, aplicación del mapeo y escritura de productos)
 - Detalles de los resultados
+
+El historial guarda el resumen de cada ejecución y una muestra de los productos procesados (200 por defecto), de modo que un cron horario con un catálogo grande no hace crecer la base de datos sin límite.
 
 ## Cron
 
@@ -238,6 +254,16 @@ Después de instalarlo:
 
 Para utilizar la sincronización automática, configura la frecuencia deseada y agrega el comando de cron de CPB Sync al programador del servidor.
 
+### Después de actualizar el módulo
+
+Limpia la caché de PrestaShop (**Parámetros avanzados > Rendimiento**) para que se carguen las traducciones y plantillas nuevas. Desde la línea de comandos:
+
+```bash
+php bin/console cache:clear --env=prod
+```
+
+Ejecuta los comandos de consola de PrestaShop como el usuario del servidor web (`www-data`), no como root: los directorios de caché que crea deben pertenecer al usuario que sirve la tienda.
+
 ## Estructura del proyecto
 
 ```text
@@ -328,35 +354,45 @@ composer check-translations
 
 ## Versión actual
 
-**Versión:** 1.0.0
+**Versión:** 1.2.0
 
-CPB Sync 1.0.0 es la primera versión pública del proyecto.
+La versión 1.2.0 completa el flujo de sincronización de productos y corrige los problemas que aparecieron al probarlo contra una tienda PrestaShop 9 real. Desde la 1.0.0:
 
-Esta versión proporciona un flujo completo de sincronización de productos mediante CSV, incluyendo importaciones manuales, procesamiento por lotes, validación, Dry Run, historial de sincronizaciones y ejecución programada mediante cron.
+- Las fuentes, el mapeo, las transformaciones, el Dry Run y el historial viven en capas separadas, así que el módulo puede crecer sin tocar el motor de sincronización.
+- Cada ejecución registra su duración, su pico de memoria y el desglose por fases, y el historial guarda una muestra acotada de productos en lugar de todos.
+- Toda la interfaz es traducible (el módulo incluye los catálogos en inglés y español).
+- Los productos se crean con URL amable y se pueden crear categorías desde una fuente.
+- La importación de imágenes admite varias imágenes por producto.
+- Las transformaciones de precio, stock y texto aceptan los formatos que usan los catálogos reales de proveedores.
+
+Consulta el archivo `CHANGELOG.md` para la lista completa.
 
 ## Roadmap
 
-Las futuras versiones pueden incluir:
+La edición de pago cubre las fuentes XML, JSON y REST, la sincronización incremental, los catálogos anidados, las transformaciones avanzadas y el panel de monitorización. Lo que sigue en el roadmap:
 
-- Fuentes XML
-- Fuentes JSON
-- Integraciones con APIs REST
-- Sincronización incremental
-- Reglas avanzadas de transformación
 - Opciones adicionales de sincronización
-- Mejoras en logging y monitoreo
 - Opciones adicionales de programación
-- Funcionalidades premium
 
 El roadmap puede evolucionar según los comentarios de los usuarios y las necesidades reales de las tiendas.
 
 ## Versión gratuita
 
-CPB Sync 1.0.0 se proporciona de forma gratuita.
+CPB Sync 1.2.0 se proporciona de forma gratuita.
 
-La versión gratuita incluye el flujo completo de sincronización CSV disponible en la versión 1.0.0.
+La versión gratuita incluye el flujo completo de sincronización CSV: fuentes, mapeo, transformaciones, Dry Run, procesamiento por lotes, importación de imágenes, historial y ejecución programada mediante cron.
 
-Las futuras versiones podrán incorporar funcionalidades adicionales premium manteniendo las funcionalidades incluidas en la versión gratuita.
+## Edición de pago
+
+La edición de pago añade, sobre la versión gratuita:
+
+- **Fuentes XML, JSON y REST**, con los catálogos anidados aplanados en columnas que se pueden mapear (`price.value`, `categories.0.name`, `Цены.Цена.ЦенаЗаЕдиницу`).
+- **Sincronización incremental**: los productos sin cambios se omiten. Medido en PrestaShop 9.0.0 con 200 productos, una resincronización pasa de 3,5 ms y 4,1 consultas por producto a 0,5 ms y 0,2 consultas.
+- **Descarga de imágenes en paralelo**: 3,5 veces más rápida con 8 descargas a la vez.
+- **Quince transformaciones avanzadas**: tablas de equivalencias, valores por defecto, campos alternativos, unión de campos, prefijos y sufijos, operaciones aritméticas con redondeo, expresiones regulares, conversión a sí/no, acortar textos, slugs, mayúsculas y minúsculas, quitar HTML, tomar una parte del valor y quedarse sólo con los números.
+- **Un panel de monitorización**: periodos, contadores, errores más frecuentes, tamaño del historial y retención.
+
+Las dos ediciones comparten el mismo código: el paquete gratuito se genera a partir de él y no contiene código de pago.
 
 ## Contribuir
 
