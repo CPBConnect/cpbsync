@@ -54,8 +54,21 @@ class CpbSync extends Module
     {
         $installer = new DatabaseInstaller();
 
-        return parent::install()
-               && $installer->install();
+        /*
+         * Las tablas se crean antes de registrar el módulo: si algo
+         * falla, no queda marcado como instalado sin sus tablas.
+         */
+        if (!$installer->install()) {
+            return false;
+        }
+
+        if (!parent::install()) {
+            $installer->uninstall();
+
+            return false;
+        }
+
+        return true;
     }
 
     /**

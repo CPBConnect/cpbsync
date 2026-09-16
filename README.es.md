@@ -212,7 +212,7 @@ Historial de sincronización
 
 ## Requisitos
 
-- PrestaShop 8.0 o superior
+- PrestaShop 8.0 o superior (verificado en PrestaShop 9.0.0 con PHP 8.4)
 - Versión de PHP compatible con la versión instalada de PrestaShop
 - MySQL/MariaDB compatible con PrestaShop
 - Dependencias de Composer incluidas en el paquete del módulo

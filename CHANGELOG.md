@@ -70,6 +70,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+* `DatabaseInstaller` was missing its `use Db;` import, so the module could not be installed at all.
+* `install()` now creates the database tables before registering the module and rolls back if registration fails, so a failed installation no longer leaves the module marked as installed without its tables.
 * `tools/check-translations.php` no longer scans the generated `build/dist/` folder.
 * An empty list at `record_path` means "no records" instead of an error.
 

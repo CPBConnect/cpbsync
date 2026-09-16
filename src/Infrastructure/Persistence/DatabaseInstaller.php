@@ -2,6 +2,8 @@
 
 namespace CPBConnect\Infrastructure\Persistence;
 
+use Db;
+
 class DatabaseInstaller
 {
     public function install(): bool
