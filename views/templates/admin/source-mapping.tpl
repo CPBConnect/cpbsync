@@ -44,33 +44,7 @@
 
                     {foreach from=$headers item=header}
 
-                        {assign var="suggested_target" value=""}
-
-                        {if $header|lower == 'sku'}
-                            {assign var="suggested_target" value="reference"}
-                        {elseif $header|lower == 'name'}
-                            {assign var="suggested_target" value="name"}
-                        {elseif $header|lower == 'description'}
-                            {assign var="suggested_target" value="description"}
-                        {elseif $header|lower == 'price'}
-                            {assign var="suggested_target" value="price"}
-                        {elseif $header|lower == 'stock'}
-                            {assign var="suggested_target" value="quantity"}
-                        {elseif $header|lower == 'category'}
-                            {assign var="suggested_target" value="category"}
-                        {elseif $header|lower == 'brand'}
-                            {assign var="suggested_target" value="manufacturer"}
-                        {elseif $header|lower == 'image'}
-                            {assign var="suggested_target" value="image"}
-                        {elseif $header|lower == 'ean'}
-                            {assign var="suggested_target" value="ean13"}
-                        {/if}
-
-                        {assign var="selected_target" value=""}
-
-                        {if isset($saved_mappings[$header])}
-                            {assign var="selected_target" value=$saved_mappings[$header]}
-                        {/if}
+                        {assign var="selected_target" value=$selected_targets[$header]|default:''}
 
                         {assign var="selected_transformation" value=""}
 

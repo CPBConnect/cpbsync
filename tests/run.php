@@ -1490,11 +1490,155 @@ if (!class_exists(XmlReader::class)) {
                     . '<attrs><color>azul</color></attrs></product>'
                     . '</catalog>';
 
+    $flat = $xml->read($source);
+
     same(
-        '<color>rojo</color>',
-        $xml->read($source)['rows'][0]['attrs'],
-        'XML: conserva el marcado interno'
+        ['sku', 'attrs.color'],
+        $flat['headers'],
+        'XML: aplana los elementos anidados'
     );
+    same(
+        'rojo',
+        $flat['rows'][0]['attrs.color'],
+        'XML: lee el valor anidado'
+    );
+
+    $xml->content = '<catalog>'
+                    . '<product><sku>A</sku>'
+                    . '<description>Texto <b>con</b> marcado</description>'
+                    . '<price><value>10.5</value><currency>EUR</currency></price>'
+                    . '</product>'
+                    . '<product><sku>B</sku>'
+                    . '<description><![CDATA[<p>Otro</p>]]></description>'
+                    . '<price><value>20</value><currency>EUR</currency></price>'
+                    . '</product>'
+                    . '</catalog>';
+
+    $mixed = $xml->read($source);
+
+    same(
+        ['sku', 'description', 'price.value', 'price.currency'],
+        $mixed['headers'],
+        'XML: distingue el texto con marcado del contenedor'
+    );
+    same(
+        'Texto <b>con</b> marcado',
+        $mixed['rows'][0]['description'],
+        'XML: conserva el marcado de un elemento con texto propio'
+    );
+    same(
+        '<p>Otro</p>',
+        $mixed['rows'][1]['description'],
+        'XML: conserva el contenido CDATA'
+    );
+    same(
+        '10.5',
+        $mixed['rows'][0]['price.value'],
+        'XML: aplana el precio anidado'
+    );
+    same(
+        'EUR',
+        $mixed['rows'][0]['price.currency'],
+        'XML: aplana la moneda anidada'
+    );
+
+    // Elementos repetidos: se numeran y el primero queda también sin
+    // número, para que valga con cualquier número de imágenes.
+    $xml->content = '<catalog>'
+                    . '<product><sku>A</sku>'
+                    . '<image>u1</image><image>u2</image></product>'
+                    . '<product><sku>B</sku><image>u3</image></product>'
+                    . '</catalog>';
+
+    $repeated = $xml->read($source);
+
+    same(
+        ['sku', 'image.0', 'image', 'image.1'],
+        $repeated['headers'],
+        'XML: numera los elementos repetidos'
+    );
+    same(
+        'u2',
+        $repeated['rows'][0]['image.1'],
+        'XML: lee la segunda imagen'
+    );
+    same(
+        'u1',
+        $repeated['rows'][0]['image'],
+        'XML: el primer repetido también queda sin número'
+    );
+    same(
+        'u3',
+        $repeated['rows'][1]['image'],
+        'XML: y sigue valiendo cuando sólo hay uno'
+    );
+
+    // Estructura tipo CommerceML (1C).
+    $xml->content = '<?xml version="1.0" encoding="UTF-8"?>'
+                    . '<КоммерческаяИнформация><Товары>'
+                    . '<Товар><Ид>SKU-1</Ид><Наименование>Producto A</Наименование>'
+                    . '<Цены><Цена><ЦенаЗаЕдиницу>10.50</ЦенаЗаЕдиницу>'
+                    . '<Валюта>EUR</Валюта></Цена></Цены>'
+                    . '<ЗначенияРеквизитов>'
+                    . '<ЗначениеРеквизита><Наименование>Marca</Наименование>'
+                    . '<Значение>Acme</Значение></ЗначениеРеквизита>'
+                    . '<ЗначениеРеквизита><Наименование>Color</Наименование>'
+                    . '<Значение>Rojo</Значение></ЗначениеРеквизита>'
+                    . '</ЗначенияРеквизитов></Товар>'
+                    . '<Товар><Ид>SKU-2</Ид><Наименование>Producto B</Наименование>'
+                    . '<Цены><Цена><ЦенаЗаЕдиницу>20.00</ЦенаЗаЕдиницу>'
+                    . '<Валюта>EUR</Валюта></Цена></Цены>'
+                    . '<ЗначенияРеквизитов>'
+                    . '<ЗначениеРеквизита><Наименование>Marca</Наименование>'
+                    . '<Значение>Otra</Значение></ЗначениеРеквизита>'
+                    . '<ЗначениеРеквизита><Наименование>Color</Наименование>'
+                    . '<Значение>Azul</Значение></ЗначениеРеквизита>'
+                    . '</ЗначенияРеквизитов></Товар>'
+                    . '</Товары></КоммерческаяИнформация>';
+
+    $cml = $xml->read(['type' => 'xml', 'url' => 'https://example.com/cml.xml']);
+
+    same(
+        [
+            'Ид',
+            'Наименование',
+            'Цены.Цена.ЦенаЗаЕдиницу',
+            'Цены.Цена.Валюта',
+            'ЗначенияРеквизитов.ЗначениеРеквизита.0.Наименование',
+            'ЗначенияРеквизитов.ЗначениеРеквизита.0.Значение',
+            'ЗначенияРеквизитов.ЗначениеРеквизита.1.Наименование',
+            'ЗначенияРеквизитов.ЗначениеРеквизита.1.Значение',
+        ],
+        $cml['headers'],
+        'XML: un catálogo CML expone el precio y los atributos'
+    );
+    same(
+        '10.50',
+        $cml['rows'][0]['Цены.Цена.ЦенаЗаЕдиницу'],
+        'XML: el precio del catálogo CML se puede mapear'
+    );
+    same(
+        'Acme',
+        $cml['rows'][0]['ЗначенияРеквизитов.ЗначениеРеквизита.0.Значение'],
+        'XML: el primer atributo se puede mapear'
+    );
+
+    $xml->content = '<catalog>'
+                    . '<product id="7"><sku>A</sku>'
+                    . '<measure unit="kg">2</measure></product>'
+                    . '<product id="8"><sku>B</sku>'
+                    . '<measure unit="kg">3</measure></product>'
+                    . '</catalog>';
+
+    $attributes = $xml->read($source);
+
+    same(
+        ['@id', 'sku', 'measure.@unit', 'measure'],
+        $attributes['headers'],
+        'XML: aplana también los atributos anidados'
+    );
+    same('kg', $attributes['rows'][0]['measure.@unit'], 'XML: lee el atributo');
+    same('2', $attributes['rows'][0]['measure'], 'XML: lee el valor del contenedor');
 
     $xml->content = 'esto no es xml';
     throws(
@@ -1554,6 +1698,98 @@ if (!class_exists(XmlReader::class)) {
         static fn () => $json->read($jsonSource),
         'The JSON source does not contain a list of records.',
         'JSON: exige una lista de registros'
+    );
+
+    // Registros anidados: cada valor acaba en su propia columna.
+    $json->content = json_encode([
+        'data' => [
+            'items' => [
+                [
+                    'sku' => 'A',
+                    'price' => ['value' => 10.5, 'currency' => 'EUR'],
+                    'categories' => [['id' => 3, 'name' => 'Cat']],
+                    'stock' => ['qty' => 5, 'in_stock' => true],
+                    'images' => ['u1', 'u2'],
+                    'tags' => [],
+                ],
+                [
+                    'sku' => 'B',
+                    'price' => ['value' => 20, 'currency' => 'EUR'],
+                    'stock' => ['qty' => 0, 'in_stock' => false],
+                    'images' => ['u3'],
+                ],
+            ],
+        ],
+    ]);
+
+    $nested = $json->read($jsonSource + [
+        'config' => json_encode(['record_path' => 'data.items']),
+    ]);
+
+    same(
+        [
+            'sku',
+            'price.value',
+            'price.currency',
+            'categories.0.id',
+            'categories.0.name',
+            'stock.qty',
+            'stock.in_stock',
+            'images.0',
+            'images',
+            'images.1',
+        ],
+        $nested['headers'],
+        'JSON: aplana objetos y listas anidadas'
+    );
+    same(
+        10.5,
+        $nested['rows'][0]['price.value'],
+        'JSON: lee el precio anidado'
+    );
+    same(
+        'EUR',
+        $nested['rows'][0]['price.currency'],
+        'JSON: lee la moneda anidada'
+    );
+    same(
+        3,
+        $nested['rows'][0]['categories.0.id'],
+        'JSON: lee una lista de objetos'
+    );
+    same(
+        true,
+        $nested['rows'][0]['stock.in_stock'],
+        'JSON: conserva los booleanos'
+    );
+    same(
+        'u2',
+        $nested['rows'][0]['images.1'],
+        'JSON: lee la segunda imagen'
+    );
+    same(
+        'u1',
+        $nested['rows'][0]['images'],
+        'JSON: el primer elemento también queda sin número'
+    );
+    same(
+        'u3',
+        $nested['rows'][1]['images'],
+        'JSON: y vale cuando sólo hay una imagen'
+    );
+
+    // Un registro que no es un objeto no se pierde: una lista de
+    // valores con record_path explícito se lee tal cual.
+    $json->content = '{"categorias":["Ropa","Zapatos"]}';
+    $scalars = $json->read($jsonSource + [
+        'config' => json_encode(['record_path' => 'categorias']),
+    ]);
+
+    same(2, $scalars['total'], 'JSON: lee una lista de valores');
+    same(
+        'Zapatos',
+        $scalars['rows'][1]['value'],
+        'JSON: cada valor queda en la columna value'
     );
 
     $json->content = '{esto no es json';
@@ -2193,6 +2429,50 @@ same(
 );
 truthy(isset($assigned['dry_run_url']), 'añade la url del dry run');
 truthy(isset($assigned['sync_url']), 'añade la url del sync');
+
+same(
+    ['sku' => 'reference', 'precio' => 'price'],
+    $assigned['selected_targets'],
+    'con un mapeo guardado no propone nada nuevo'
+);
+
+// Fuente nueva: se proponen los campos destino habituales, también con
+// columnas anidadas.
+$csvSource->result = [
+    'headers' => [
+        'sku',
+        'precio',
+        'images.0',
+        'Цены.Цена.ЦенаЗаЕдиницу',
+        'attrs.color',
+    ],
+    'rows' => [],
+    'total' => 0,
+];
+
+$mappingRepository->mappings = [];
+
+Tools::set(['id_source' => 1]);
+
+$mappingHandler->show();
+
+same(
+    [
+        'sku' => 'reference',
+        'precio' => 'price',
+        'images.0' => 'image',
+        'Цены.Цена.ЦенаЗаЕдиницу' => '',
+        'attrs.color' => '',
+    ],
+    $shell->lastAssignment()['selected_targets'],
+    'propone el campo destino de las columnas anidadas'
+);
+
+same(
+    [],
+    $mappingRepository->replaced,
+    'las sugerencias no guardan nada por su cuenta'
+);
 
 Tools::set(['id_source' => 99]);
 same(

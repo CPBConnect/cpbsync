@@ -12,10 +12,27 @@ class ProductDataApplier
         }
 
         if (isset($data['name'])) {
-            $product->name = [
-                (int) \Configuration::get('PS_LANG_DEFAULT') =>
-                    (string) $data['name'],
-            ];
+            $name = (string) $data['name'];
+
+            $languageId = (int) \Configuration::get('PS_LANG_DEFAULT');
+
+            $product->name = [$languageId => $name];
+
+            /*
+             * PrestaShop no genera la URL amable por su cuenta: sin
+             * link_rewrite el producto queda sin URL propia. Sólo se
+             * rellena cuando falta, para no pisar las direcciones que la
+             * tienda ya tenga personalizadas.
+             */
+            $current = is_array($product->link_rewrite)
+                ? ($product->link_rewrite[$languageId] ?? '')
+                : (string) $product->link_rewrite;
+
+            if (trim((string) $current) === '' && trim($name) !== '') {
+                $product->link_rewrite = [
+                    $languageId => \Tools::str2url($name),
+                ];
+            }
         }
 
         if (isset($data['description'])) {
