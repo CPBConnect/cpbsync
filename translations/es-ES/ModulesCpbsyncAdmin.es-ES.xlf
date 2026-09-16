@@ -34,6 +34,18 @@
         <source>Active source</source>
         <target>Fuente activa</target>
       </trans-unit>
+      <trans-unit id="ec211f7c20" resname="Add">
+        <source>Add</source>
+        <target>Sumar</target>
+      </trans-unit>
+      <trans-unit id="c2c755d1bb" resname="Add at the end">
+        <source>Add at the end</source>
+        <target>Añadir al final</target>
+      </trans-unit>
+      <trans-unit id="7c5682e339" resname="Add prefix or suffix">
+        <source>Add prefix or suffix</source>
+        <target>Añadir prefijo o sufijo</target>
+      </trans-unit>
       <trans-unit id="a73d159d9f" resname="Add source">
         <source>Add source</source>
         <target>Agregar fuente</target>
@@ -57,6 +69,10 @@
       <trans-unit id="c5db1fa156" resname="Are you sure you want to delete this source?">
         <source>Are you sure you want to delete this source?</source>
         <target>¿Estás seguro de eliminar esta fuente?</target>
+      </trans-unit>
+      <trans-unit id="9b8f0983ed" resname="Arithmetic">
+        <source>Arithmetic</source>
+        <target>Operaciones aritméticas</target>
       </trans-unit>
       <trans-unit id="a77d89ba5d" resname="Assign each source field to the matching PrestaShop field.">
         <source>Assign each source field to the matching PrestaShop field.</source>
@@ -82,6 +98,10 @@
         <source>Back to sources</source>
         <target>Volver a fuentes</target>
       </trans-unit>
+      <trans-unit id="cdbb457a58" resname="Build a slug">
+        <source>Build a slug</source>
+        <target>Crear un slug</target>
+      </trans-unit>
       <trans-unit id="95e297e0cc" resname="CPB Sync">
         <source>CPB Sync</source>
         <target>CPB Sync</target>
@@ -98,6 +118,18 @@
         <source>Cancel</source>
         <target>Cancelar</target>
       </trans-unit>
+      <trans-unit id="b776c1712a" resname="Capitalisation">
+        <source>Capitalisation</source>
+        <target>Capitalización</target>
+      </trans-unit>
+      <trans-unit id="e3aa27a099" resname="Capture group">
+        <source>Capture group</source>
+        <target>Grupo de captura</target>
+      </trans-unit>
+      <trans-unit id="64c6b1d478" resname="Change capitalisation">
+        <source>Change capitalisation</source>
+        <target>Cambiar mayúsculas y minúsculas</target>
+      </trans-unit>
       <trans-unit id="8527ed8305" resname="Changed">
         <source>Changed</source>
         <target>Cambiado</target>
@@ -109,6 +141,10 @@
       <trans-unit id="5e5f2c5ecc" resname="Connection successful.">
         <source>Connection successful.</source>
         <target>Conexión exitosa.</target>
+      </trans-unit>
+      <trans-unit id="0aa315971b" resname="Convert to yes/no">
+        <source>Convert to yes/no</source>
+        <target>Convertir a sí/no</target>
       </trans-unit>
       <trans-unit id="7171ab8c4f" resname="Could not connect to the source: %error%">
         <source>Could not connect to the source: %error%</source>
@@ -134,6 +170,18 @@
         <source>Date:</source>
         <target>Fecha:</target>
       </trans-unit>
+      <trans-unit id="5ef449f60d" resname="Decimal places">
+        <source>Decimal places</source>
+        <target>Decimales</target>
+      </trans-unit>
+      <trans-unit id="4aa24bf677" resname="Decimal separator">
+        <source>Decimal separator</source>
+        <target>Separador decimal</target>
+      </trans-unit>
+      <trans-unit id="31ce3cdcd6" resname="Default value">
+        <source>Default value</source>
+        <target>Valor por defecto</target>
+      </trans-unit>
       <trans-unit id="82cce92e81" resname="Delete">
         <source>Delete</source>
         <target>Eliminar</target>
@@ -158,6 +206,10 @@
         <source>Detected columns</source>
         <target>Columnas detectadas</target>
       </trans-unit>
+      <trans-unit id="0b914e1961" resname="Divide">
+        <source>Divide</source>
+        <target>Dividir</target>
+      </trans-unit>
       <trans-unit id="e02d2ae03d" resname="Duration">
         <source>Duration</source>
         <target>Duración</target>
@@ -169,6 +221,14 @@
       <trans-unit id="918942ccd9" resname="E.g. Supplier ABC">
         <source>E.g. Supplier ABC</source>
         <target>Ej. Proveedor ABC</target>
+      </trans-unit>
+      <trans-unit id="d66f259ef3" resname="EVERYTHING IN CAPITALS">
+        <source>EVERYTHING IN CAPITALS</source>
+        <target>TODO EN MAYÚSCULAS</target>
+      </trans-unit>
+      <trans-unit id="1accc2cf7b" resname="Each Word With Capitals">
+        <source>Each Word With Capitals</source>
+        <target>Cada Palabra Con Mayúscula</target>
       </trans-unit>
       <trans-unit id="b5d635e5f8" resname="Edit">
         <source>Edit</source>
@@ -190,6 +250,18 @@
         <source>Every 6 hours</source>
         <target>Cada 6 horas</target>
       </trans-unit>
+      <trans-unit id="1d01bd3d4a" resname="Extract with a pattern">
+        <source>Extract with a pattern</source>
+        <target>Extraer con una expresión</target>
+      </trans-unit>
+      <trans-unit id="aa32ae30a3" resname="Fallback fields">
+        <source>Fallback fields</source>
+        <target>Campos alternativos</target>
+      </trans-unit>
+      <trans-unit id="a7acda7383" resname="Fields to join">
+        <source>Fields to join</source>
+        <target>Campos a unir</target>
+      </trans-unit>
       <trans-unit id="b286918ab1" resname="File uploaded. Starting import...">
         <source>File uploaded. Starting import...</source>
         <target>Archivo cargado. Iniciando importación...</target>
@@ -205,6 +277,10 @@
       <trans-unit id="01c0885dcb" resname="Frequency:">
         <source>Frequency:</source>
         <target>Frecuencia:</target>
+      </trans-unit>
+      <trans-unit id="540d158839" resname="Group number to keep. 0 keeps the whole match.">
+        <source>Group number to keep. 0 keeps the whole match.</source>
+        <target>Número de grupo que se conserva. 0 conserva toda la coincidencia.</target>
       </trans-unit>
       <trans-unit id="113491cfae" resname="History">
         <source>History</source>
@@ -238,6 +314,22 @@
         <source>Inactive</source>
         <target>Inactiva</target>
       </trans-unit>
+      <trans-unit id="8d51e5c2e9" resname="Include the delimiters, for example /([0-9]+)/.">
+        <source>Include the delimiters, for example /([0-9]+)/.</source>
+        <target>Incluye los delimitadores, por ejemplo /([0-9]+)/.</target>
+      </trans-unit>
+      <trans-unit id="0d6a959e11" resname="Include the delimiters, for example /\s+/ to collapse spaces.">
+        <source>Include the delimiters, for example /\s+/ to collapse spaces.</source>
+        <target>Incluye los delimitadores, por ejemplo /\s+/ para juntar espacios.</target>
+      </trans-unit>
+      <trans-unit id="45d7319097" resname="Join fields">
+        <source>Join fields</source>
+        <target>Unir campos</target>
+      </trans-unit>
+      <trans-unit id="6c1c00a886" resname="Keep only digits">
+        <source>Keep only digits</source>
+        <target>Dejar sólo los números</target>
+      </trans-unit>
       <trans-unit id="808f7935ce" resname="Keeps the last %days% days.">
         <source>Keeps the last %days% days.</source>
         <target>Conserva los últimos %days% días.</target>
@@ -262,6 +354,22 @@
         <source>Last run:</source>
         <target>Última ejecución:</target>
       </trans-unit>
+      <trans-unit id="a98272ad52" resname="Leave empty to detect it automatically.">
+        <source>Leave empty to detect it automatically.</source>
+        <target>Déjalo vacío para detectarlo automáticamente.</target>
+      </trans-unit>
+      <trans-unit id="20b0f5164a" resname="Leave empty to keep the result as it is.">
+        <source>Leave empty to keep the result as it is.</source>
+        <target>Déjalo vacío para no redondear.</target>
+      </trans-unit>
+      <trans-unit id="f014aac0ff" resname="Leave empty to remove the text.">
+        <source>Leave empty to remove the text.</source>
+        <target>Déjalo vacío para quitar el texto.</target>
+      </trans-unit>
+      <trans-unit id="a55cb8dae4" resname="Leave empty to remove what the pattern finds. You can use $1 for capture groups.">
+        <source>Leave empty to remove what the pattern finds. You can use $1 for capture groups.</source>
+        <target>Déjalo vacío para quitar lo que encuentre el patrón. Puedes usar $1 para los grupos capturados.</target>
+      </trans-unit>
       <trans-unit id="c6c3c4d905" resname="Longest run">
         <source>Longest run</source>
         <target>Ejecución más larga</target>
@@ -273,6 +381,14 @@
       <trans-unit id="490ee549a5" resname="Map fields">
         <source>Map fields</source>
         <target>Mapear campos</target>
+      </trans-unit>
+      <trans-unit id="d78cc5f621" resname="Map values">
+        <source>Map values</source>
+        <target>Traducir valores</target>
+      </trans-unit>
+      <trans-unit id="94f0e60865" resname="Maximum length">
+        <source>Maximum length</source>
+        <target>Longitud máxima</target>
       </trans-unit>
       <trans-unit id="4789f23283" resname="Memory">
         <source>Memory</source>
@@ -289,6 +405,10 @@
       <trans-unit id="bcb4fd2cd6" resname="Most frequent errors">
         <source>Most frequent errors</source>
         <target>Errores más frecuentes</target>
+      </trans-unit>
+      <trans-unit id="e257376d91" resname="Multiply">
+        <source>Multiply</source>
+        <target>Multiplicar</target>
       </trans-unit>
       <trans-unit id="9b5dc4e594" resname="Name">
         <source>Name</source>
@@ -326,17 +446,37 @@
         <source>Normalize text</source>
         <target>Normalizar texto</target>
       </trans-unit>
-      <trans-unit id="4729380e58" resname="Not available">
-        <source>Not available</source>
-        <target>No disponible</target>
+      <trans-unit id="a9dbb7bc25" resname="Number of characters to keep.">
+        <source>Number of characters to keep.</source>
+        <target>Número de caracteres que se conservan.</target>
+      </trans-unit>
+      <trans-unit id="76ff8ed019" resname="Number used by the operation. Use 1.21 to add 21% VAT.">
+        <source>Number used by the operation. Use 1.21 to add 21% VAT.</source>
+        <target>Número que usa la operación. Usa 1.21 para añadir un 21% de IVA.</target>
       </trans-unit>
       <trans-unit id="6f1b6b9b1d" resname="One of the mappings could not be saved.">
         <source>One of the mappings could not be saved.</source>
         <target>No fue posible guardar uno de los mappings.</target>
       </trans-unit>
+      <trans-unit id="0db55bea7e" resname="One rule per line, with the source value and the target value separated by &quot;=&quot;.">
+        <source>One rule per line, with the source value and the target value separated by "=".</source>
+        <target>Una regla por línea, con el valor de origen y el de destino separados por "=".</target>
+      </trans-unit>
       <trans-unit id="f718a836af" resname="Only the first %shown% of %total% records are stored. The rest are summarised in the counters above.">
         <source>Only the first %shown% of %total% records are stored. The rest are summarised in the counters above.</source>
         <target>Sólo se guardan los primeros %shown% registros de %total%. El resto queda resumido en los contadores anteriores.</target>
+      </trans-unit>
+      <trans-unit id="67e85708eb" resname="Only the first letter">
+        <source>Only the first letter</source>
+        <target>Sólo la primera letra</target>
+      </trans-unit>
+      <trans-unit id="a22f9880f7" resname="Only when the text has been shortened.">
+        <source>Only when the text has been shortened.</source>
+        <target>Sólo cuando el texto se ha recortado.</target>
+      </trans-unit>
+      <trans-unit id="2a78ed7645" resname="Operation">
+        <source>Operation</source>
+        <target>Operación</target>
       </trans-unit>
       <trans-unit id="534394c888" resname="Optional. XML and JSON sources use the record_path setting to locate the records.">
         <source>Optional. XML and JSON sources use the record_path setting to locate the records.</source>
@@ -345,6 +485,18 @@
       <trans-unit id="f3c92c209d" resname="Original">
         <source>Original</source>
         <target>Original</target>
+      </trans-unit>
+      <trans-unit id="b8d29742df" resname="Part number">
+        <source>Part number</source>
+        <target>Número de parte</target>
+      </trans-unit>
+      <trans-unit id="0e2d29d5b1" resname="Parts are counted from 1.">
+        <source>Parts are counted from 1.</source>
+        <target>Las partes se cuentan desde 1.</target>
+      </trans-unit>
+      <trans-unit id="716de874a0" resname="Prefix">
+        <source>Prefix</source>
+        <target>Prefijo</target>
       </trans-unit>
       <trans-unit id="c908dc8b8d" resname="PrestaShop ID">
         <source>PrestaShop ID</source>
@@ -390,6 +542,14 @@
         <source>Reference</source>
         <target>Referencia</target>
       </trans-unit>
+      <trans-unit id="0c49a7a7a3" resname="Regular expression">
+        <source>Regular expression</source>
+        <target>Expresión regular</target>
+      </trans-unit>
+      <trans-unit id="5142ecb32a" resname="Remove HTML">
+        <source>Remove HTML</source>
+        <target>Quitar el HTML</target>
+      </trans-unit>
       <trans-unit id="6debc10025" resname="Removed %count% runs older than %days% days.">
         <source>Removed %count% runs older than %days% days.</source>
         <target>Se han borrado %count% ejecuciones anteriores a %days% días.</target>
@@ -401,6 +561,10 @@
       <trans-unit id="6ecf4f9338" resname="Replace with">
         <source>Replace with</source>
         <target>Reemplazar por</target>
+      </trans-unit>
+      <trans-unit id="85d84b3e5c" resname="Replace with a pattern">
+        <source>Replace with a pattern</source>
+        <target>Reemplazar con una expresión</target>
       </trans-unit>
       <trans-unit id="6dbafc5455" resname="Result">
         <source>Result</source>
@@ -438,6 +602,18 @@
         <source>Select a source</source>
         <target>Selecciona una fuente</target>
       </trans-unit>
+      <trans-unit id="6b9ee4b4c9" resname="Separated by commas. Anything else becomes 0.">
+        <source>Separated by commas. Anything else becomes 0.</source>
+        <target>Separados por comas. Cualquier otro valor se convierte en 0.</target>
+      </trans-unit>
+      <trans-unit id="04b2e4188d" resname="Separator">
+        <source>Separator</source>
+        <target>Separador</target>
+      </trans-unit>
+      <trans-unit id="2861162b99" resname="Shorten text">
+        <source>Shorten text</source>
+        <target>Acortar el texto</target>
+      </trans-unit>
       <trans-unit id="2d4495e58c" resname="Skipped">
         <source>Skipped</source>
         <target>Omitido</target>
@@ -449,6 +625,14 @@
       <trans-unit id="841a1bf747" resname="Source URL">
         <source>Source URL</source>
         <target>URL de la fuente</target>
+      </trans-unit>
+      <trans-unit id="9ef9f4823c" resname="Source field names separated by commas, in order of preference.">
+        <source>Source field names separated by commas, in order of preference.</source>
+        <target>Nombres de campos separados por comas, por orden de preferencia.</target>
+      </trans-unit>
+      <trans-unit id="ab5b38a8d8" resname="Source field names separated by commas, in the order you want them. The value of this row is used first.">
+        <source>Source field names separated by commas, in the order you want them. The value of this row is used first.</source>
+        <target>Nombres de campos separados por comas, en el orden que quieras. El valor de la propia fila va primero.</target>
       </trans-unit>
       <trans-unit id="cea5ef4ae7" resname="Source preview">
         <source>Source preview</source>
@@ -478,6 +662,10 @@
         <source>Stored runs:</source>
         <target>Ejecuciones guardadas:</target>
       </trans-unit>
+      <trans-unit id="1d9baf077e" resname="Subtract">
+        <source>Subtract</source>
+        <target>Restar</target>
+      </trans-unit>
       <trans-unit id="9bb4e80465" resname="Success">
         <source>Success</source>
         <target>Éxito</target>
@@ -485,6 +673,10 @@
       <trans-unit id="e345211681" resname="Successful:">
         <source>Successful:</source>
         <target>Exitosos:</target>
+      </trans-unit>
+      <trans-unit id="56e6ddd1cb" resname="Suffix">
+        <source>Suffix</source>
+        <target>Sufijo</target>
       </trans-unit>
       <trans-unit id="c8ae1a8f27" resname="Supplier field">
         <source>Supplier field</source>
@@ -510,9 +702,37 @@
         <source>Synchronize external product catalogs with PrestaShop using configurable mappings and data transformations.</source>
         <target>Sincroniza catálogos de productos externos con PrestaShop usando mappings y transformaciones de datos configurables.</target>
       </trans-unit>
+      <trans-unit id="e1e8421cb2" resname="Take one part">
+        <source>Take one part</source>
+        <target>Tomar una parte</target>
+      </trans-unit>
       <trans-unit id="0b94ff070b" resname="Test connection">
         <source>Test connection</source>
         <target>Probar conexión</target>
+      </trans-unit>
+      <trans-unit id="cc4e39d37b" resname="Text added after the value.">
+        <source>Text added after the value.</source>
+        <target>Texto que se añade detrás del valor.</target>
+      </trans-unit>
+      <trans-unit id="2d730a0aa9" resname="Text added before the value.">
+        <source>Text added before the value.</source>
+        <target>Texto que se añade delante del valor.</target>
+      </trans-unit>
+      <trans-unit id="0f97248dd7" resname="Text placed between the values.">
+        <source>Text placed between the values.</source>
+        <target>Texto que se coloca entre los valores.</target>
+      </trans-unit>
+      <trans-unit id="0959da895a" resname="Text placed between words.">
+        <source>Text placed between words.</source>
+        <target>Texto que se coloca entre palabras.</target>
+      </trans-unit>
+      <trans-unit id="e293b93e1a" resname="Text that divides the parts.">
+        <source>Text that divides the parts.</source>
+        <target>Texto que separa las partes.</target>
+      </trans-unit>
+      <trans-unit id="4cc0f3de26" resname="Text to search for in the source value.">
+        <source>Text to search for in the source value.</source>
+        <target>Texto que se busca en el valor de origen.</target>
       </trans-unit>
       <trans-unit id="568bc9ce9c" resname="The CSV file contains an empty header.">
         <source>The CSV file contains an empty header.</source>
@@ -581,6 +801,10 @@
       <trans-unit id="79ae8c0671" resname="The additional configuration must be valid JSON.">
         <source>The additional configuration must be valid JSON.</source>
         <target>La configuración adicional debe ser un JSON válido.</target>
+      </trans-unit>
+      <trans-unit id="7a373a147c" resname="The arithmetic value cannot be empty.">
+        <source>The arithmetic value cannot be empty.</source>
+        <target>El valor de la operación no puede estar vacío.</target>
       </trans-unit>
       <trans-unit id="6ce345624f" resname="The category could not be created in PrestaShop.">
         <source>The category could not be created in PrestaShop.</source>
@@ -702,6 +926,22 @@
         <source>The monitoring data could not be loaded: %error%</source>
         <target>No fue posible cargar los datos de monitorización: %error%</target>
       </trans-unit>
+      <trans-unit id="5e23aa305b" resname="The number of decimal places is not valid for the &quot;%field%&quot; field.">
+        <source>The number of decimal places is not valid for the "%field%" field.</source>
+        <target>El número de decimales no es válido para el campo "%field%".</target>
+      </trans-unit>
+      <trans-unit id="e1bb200941" resname="The operation &quot;%value%&quot; is not valid for the &quot;%field%&quot; field.">
+        <source>The operation "%value%" is not valid for the "%field%" field.</source>
+        <target>La operación "%value%" no es válida para el campo "%field%".</target>
+      </trans-unit>
+      <trans-unit id="20d0dd31c8" resname="The part number of the &quot;%field%&quot; field must be 1 or greater.">
+        <source>The part number of the "%field%" field must be 1 or greater.</source>
+        <target>El número de parte del campo "%field%" debe ser 1 o mayor.</target>
+      </trans-unit>
+      <trans-unit id="16dba4a4b3" resname="The pattern is not valid for the &quot;%field%&quot; field.">
+        <source>The pattern is not valid for the "%field%" field.</source>
+        <target>La expresión no es válida para el campo "%field%".</target>
+      </trans-unit>
       <trans-unit id="9388a2132a" resname="The previous mapping could not be deleted.">
         <source>The previous mapping could not be deleted.</source>
         <target>No fue posible eliminar el mapping anterior.</target>
@@ -745,6 +985,10 @@
       <trans-unit id="1526875349" resname="The selected source does not exist.">
         <source>The selected source does not exist.</source>
         <target>La fuente seleccionada no existe.</target>
+      </trans-unit>
+      <trans-unit id="7f98d078e9" resname="The separator must be a comma or a dot.">
+        <source>The separator must be a comma or a dot.</source>
+        <target>El separador debe ser una coma o un punto.</target>
       </trans-unit>
       <trans-unit id="e8b358948a" resname="The source ID is not valid.">
         <source>The source ID is not valid.</source>
@@ -894,6 +1138,10 @@
         <source>The uploaded file is not valid.</source>
         <target>El archivo subido no es válido.</target>
       </trans-unit>
+      <trans-unit id="afdcd1de3b" resname="The value is not a number.">
+        <source>The value is not a number.</source>
+        <target>El valor no es un número.</target>
+      </trans-unit>
       <trans-unit id="2660dda60d" resname="There are no mappings for the source.">
         <source>There are no mappings for the source.</source>
         <target>No existen mappings para la fuente.</target>
@@ -909,6 +1157,10 @@
       <trans-unit id="b1e1be4138" resname="This synchronization was recorded in the history.">
         <source>This synchronization was recorded in the history.</source>
         <target>Esta sincronización quedó registrada en el historial.</target>
+      </trans-unit>
+      <trans-unit id="117964e3f0" resname="Thousands separator">
+        <source>Thousands separator</source>
+        <target>Separador de miles</target>
       </trans-unit>
       <trans-unit id="b3ac111fd7" resname="Times">
         <source>Times</source>
@@ -958,9 +1210,29 @@
         <source>Uploading file...</source>
         <target>Subiendo archivo...</target>
       </trans-unit>
+      <trans-unit id="3530414c2b" resname="Use another field">
+        <source>Use another field</source>
+        <target>Usar otro campo</target>
+      </trans-unit>
+      <trans-unit id="c8c2567c99" resname="Used when the source value is empty.">
+        <source>Used when the source value is empty.</source>
+        <target>Se usa cuando el valor de origen viene vacío.</target>
+      </trans-unit>
       <trans-unit id="f013ad3c49" resname="Valid">
         <source>Valid</source>
         <target>Válido</target>
+      </trans-unit>
+      <trans-unit id="689202409e" resname="Value">
+        <source>Value</source>
+        <target>Valor</target>
+      </trans-unit>
+      <trans-unit id="413286b6e2" resname="Value map">
+        <source>Value map</source>
+        <target>Tabla de valores</target>
+      </trans-unit>
+      <trans-unit id="f0c302d425" resname="Values that mean yes">
+        <source>Values that mean yes</source>
+        <target>Valores que significan sí</target>
       </trans-unit>
       <trans-unit id="fee834efb3" resname="View detail">
         <source>View detail</source>
@@ -978,13 +1250,49 @@
         <source>Writing products</source>
         <target>Guardando los productos</target>
       </trans-unit>
+      <trans-unit id="7d04c02df6" resname="You cannot divide by zero in the &quot;%field%&quot; field.">
+        <source>You cannot divide by zero in the "%field%" field.</source>
+        <target>No puedes dividir entre cero en el campo "%field%".</target>
+      </trans-unit>
       <trans-unit id="134e15b442" resname="You have no sources configured yet.">
         <source>You have no sources configured yet.</source>
         <target>Aún no tienes fuentes configuradas.</target>
       </trans-unit>
+      <trans-unit id="5314e5ff5a" resname="You must list the values that mean yes for the &quot;%field%&quot; field.">
+        <source>You must list the values that mean yes for the "%field%" field.</source>
+        <target>Debes indicar los valores que significan sí para el campo "%field%".</target>
+      </trans-unit>
       <trans-unit id="3573e555ac" resname="You must map a supplier field to reference.">
         <source>You must map a supplier field to reference.</source>
         <target>Debes asignar un campo del proveedor a reference.</target>
+      </trans-unit>
+      <trans-unit id="9d732c4978" resname="You must name the fields to join for the &quot;%field%&quot; field.">
+        <source>You must name the fields to join for the "%field%" field.</source>
+        <target>Debes indicar los campos que se unen para el campo "%field%".</target>
+      </trans-unit>
+      <trans-unit id="67829a14e7" resname="You must name the fields to use for the &quot;%field%&quot; field.">
+        <source>You must name the fields to use for the "%field%" field.</source>
+        <target>Debes indicar los campos que se usan para el campo "%field%".</target>
+      </trans-unit>
+      <trans-unit id="2c6c1411fc" resname="You must provide a number for the &quot;%field%&quot; field.">
+        <source>You must provide a number for the "%field%" field.</source>
+        <target>Debes indicar un número para el campo "%field%".</target>
+      </trans-unit>
+      <trans-unit id="83c8ec017d" resname="You must provide a pattern for the &quot;%field%&quot; field.">
+        <source>You must provide a pattern for the "%field%" field.</source>
+        <target>Debes indicar una expresión para el campo "%field%".</target>
+      </trans-unit>
+      <trans-unit id="0c67a1b021" resname="You must provide a separator for the &quot;%field%&quot; field.">
+        <source>You must provide a separator for the "%field%" field.</source>
+        <target>Debes indicar un separador para el campo "%field%".</target>
+      </trans-unit>
+      <trans-unit id="7e7b56dc4c" resname="You must provide at least one value to map for the &quot;%field%&quot; field.">
+        <source>You must provide at least one value to map for the "%field%" field.</source>
+        <target>Debes indicar al menos un valor que traducir para el campo "%field%".</target>
+      </trans-unit>
+      <trans-unit id="8dda5f6da5" resname="You must provide the maximum length for the &quot;%field%&quot; field.">
+        <source>You must provide the maximum length for the "%field%" field.</source>
+        <target>Debes indicar la longitud máxima para el campo "%field%".</target>
       </trans-unit>
       <trans-unit id="895ac7b0f8" resname="You must provide the text to replace for the &quot;%field%&quot; field.">
         <source>You must provide the text to replace for the "%field%" field.</source>
@@ -997,6 +1305,10 @@
       <trans-unit id="b875d0ad32" resname="You must select a source.">
         <source>You must select a source.</source>
         <target>Debes seleccionar una fuente.</target>
+      </trans-unit>
+      <trans-unit id="4243e319b2" resname="everything in lower case">
+        <source>everything in lower case</source>
+        <target>todo en minúsculas</target>
       </trans-unit>
       <trans-unit id="01ce836ce6" resname="records found.">
         <source>records found.</source>

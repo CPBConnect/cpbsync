@@ -5,6 +5,8 @@ namespace CPBConnect\Presentation\Admin\Handler;
 use CPBConnect\Application\Mapping\MappingInputValidator;
 use CPBConnect\Application\Mapping\MappingSaver;
 use CPBConnect\Application\Source\SourceService;
+use CPBConnect\Application\Transform\TransformerFactory;
+use CPBConnect\Application\Transform\TransformerRegistry;
 use CPBConnect\Infrastructure\Persistence\MappingRepository;
 use CPBConnect\Presentation\Admin\AdminLinkBuilder;
 use CPBConnect\Presentation\Admin\AdminShellInterface;
@@ -15,6 +17,8 @@ use Tools;
  */
 class MappingHandler
 {
+    private TransformerRegistry $transformers;
+
     public function __construct(
         private AdminShellInterface $shell,
         private AdminLinkBuilder $links,
@@ -22,8 +26,11 @@ class MappingHandler
         private MappingRepository $mappingRepository,
         private MappingInputValidator $validator,
         private MappingSaver $saver,
-        private SourceHandler $sourcesHandler
+        private SourceHandler $sourcesHandler,
+        ?TransformerRegistry $transformers = null
     ) {
+        $this->transformers = $transformers
+            ?? TransformerFactory::create();
     }
 
     /**
@@ -55,6 +62,8 @@ class MappingHandler
                 'saved_mappings' => $mappings,
                 'saved_transformations' => $transformations,
                 'saved_transformation_configs' => $configs,
+                'saved_config_json' => $this->encodeConfigs($configs),
+                'transform_options' => $this->transformOptions(),
                 'save_mapping_url' => $this->links->saveMapping(
                     (int) $source['id_source']
                 ),
@@ -92,8 +101,7 @@ class MappingHandler
 
         $mapping = Tools::getValue('mapping', []);
         $transformations = Tools::getValue('transformation', []);
-        $search = Tools::getValue('transformation_search', []);
-        $replace = Tools::getValue('transformation_replace', []);
+        $config = Tools::getValue('transformation_config', []);
 
         if (!is_array($mapping)) {
             $this->shell->addError(
@@ -107,12 +115,8 @@ class MappingHandler
             $transformations = [];
         }
 
-        if (!is_array($search)) {
-            $search = [];
-        }
-
-        if (!is_array($replace)) {
-            $replace = [];
+        if (!is_array($config)) {
+            $config = [];
         }
 
         if ($sourceId <= 0) {
@@ -122,7 +126,7 @@ class MappingHandler
         $error = $this->validator->validate(
             $mapping,
             $transformations,
-            $search
+            $config
         );
 
         if ($error !== null) {
@@ -139,8 +143,7 @@ class MappingHandler
                 $sourceId,
                 $mapping,
                 $transformations,
-                $search,
-                $replace
+                $config
             );
 
             $this->shell->addConfirmation(
@@ -189,5 +192,120 @@ class MappingHandler
         }
 
         return [$mappings, $transformations, $configs];
+    }
+
+    /**
+     * Configuración guardada, en JSON, para que el formulario pueda
+     * reponerla sin recargar la página.
+     *
+     * @param array<string, mixed> $configs
+     *
+     * @return array<string, string>
+     */
+    private function encodeConfigs(array $configs): array
+    {
+        $encoded = [];
+
+        foreach ($configs as $sourceField => $config) {
+            $json = json_encode(
+                is_array($config) ? $config : [],
+                JSON_UNESCAPED_UNICODE
+            );
+
+            $encoded[$sourceField] = $json === false ? '{}' : $json;
+        }
+
+        return $encoded;
+    }
+
+    /**
+     * Transformaciones disponibles para el formulario.
+     *
+     * Las etiquetas vienen de cada transformación en inglés; aquí se
+     * traducen y se preparan los campos de configuración.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function transformOptions(): array
+    {
+        $options = [];
+
+        foreach ($this->transformers->all() as $transformer) {
+            $description = $transformer->describe();
+
+            $options[] = [
+                'name' => $transformer->getName(),
+                'label' => $this->shell->translate(
+                    (string) $description['label']
+                ),
+                'targets' => implode(
+                    ',',
+                    array_map('strval', $description['targets'])
+                ),
+                'fields' => $this->transformFields(
+                    $description['fields']
+                ),
+            ];
+        }
+
+        return $options;
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $fields
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function transformFields(array $fields): array
+    {
+        $prepared = [];
+
+        foreach ($fields as $field) {
+            $prepared[] = [
+                'name' => (string) ($field['name'] ?? ''),
+                'label' => $this->shell->translate(
+                    (string) ($field['label'] ?? '')
+                ),
+                'hint' => $this->shell->translate(
+                    (string) ($field['hint'] ?? '')
+                ),
+                'type' => (string) ($field['type'] ?? 'text'),
+                'default' => (string) ($field['default'] ?? ''),
+                'options' => $this->transformFieldOptions(
+                    $field['options'] ?? []
+                ),
+            ];
+        }
+
+        return $prepared;
+    }
+
+    /**
+     * @param mixed $options
+     *
+     * @return array<int, array{value: string, label: string}>
+     */
+    private function transformFieldOptions($options): array
+    {
+        if (!is_array($options)) {
+            return [];
+        }
+
+        $prepared = [];
+
+        foreach ($options as $option) {
+            if (!is_array($option)) {
+                continue;
+            }
+
+            $prepared[] = [
+                'value' => (string) ($option['value'] ?? ''),
+                'label' => $this->shell->translate(
+                    (string) ($option['label'] ?? '')
+                ),
+            ];
+        }
+
+        return $prepared;
     }
 }

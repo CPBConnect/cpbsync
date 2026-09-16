@@ -2,10 +2,8 @@
 
 namespace CPBConnect\Application\Mapping;
 
-use CPBConnect\Application\Transform\PriceTransformer;
-use CPBConnect\Application\Transform\StockTransformer;
-use CPBConnect\Application\Transform\TextTransformer;
-use CPBConnect\Application\Transform\ReplaceTextTransformer;
+use CPBConnect\Application\Transform\TransformerFactory;
+use CPBConnect\Application\Transform\TransformerRegistry;
 
 /**
  * Aplica el mapeo a una fila del catálogo.
@@ -14,20 +12,18 @@ use CPBConnect\Application\Transform\ReplaceTextTransformer;
  * cada uno tuviera su propio recorrido, el Dry Run podría prometer un
  * resultado que la sincronización no cumple (era el caso de la
  * normalización de texto, que sólo aplicaba el Dry Run).
+ *
+ * Las transformaciones no están escritas aquí: se buscan en el
+ * registro, que la edición de pago amplía con las suyas.
  */
 class MappingApplier
 {
-    private PriceTransformer $priceTransformer;
-    private StockTransformer $stockTransformer;
-    private TextTransformer $textTransformer;
-    private ReplaceTextTransformer $replaceTextTransformer;
+    private TransformerRegistry $transformers;
 
-    public function __construct()
+    public function __construct(?TransformerRegistry $transformers = null)
     {
-        $this->priceTransformer = new PriceTransformer();
-        $this->stockTransformer = new StockTransformer();
-        $this->textTransformer = new TextTransformer();
-        $this->replaceTextTransformer = new ReplaceTextTransformer();
+        $this->transformers = $transformers
+            ?? TransformerFactory::create();
     }
 
     /**
@@ -98,7 +94,11 @@ class MappingApplier
                 continue;
             }
 
-            $value = $this->transformValue($original, $configuration);
+            $value = $this->transformValue(
+                $original,
+                $configuration,
+                $row
+            );
 
             $result[$targetField] = $withOriginals
                 ? $this->entry($original, $value)
@@ -111,14 +111,26 @@ class MappingApplier
     /**
      * Aplica a un valor la transformación configurada para su campo.
      *
-     * @param mixed $value
+     * @param mixed                $value
      * @param array<string, mixed> $configuration
+     * @param array<string, mixed> $row
      *
      * @return mixed
      */
-    private function transformValue($value, array $configuration)
-    {
+    private function transformValue(
+        $value,
+        array $configuration,
+        array $row
+    ) {
         $transform = $configuration['transform'] ?? 'none';
+
+        $transformer = is_string($transform)
+            ? $this->transformers->find($transform)
+            : null;
+
+        if ($transformer === null) {
+            return $value;
+        }
 
         $config = $configuration['config'] ?? [];
 
@@ -126,25 +138,7 @@ class MappingApplier
             $config = [];
         }
 
-        switch ($transform) {
-            case 'normalize_price':
-                return $this->priceTransformer->transform($value);
-
-            case 'normalize_stock':
-                return $this->stockTransformer->transform($value);
-
-            case 'normalize_text':
-                return $this->textTransformer->transform($value);
-
-            case 'replace_text':
-                return $this->replaceTextTransformer->transform(
-                    $value,
-                    (string) ($config['search'] ?? ''),
-                    (string) ($config['replace'] ?? '')
-                );
-        }
-
-        return $value;
+        return $transformer->transform($value, $config, $row);
     }
 
     /**

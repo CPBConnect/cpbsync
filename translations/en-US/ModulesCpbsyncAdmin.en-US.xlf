@@ -34,6 +34,18 @@
         <source>Active source</source>
         <target>Active source</target>
       </trans-unit>
+      <trans-unit id="ec211f7c20" resname="Add">
+        <source>Add</source>
+        <target>Add</target>
+      </trans-unit>
+      <trans-unit id="c2c755d1bb" resname="Add at the end">
+        <source>Add at the end</source>
+        <target>Add at the end</target>
+      </trans-unit>
+      <trans-unit id="7c5682e339" resname="Add prefix or suffix">
+        <source>Add prefix or suffix</source>
+        <target>Add prefix or suffix</target>
+      </trans-unit>
       <trans-unit id="a73d159d9f" resname="Add source">
         <source>Add source</source>
         <target>Add source</target>
@@ -57,6 +69,10 @@
       <trans-unit id="c5db1fa156" resname="Are you sure you want to delete this source?">
         <source>Are you sure you want to delete this source?</source>
         <target>Are you sure you want to delete this source?</target>
+      </trans-unit>
+      <trans-unit id="9b8f0983ed" resname="Arithmetic">
+        <source>Arithmetic</source>
+        <target>Arithmetic</target>
       </trans-unit>
       <trans-unit id="a77d89ba5d" resname="Assign each source field to the matching PrestaShop field.">
         <source>Assign each source field to the matching PrestaShop field.</source>
@@ -82,6 +98,10 @@
         <source>Back to sources</source>
         <target>Back to sources</target>
       </trans-unit>
+      <trans-unit id="cdbb457a58" resname="Build a slug">
+        <source>Build a slug</source>
+        <target>Build a slug</target>
+      </trans-unit>
       <trans-unit id="95e297e0cc" resname="CPB Sync">
         <source>CPB Sync</source>
         <target>CPB Sync</target>
@@ -98,6 +118,18 @@
         <source>Cancel</source>
         <target>Cancel</target>
       </trans-unit>
+      <trans-unit id="b776c1712a" resname="Capitalisation">
+        <source>Capitalisation</source>
+        <target>Capitalisation</target>
+      </trans-unit>
+      <trans-unit id="e3aa27a099" resname="Capture group">
+        <source>Capture group</source>
+        <target>Capture group</target>
+      </trans-unit>
+      <trans-unit id="64c6b1d478" resname="Change capitalisation">
+        <source>Change capitalisation</source>
+        <target>Change capitalisation</target>
+      </trans-unit>
       <trans-unit id="8527ed8305" resname="Changed">
         <source>Changed</source>
         <target>Changed</target>
@@ -109,6 +141,10 @@
       <trans-unit id="5e5f2c5ecc" resname="Connection successful.">
         <source>Connection successful.</source>
         <target>Connection successful.</target>
+      </trans-unit>
+      <trans-unit id="0aa315971b" resname="Convert to yes/no">
+        <source>Convert to yes/no</source>
+        <target>Convert to yes/no</target>
       </trans-unit>
       <trans-unit id="7171ab8c4f" resname="Could not connect to the source: %error%">
         <source>Could not connect to the source: %error%</source>
@@ -134,6 +170,18 @@
         <source>Date:</source>
         <target>Date:</target>
       </trans-unit>
+      <trans-unit id="5ef449f60d" resname="Decimal places">
+        <source>Decimal places</source>
+        <target>Decimal places</target>
+      </trans-unit>
+      <trans-unit id="4aa24bf677" resname="Decimal separator">
+        <source>Decimal separator</source>
+        <target>Decimal separator</target>
+      </trans-unit>
+      <trans-unit id="31ce3cdcd6" resname="Default value">
+        <source>Default value</source>
+        <target>Default value</target>
+      </trans-unit>
       <trans-unit id="82cce92e81" resname="Delete">
         <source>Delete</source>
         <target>Delete</target>
@@ -158,6 +206,10 @@
         <source>Detected columns</source>
         <target>Detected columns</target>
       </trans-unit>
+      <trans-unit id="0b914e1961" resname="Divide">
+        <source>Divide</source>
+        <target>Divide</target>
+      </trans-unit>
       <trans-unit id="e02d2ae03d" resname="Duration">
         <source>Duration</source>
         <target>Duration</target>
@@ -169,6 +221,14 @@
       <trans-unit id="918942ccd9" resname="E.g. Supplier ABC">
         <source>E.g. Supplier ABC</source>
         <target>E.g. Supplier ABC</target>
+      </trans-unit>
+      <trans-unit id="d66f259ef3" resname="EVERYTHING IN CAPITALS">
+        <source>EVERYTHING IN CAPITALS</source>
+        <target>EVERYTHING IN CAPITALS</target>
+      </trans-unit>
+      <trans-unit id="1accc2cf7b" resname="Each Word With Capitals">
+        <source>Each Word With Capitals</source>
+        <target>Each Word With Capitals</target>
       </trans-unit>
       <trans-unit id="b5d635e5f8" resname="Edit">
         <source>Edit</source>
@@ -190,6 +250,18 @@
         <source>Every 6 hours</source>
         <target>Every 6 hours</target>
       </trans-unit>
+      <trans-unit id="1d01bd3d4a" resname="Extract with a pattern">
+        <source>Extract with a pattern</source>
+        <target>Extract with a pattern</target>
+      </trans-unit>
+      <trans-unit id="aa32ae30a3" resname="Fallback fields">
+        <source>Fallback fields</source>
+        <target>Fallback fields</target>
+      </trans-unit>
+      <trans-unit id="a7acda7383" resname="Fields to join">
+        <source>Fields to join</source>
+        <target>Fields to join</target>
+      </trans-unit>
       <trans-unit id="b286918ab1" resname="File uploaded. Starting import...">
         <source>File uploaded. Starting import...</source>
         <target>File uploaded. Starting import...</target>
@@ -205,6 +277,10 @@
       <trans-unit id="01c0885dcb" resname="Frequency:">
         <source>Frequency:</source>
         <target>Frequency:</target>
+      </trans-unit>
+      <trans-unit id="540d158839" resname="Group number to keep. 0 keeps the whole match.">
+        <source>Group number to keep. 0 keeps the whole match.</source>
+        <target>Group number to keep. 0 keeps the whole match.</target>
       </trans-unit>
       <trans-unit id="113491cfae" resname="History">
         <source>History</source>
@@ -238,6 +314,22 @@
         <source>Inactive</source>
         <target>Inactive</target>
       </trans-unit>
+      <trans-unit id="8d51e5c2e9" resname="Include the delimiters, for example /([0-9]+)/.">
+        <source>Include the delimiters, for example /([0-9]+)/.</source>
+        <target>Include the delimiters, for example /([0-9]+)/.</target>
+      </trans-unit>
+      <trans-unit id="0d6a959e11" resname="Include the delimiters, for example /\s+/ to collapse spaces.">
+        <source>Include the delimiters, for example /\s+/ to collapse spaces.</source>
+        <target>Include the delimiters, for example /\s+/ to collapse spaces.</target>
+      </trans-unit>
+      <trans-unit id="45d7319097" resname="Join fields">
+        <source>Join fields</source>
+        <target>Join fields</target>
+      </trans-unit>
+      <trans-unit id="6c1c00a886" resname="Keep only digits">
+        <source>Keep only digits</source>
+        <target>Keep only digits</target>
+      </trans-unit>
       <trans-unit id="808f7935ce" resname="Keeps the last %days% days.">
         <source>Keeps the last %days% days.</source>
         <target>Keeps the last %days% days.</target>
@@ -262,6 +354,22 @@
         <source>Last run:</source>
         <target>Last run:</target>
       </trans-unit>
+      <trans-unit id="a98272ad52" resname="Leave empty to detect it automatically.">
+        <source>Leave empty to detect it automatically.</source>
+        <target>Leave empty to detect it automatically.</target>
+      </trans-unit>
+      <trans-unit id="20b0f5164a" resname="Leave empty to keep the result as it is.">
+        <source>Leave empty to keep the result as it is.</source>
+        <target>Leave empty to keep the result as it is.</target>
+      </trans-unit>
+      <trans-unit id="f014aac0ff" resname="Leave empty to remove the text.">
+        <source>Leave empty to remove the text.</source>
+        <target>Leave empty to remove the text.</target>
+      </trans-unit>
+      <trans-unit id="a55cb8dae4" resname="Leave empty to remove what the pattern finds. You can use $1 for capture groups.">
+        <source>Leave empty to remove what the pattern finds. You can use $1 for capture groups.</source>
+        <target>Leave empty to remove what the pattern finds. You can use $1 for capture groups.</target>
+      </trans-unit>
       <trans-unit id="c6c3c4d905" resname="Longest run">
         <source>Longest run</source>
         <target>Longest run</target>
@@ -273,6 +381,14 @@
       <trans-unit id="490ee549a5" resname="Map fields">
         <source>Map fields</source>
         <target>Map fields</target>
+      </trans-unit>
+      <trans-unit id="d78cc5f621" resname="Map values">
+        <source>Map values</source>
+        <target>Map values</target>
+      </trans-unit>
+      <trans-unit id="94f0e60865" resname="Maximum length">
+        <source>Maximum length</source>
+        <target>Maximum length</target>
       </trans-unit>
       <trans-unit id="4789f23283" resname="Memory">
         <source>Memory</source>
@@ -289,6 +405,10 @@
       <trans-unit id="bcb4fd2cd6" resname="Most frequent errors">
         <source>Most frequent errors</source>
         <target>Most frequent errors</target>
+      </trans-unit>
+      <trans-unit id="e257376d91" resname="Multiply">
+        <source>Multiply</source>
+        <target>Multiply</target>
       </trans-unit>
       <trans-unit id="9b5dc4e594" resname="Name">
         <source>Name</source>
@@ -326,17 +446,37 @@
         <source>Normalize text</source>
         <target>Normalize text</target>
       </trans-unit>
-      <trans-unit id="4729380e58" resname="Not available">
-        <source>Not available</source>
-        <target>Not available</target>
+      <trans-unit id="a9dbb7bc25" resname="Number of characters to keep.">
+        <source>Number of characters to keep.</source>
+        <target>Number of characters to keep.</target>
+      </trans-unit>
+      <trans-unit id="76ff8ed019" resname="Number used by the operation. Use 1.21 to add 21% VAT.">
+        <source>Number used by the operation. Use 1.21 to add 21% VAT.</source>
+        <target>Number used by the operation. Use 1.21 to add 21% VAT.</target>
       </trans-unit>
       <trans-unit id="6f1b6b9b1d" resname="One of the mappings could not be saved.">
         <source>One of the mappings could not be saved.</source>
         <target>One of the mappings could not be saved.</target>
       </trans-unit>
+      <trans-unit id="0db55bea7e" resname="One rule per line, with the source value and the target value separated by &quot;=&quot;.">
+        <source>One rule per line, with the source value and the target value separated by "=".</source>
+        <target>One rule per line, with the source value and the target value separated by "=".</target>
+      </trans-unit>
       <trans-unit id="f718a836af" resname="Only the first %shown% of %total% records are stored. The rest are summarised in the counters above.">
         <source>Only the first %shown% of %total% records are stored. The rest are summarised in the counters above.</source>
         <target>Only the first %shown% of %total% records are stored. The rest are summarised in the counters above.</target>
+      </trans-unit>
+      <trans-unit id="67e85708eb" resname="Only the first letter">
+        <source>Only the first letter</source>
+        <target>Only the first letter</target>
+      </trans-unit>
+      <trans-unit id="a22f9880f7" resname="Only when the text has been shortened.">
+        <source>Only when the text has been shortened.</source>
+        <target>Only when the text has been shortened.</target>
+      </trans-unit>
+      <trans-unit id="2a78ed7645" resname="Operation">
+        <source>Operation</source>
+        <target>Operation</target>
       </trans-unit>
       <trans-unit id="534394c888" resname="Optional. XML and JSON sources use the record_path setting to locate the records.">
         <source>Optional. XML and JSON sources use the record_path setting to locate the records.</source>
@@ -345,6 +485,18 @@
       <trans-unit id="f3c92c209d" resname="Original">
         <source>Original</source>
         <target>Original</target>
+      </trans-unit>
+      <trans-unit id="b8d29742df" resname="Part number">
+        <source>Part number</source>
+        <target>Part number</target>
+      </trans-unit>
+      <trans-unit id="0e2d29d5b1" resname="Parts are counted from 1.">
+        <source>Parts are counted from 1.</source>
+        <target>Parts are counted from 1.</target>
+      </trans-unit>
+      <trans-unit id="716de874a0" resname="Prefix">
+        <source>Prefix</source>
+        <target>Prefix</target>
       </trans-unit>
       <trans-unit id="c908dc8b8d" resname="PrestaShop ID">
         <source>PrestaShop ID</source>
@@ -390,6 +542,14 @@
         <source>Reference</source>
         <target>Reference</target>
       </trans-unit>
+      <trans-unit id="0c49a7a7a3" resname="Regular expression">
+        <source>Regular expression</source>
+        <target>Regular expression</target>
+      </trans-unit>
+      <trans-unit id="5142ecb32a" resname="Remove HTML">
+        <source>Remove HTML</source>
+        <target>Remove HTML</target>
+      </trans-unit>
       <trans-unit id="6debc10025" resname="Removed %count% runs older than %days% days.">
         <source>Removed %count% runs older than %days% days.</source>
         <target>Removed %count% runs older than %days% days.</target>
@@ -401,6 +561,10 @@
       <trans-unit id="6ecf4f9338" resname="Replace with">
         <source>Replace with</source>
         <target>Replace with</target>
+      </trans-unit>
+      <trans-unit id="85d84b3e5c" resname="Replace with a pattern">
+        <source>Replace with a pattern</source>
+        <target>Replace with a pattern</target>
       </trans-unit>
       <trans-unit id="6dbafc5455" resname="Result">
         <source>Result</source>
@@ -438,6 +602,18 @@
         <source>Select a source</source>
         <target>Select a source</target>
       </trans-unit>
+      <trans-unit id="6b9ee4b4c9" resname="Separated by commas. Anything else becomes 0.">
+        <source>Separated by commas. Anything else becomes 0.</source>
+        <target>Separated by commas. Anything else becomes 0.</target>
+      </trans-unit>
+      <trans-unit id="04b2e4188d" resname="Separator">
+        <source>Separator</source>
+        <target>Separator</target>
+      </trans-unit>
+      <trans-unit id="2861162b99" resname="Shorten text">
+        <source>Shorten text</source>
+        <target>Shorten text</target>
+      </trans-unit>
       <trans-unit id="2d4495e58c" resname="Skipped">
         <source>Skipped</source>
         <target>Skipped</target>
@@ -449,6 +625,14 @@
       <trans-unit id="841a1bf747" resname="Source URL">
         <source>Source URL</source>
         <target>Source URL</target>
+      </trans-unit>
+      <trans-unit id="9ef9f4823c" resname="Source field names separated by commas, in order of preference.">
+        <source>Source field names separated by commas, in order of preference.</source>
+        <target>Source field names separated by commas, in order of preference.</target>
+      </trans-unit>
+      <trans-unit id="ab5b38a8d8" resname="Source field names separated by commas, in the order you want them. The value of this row is used first.">
+        <source>Source field names separated by commas, in the order you want them. The value of this row is used first.</source>
+        <target>Source field names separated by commas, in the order you want them. The value of this row is used first.</target>
       </trans-unit>
       <trans-unit id="cea5ef4ae7" resname="Source preview">
         <source>Source preview</source>
@@ -478,6 +662,10 @@
         <source>Stored runs:</source>
         <target>Stored runs:</target>
       </trans-unit>
+      <trans-unit id="1d9baf077e" resname="Subtract">
+        <source>Subtract</source>
+        <target>Subtract</target>
+      </trans-unit>
       <trans-unit id="9bb4e80465" resname="Success">
         <source>Success</source>
         <target>Success</target>
@@ -485,6 +673,10 @@
       <trans-unit id="e345211681" resname="Successful:">
         <source>Successful:</source>
         <target>Successful:</target>
+      </trans-unit>
+      <trans-unit id="56e6ddd1cb" resname="Suffix">
+        <source>Suffix</source>
+        <target>Suffix</target>
       </trans-unit>
       <trans-unit id="c8ae1a8f27" resname="Supplier field">
         <source>Supplier field</source>
@@ -510,9 +702,37 @@
         <source>Synchronize external product catalogs with PrestaShop using configurable mappings and data transformations.</source>
         <target>Synchronize external product catalogs with PrestaShop using configurable mappings and data transformations.</target>
       </trans-unit>
+      <trans-unit id="e1e8421cb2" resname="Take one part">
+        <source>Take one part</source>
+        <target>Take one part</target>
+      </trans-unit>
       <trans-unit id="0b94ff070b" resname="Test connection">
         <source>Test connection</source>
         <target>Test connection</target>
+      </trans-unit>
+      <trans-unit id="cc4e39d37b" resname="Text added after the value.">
+        <source>Text added after the value.</source>
+        <target>Text added after the value.</target>
+      </trans-unit>
+      <trans-unit id="2d730a0aa9" resname="Text added before the value.">
+        <source>Text added before the value.</source>
+        <target>Text added before the value.</target>
+      </trans-unit>
+      <trans-unit id="0f97248dd7" resname="Text placed between the values.">
+        <source>Text placed between the values.</source>
+        <target>Text placed between the values.</target>
+      </trans-unit>
+      <trans-unit id="0959da895a" resname="Text placed between words.">
+        <source>Text placed between words.</source>
+        <target>Text placed between words.</target>
+      </trans-unit>
+      <trans-unit id="e293b93e1a" resname="Text that divides the parts.">
+        <source>Text that divides the parts.</source>
+        <target>Text that divides the parts.</target>
+      </trans-unit>
+      <trans-unit id="4cc0f3de26" resname="Text to search for in the source value.">
+        <source>Text to search for in the source value.</source>
+        <target>Text to search for in the source value.</target>
       </trans-unit>
       <trans-unit id="568bc9ce9c" resname="The CSV file contains an empty header.">
         <source>The CSV file contains an empty header.</source>
@@ -581,6 +801,10 @@
       <trans-unit id="79ae8c0671" resname="The additional configuration must be valid JSON.">
         <source>The additional configuration must be valid JSON.</source>
         <target>The additional configuration must be valid JSON.</target>
+      </trans-unit>
+      <trans-unit id="7a373a147c" resname="The arithmetic value cannot be empty.">
+        <source>The arithmetic value cannot be empty.</source>
+        <target>The arithmetic value cannot be empty.</target>
       </trans-unit>
       <trans-unit id="6ce345624f" resname="The category could not be created in PrestaShop.">
         <source>The category could not be created in PrestaShop.</source>
@@ -702,6 +926,22 @@
         <source>The monitoring data could not be loaded: %error%</source>
         <target>The monitoring data could not be loaded: %error%</target>
       </trans-unit>
+      <trans-unit id="5e23aa305b" resname="The number of decimal places is not valid for the &quot;%field%&quot; field.">
+        <source>The number of decimal places is not valid for the "%field%" field.</source>
+        <target>The number of decimal places is not valid for the "%field%" field.</target>
+      </trans-unit>
+      <trans-unit id="e1bb200941" resname="The operation &quot;%value%&quot; is not valid for the &quot;%field%&quot; field.">
+        <source>The operation "%value%" is not valid for the "%field%" field.</source>
+        <target>The operation "%value%" is not valid for the "%field%" field.</target>
+      </trans-unit>
+      <trans-unit id="20d0dd31c8" resname="The part number of the &quot;%field%&quot; field must be 1 or greater.">
+        <source>The part number of the "%field%" field must be 1 or greater.</source>
+        <target>The part number of the "%field%" field must be 1 or greater.</target>
+      </trans-unit>
+      <trans-unit id="16dba4a4b3" resname="The pattern is not valid for the &quot;%field%&quot; field.">
+        <source>The pattern is not valid for the "%field%" field.</source>
+        <target>The pattern is not valid for the "%field%" field.</target>
+      </trans-unit>
       <trans-unit id="9388a2132a" resname="The previous mapping could not be deleted.">
         <source>The previous mapping could not be deleted.</source>
         <target>The previous mapping could not be deleted.</target>
@@ -745,6 +985,10 @@
       <trans-unit id="1526875349" resname="The selected source does not exist.">
         <source>The selected source does not exist.</source>
         <target>The selected source does not exist.</target>
+      </trans-unit>
+      <trans-unit id="7f98d078e9" resname="The separator must be a comma or a dot.">
+        <source>The separator must be a comma or a dot.</source>
+        <target>The separator must be a comma or a dot.</target>
       </trans-unit>
       <trans-unit id="e8b358948a" resname="The source ID is not valid.">
         <source>The source ID is not valid.</source>
@@ -894,6 +1138,10 @@
         <source>The uploaded file is not valid.</source>
         <target>The uploaded file is not valid.</target>
       </trans-unit>
+      <trans-unit id="afdcd1de3b" resname="The value is not a number.">
+        <source>The value is not a number.</source>
+        <target>The value is not a number.</target>
+      </trans-unit>
       <trans-unit id="2660dda60d" resname="There are no mappings for the source.">
         <source>There are no mappings for the source.</source>
         <target>There are no mappings for the source.</target>
@@ -909,6 +1157,10 @@
       <trans-unit id="b1e1be4138" resname="This synchronization was recorded in the history.">
         <source>This synchronization was recorded in the history.</source>
         <target>This synchronization was recorded in the history.</target>
+      </trans-unit>
+      <trans-unit id="117964e3f0" resname="Thousands separator">
+        <source>Thousands separator</source>
+        <target>Thousands separator</target>
       </trans-unit>
       <trans-unit id="b3ac111fd7" resname="Times">
         <source>Times</source>
@@ -958,9 +1210,29 @@
         <source>Uploading file...</source>
         <target>Uploading file...</target>
       </trans-unit>
+      <trans-unit id="3530414c2b" resname="Use another field">
+        <source>Use another field</source>
+        <target>Use another field</target>
+      </trans-unit>
+      <trans-unit id="c8c2567c99" resname="Used when the source value is empty.">
+        <source>Used when the source value is empty.</source>
+        <target>Used when the source value is empty.</target>
+      </trans-unit>
       <trans-unit id="f013ad3c49" resname="Valid">
         <source>Valid</source>
         <target>Valid</target>
+      </trans-unit>
+      <trans-unit id="689202409e" resname="Value">
+        <source>Value</source>
+        <target>Value</target>
+      </trans-unit>
+      <trans-unit id="413286b6e2" resname="Value map">
+        <source>Value map</source>
+        <target>Value map</target>
+      </trans-unit>
+      <trans-unit id="f0c302d425" resname="Values that mean yes">
+        <source>Values that mean yes</source>
+        <target>Values that mean yes</target>
       </trans-unit>
       <trans-unit id="fee834efb3" resname="View detail">
         <source>View detail</source>
@@ -978,13 +1250,49 @@
         <source>Writing products</source>
         <target>Writing products</target>
       </trans-unit>
+      <trans-unit id="7d04c02df6" resname="You cannot divide by zero in the &quot;%field%&quot; field.">
+        <source>You cannot divide by zero in the "%field%" field.</source>
+        <target>You cannot divide by zero in the "%field%" field.</target>
+      </trans-unit>
       <trans-unit id="134e15b442" resname="You have no sources configured yet.">
         <source>You have no sources configured yet.</source>
         <target>You have no sources configured yet.</target>
       </trans-unit>
+      <trans-unit id="5314e5ff5a" resname="You must list the values that mean yes for the &quot;%field%&quot; field.">
+        <source>You must list the values that mean yes for the "%field%" field.</source>
+        <target>You must list the values that mean yes for the "%field%" field.</target>
+      </trans-unit>
       <trans-unit id="3573e555ac" resname="You must map a supplier field to reference.">
         <source>You must map a supplier field to reference.</source>
         <target>You must map a supplier field to reference.</target>
+      </trans-unit>
+      <trans-unit id="9d732c4978" resname="You must name the fields to join for the &quot;%field%&quot; field.">
+        <source>You must name the fields to join for the "%field%" field.</source>
+        <target>You must name the fields to join for the "%field%" field.</target>
+      </trans-unit>
+      <trans-unit id="67829a14e7" resname="You must name the fields to use for the &quot;%field%&quot; field.">
+        <source>You must name the fields to use for the "%field%" field.</source>
+        <target>You must name the fields to use for the "%field%" field.</target>
+      </trans-unit>
+      <trans-unit id="2c6c1411fc" resname="You must provide a number for the &quot;%field%&quot; field.">
+        <source>You must provide a number for the "%field%" field.</source>
+        <target>You must provide a number for the "%field%" field.</target>
+      </trans-unit>
+      <trans-unit id="83c8ec017d" resname="You must provide a pattern for the &quot;%field%&quot; field.">
+        <source>You must provide a pattern for the "%field%" field.</source>
+        <target>You must provide a pattern for the "%field%" field.</target>
+      </trans-unit>
+      <trans-unit id="0c67a1b021" resname="You must provide a separator for the &quot;%field%&quot; field.">
+        <source>You must provide a separator for the "%field%" field.</source>
+        <target>You must provide a separator for the "%field%" field.</target>
+      </trans-unit>
+      <trans-unit id="7e7b56dc4c" resname="You must provide at least one value to map for the &quot;%field%&quot; field.">
+        <source>You must provide at least one value to map for the "%field%" field.</source>
+        <target>You must provide at least one value to map for the "%field%" field.</target>
+      </trans-unit>
+      <trans-unit id="8dda5f6da5" resname="You must provide the maximum length for the &quot;%field%&quot; field.">
+        <source>You must provide the maximum length for the "%field%" field.</source>
+        <target>You must provide the maximum length for the "%field%" field.</target>
       </trans-unit>
       <trans-unit id="895ac7b0f8" resname="You must provide the text to replace for the &quot;%field%&quot; field.">
         <source>You must provide the text to replace for the "%field%" field.</source>
@@ -997,6 +1305,10 @@
       <trans-unit id="b875d0ad32" resname="You must select a source.">
         <source>You must select a source.</source>
         <target>You must select a source.</target>
+      </trans-unit>
+      <trans-unit id="4243e319b2" resname="everything in lower case">
+        <source>everything in lower case</source>
+        <target>everything in lower case</target>
       </trans-unit>
       <trans-unit id="01ce836ce6" resname="records found.">
         <source>records found.</source>

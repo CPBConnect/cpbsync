@@ -78,7 +78,10 @@
                             {assign var="selected_transformation" value=$saved_transformations[$header]}
                         {/if}
 
-                        <tr>
+                        <tr
+                                data-field="{$header|escape:'htmlall':'UTF-8'}"
+                                data-config="{$saved_config_json[$header]|default:'{}'|escape:'htmlall':'UTF-8'}"
+                        >
 
                             <td>
                                 <strong>
@@ -90,7 +93,7 @@
 
                                 <select
                                         name="mapping[{$header|escape:'htmlall':'UTF-8'}]"
-                                        class="form-control"
+                                        class="form-control js-target"
                                 >
 
                                     <option value="">
@@ -163,107 +166,37 @@
                                 </select>
 
                             </td>
+
                             <td>
-                                {if $selected_target == 'price'}
-                                    <select
-                                            name="transformation[{$header|escape:'htmlall':'UTF-8'}]"
-                                            class="form-control"
-                                    >
-                                        <option value="">
-                                            {l s='-- None --' d='Modules.Cpbsync.Admin'}
-                                        </option>
 
+                                <select
+                                        name="transformation[{$header|escape:'htmlall':'UTF-8'}]"
+                                        class="form-control js-transformation"
+                                >
+
+                                    <option value="">
+                                        {l s='-- None --' d='Modules.Cpbsync.Admin'}
+                                    </option>
+
+                                    {foreach from=$transform_options item=option}
                                         <option
-                                                value="normalize_price"
-                                                {if $selected_transformation == 'normalize_price'}selected{/if}
+                                                value="{$option.name|escape:'htmlall':'UTF-8'}"
+                                                data-targets="{$option.targets|escape:'htmlall':'UTF-8'}"
+                                                {if $selected_transformation == $option.name}selected{/if}
                                         >
-                                            {l s='Normalize price' d='Modules.Cpbsync.Admin'}
+                                            {$option.label|escape:'htmlall':'UTF-8'}
                                         </option>
-                                    </select>
-                                {elseif $selected_target == 'quantity'}
-                                    <select
-                                            name="transformation[{$header|escape:'htmlall':'UTF-8'}]"
-                                            class="form-control"
-                                    >
-                                        <option value="">
-                                            {l s='-- None --' d='Modules.Cpbsync.Admin'}
-                                        </option>
+                                    {/foreach}
 
-                                        <option
-                                                value="normalize_stock"
-                                                {if $selected_transformation == 'normalize_stock'}selected{/if}
-                                        >
-                                            {l s='Normalize stock' d='Modules.Cpbsync.Admin'}
-                                        </option>
-                                    </select>
-                                {elseif $selected_target == 'name'
-                                || $selected_target == 'description'
-                                || $selected_target == 'manufacturer'}
-                                    <select
-                                            name="transformation[{$header|escape:'htmlall':'UTF-8'}]"
-                                            class="form-control js-transformation"
-                                    >
-                                        <option value="">
-                                            {l s='-- None --' d='Modules.Cpbsync.Admin'}
-                                        </option>
+                                </select>
 
-                                        <option
-                                                value="normalize_text"
-                                                {if $selected_transformation == 'normalize_text'}selected{/if}
-                                        >
-                                            {l s='Normalize text' d='Modules.Cpbsync.Admin'}
-                                        </option>
-
-                                        <option
-                                                value="replace_text"
-                                                {if $selected_transformation == 'replace_text'}selected{/if}
-                                        >
-                                            {l s='Replace text' d='Modules.Cpbsync.Admin'}
-                                        </option>
-                                    </select>
-
-                                    <div
-                                            class="row js-replace-config"
-                                            style="margin-top: 10px; {if $selected_transformation != 'replace_text'}display: none;{/if}"
-                                    >
-
-                                        <div class="col-md-6">
-                                            <label>
-                                                {l s='Search' d='Modules.Cpbsync.Admin'}
-                                            </label>
-
-                                            <input
-                                                    type="text"
-                                                    name="transformation_search[{$header|escape:'htmlall':'UTF-8'}]"
-                                                    class="form-control"
-                                                    placeholder="Text to search"
-                                                    value="{$saved_transformation_configs[$header]['search']|default:''|escape:'htmlall':'UTF-8'}"
-                                            >
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label>
-                                                {l s='Replace with' d='Modules.Cpbsync.Admin'}
-                                            </label>
-
-                                            <input
-                                                    type="text"
-                                                    name="transformation_replace[{$header|escape:'htmlall':'UTF-8'}]"
-                                                    class="form-control"
-                                                    placeholder="New text"
-                                                    value="{$saved_transformation_configs[$header]['replace']|default:''|escape:'htmlall':'UTF-8'}"
-                                            >
-                                        </div>
-
-                                    </div>
-
-                                {else}
-                                    <span class="text-muted">
-                                        {l s='Not available' d='Modules.Cpbsync.Admin'}
-                                    </span>
-                                {/if}
+                                <div
+                                        class="js-transform-config"
+                                        style="margin-top: 10px;"
+                                ></div>
 
                             </td>
+
                         </tr>
 
                     {/foreach}
@@ -307,25 +240,187 @@
 
 </div>
 
+{*
+    Configuración de cada transformación, una sola vez por página. El
+    script copia la que corresponda en la fila que la pida, así que no
+    se repite por cada campo del catálogo.
+*}
+<div id="cpbsync-transform-templates" style="display: none;">
+
+    {foreach from=$transform_options item=option}
+
+        {if !empty($option.fields)}
+
+            <div data-transform-template="{$option.name|escape:'htmlall':'UTF-8'}">
+
+                {foreach from=$option.fields item=field}
+
+                    <div class="form-group">
+
+                        <label>
+                            {$field.label|escape:'htmlall':'UTF-8'}
+                        </label>
+
+                        {if $field.type == 'select'}
+
+                            <select
+                                    class="form-control"
+                                    data-config-key="{$field.name|escape:'htmlall':'UTF-8'}"
+                                    data-config-name="transformation_config[__FIELD__][{$field.name|escape:'htmlall':'UTF-8'}]"
+                            >
+                                {foreach from=$field.options item=field_option}
+                                    <option value="{$field_option.value|escape:'htmlall':'UTF-8'}">
+                                        {$field_option.label|escape:'htmlall':'UTF-8'}
+                                    </option>
+                                {/foreach}
+                            </select>
+
+                        {elseif $field.type == 'textarea'}
+
+                            <textarea
+                                    class="form-control"
+                                    rows="3"
+                                    data-config-key="{$field.name|escape:'htmlall':'UTF-8'}"
+                                    data-config-name="transformation_config[__FIELD__][{$field.name|escape:'htmlall':'UTF-8'}]"
+                            ></textarea>
+
+                        {else}
+
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    data-config-key="{$field.name|escape:'htmlall':'UTF-8'}"
+                                    data-config-name="transformation_config[__FIELD__][{$field.name|escape:'htmlall':'UTF-8'}]"
+                            >
+
+                        {/if}
+
+                        {if $field.hint}
+                            <p class="help-block">
+                                {$field.hint|escape:'htmlall':'UTF-8'}
+                            </p>
+                        {/if}
+
+                    </div>
+
+                {/foreach}
+
+            </div>
+
+        {/if}
+
+    {/foreach}
+
+</div>
+
 <script>
-    document.addEventListener('change', function (event) {
+    (function () {
 
-        if (!event.target.classList.contains('js-transformation')) {
-            return;
+        var templates = document.getElementById('cpbsync-transform-templates');
+
+        function findTemplate(name) {
+            if (!templates || !name) {
+                return null;
+            }
+
+            return templates.querySelector(
+                '[data-transform-template="' + name + '"]'
+            );
         }
 
-        const select = event.target;
+        // Deja visible sólo lo que se puede aplicar al campo destino.
+        function filterTransformations(row) {
+            var target = row.querySelector('.js-target');
+            var select = row.querySelector('.js-transformation');
 
-        const config = select.nextElementSibling;
+            if (!target || !select) {
+                return;
+            }
 
-        if (!config || !config.classList.contains('js-replace-config')) {
-            return;
+            select.querySelectorAll('option').forEach(function (option) {
+                var targets = (option.dataset.targets || '')
+                    .split(',')
+                    .filter(Boolean);
+
+                // La opción ya elegida nunca se oculta: si el mapeo se
+                // guardó con otra versión no se pierde al reenviar.
+                var allowed = option.value === ''
+                    || targets.length === 0
+                    || targets.indexOf(target.value) !== -1
+                    || option.selected;
+
+                option.hidden = !allowed;
+                option.disabled = !allowed;
+            });
+
+            refreshConfig(row);
         }
 
-        if (select.value === 'replace_text') {
-            config.style.display = '';
-        } else {
-            config.style.display = 'none';
+        // Copia la configuración de la transformación elegida.
+        function refreshConfig(row) {
+            var select = row.querySelector('.js-transformation');
+            var box = row.querySelector('.js-transform-config');
+
+            if (!select || !box) {
+                return;
+            }
+
+            var config = {};
+
+            try {
+                config = JSON.parse(row.dataset.config || '{}') || {};
+            } catch (error) {
+                config = {};
+            }
+
+            box.innerHTML = '';
+
+            var source = findTemplate(select.value);
+
+            if (!source) {
+                return;
+            }
+
+            var clone = source.cloneNode(true);
+
+            clone.style.display = '';
+
+            clone.querySelectorAll('[data-config-name]').forEach(
+                function (element) {
+                    var key = element.dataset.configKey || '';
+
+                    element.name = element.dataset.configName
+                        .replace('__FIELD__', row.dataset.field || '');
+
+                    if (Object.prototype.hasOwnProperty.call(config, key)) {
+                        element.value = config[key];
+                    }
+                }
+            );
+
+            box.appendChild(clone);
         }
-    });
+
+        document.addEventListener('change', function (event) {
+            var row = event.target.closest('tr[data-field]');
+
+            if (!row) {
+                return;
+            }
+
+            if (event.target.classList.contains('js-target')) {
+                filterTransformations(row);
+            }
+
+            if (event.target.classList.contains('js-transformation')) {
+                refreshConfig(row);
+            }
+        });
+
+        document.querySelectorAll('tr[data-field]').forEach(
+            function (row) {
+                filterTransformations(row);
+            }
+        );
+    })();
 </script>
