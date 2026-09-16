@@ -10,7 +10,7 @@ class PriceTransformer
 
         if ($value === '') {
             throw new \RuntimeException(
-                'El precio no puede estar vacío.'
+                'The price cannot be empty.'
             );
         }
 
@@ -28,7 +28,7 @@ class PriceTransformer
 
         if (!is_numeric($value)) {
             throw new \RuntimeException(
-                'El precio no tiene un formato válido.'
+                'The price format is not valid.'
             );
         }
 

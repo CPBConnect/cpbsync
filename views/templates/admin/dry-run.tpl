@@ -5,11 +5,11 @@
     </div>
 
     <div class="alert alert-info">
-        <strong>{l s='Vista previa' mod='cpbsync'}</strong>
+        <strong>{l s='Preview' d='Modules.Cpbsync.Admin'}</strong>
         <p>
-            {l s='Se muestran los primeros 5 productos de la fuente.' mod='cpbsync'}
+            {l s='The first 5 products from the source are shown.' d='Modules.Cpbsync.Admin'}
         </p>
-        <strong>{l s='No se modificó ningún producto en PrestaShop.' mod='cpbsync'}</strong>
+        <strong>{l s='No product was modified in PrestaShop.' d='Modules.Cpbsync.Admin'}</strong>
     </div>
 
     {foreach from=$products item=product}
@@ -17,22 +17,22 @@
         <div class="panel" style="margin-bottom: 20px;">
 
             <div class="panel-heading">
-                {l s='Producto' mod='cpbsync'} {$product.number}
+                {l s='Product' d='Modules.Cpbsync.Admin'} {$product.number}
 
                 {if $product.valid}
                     <span class="label label-success pull-right">
-                        ✓ {l s='Válido' mod='cpbsync'}
+                        ✓ {l s='Valid' d='Modules.Cpbsync.Admin'}
                     </span>
                 {else}
                     <span class="label label-danger pull-right">
-                        ✗ {l s='Con errores' mod='cpbsync'}
+                        ✗ {l s='With errors' d='Modules.Cpbsync.Admin'}
                     </span>
                 {/if}
             </div>
 
             {if !$product.valid}
                 <div class="alert alert-danger">
-                    <strong>{l s='Errores:' mod='cpbsync'}</strong>
+                    <strong>{l s='Errors:' d='Modules.Cpbsync.Admin'}</strong>
 
                     <ul>
                         {foreach from=$product.errors item=error}
@@ -47,9 +47,9 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>{l s='Campo PrestaShop' mod='cpbsync'}</th>
-                    <th>{l s='Original' mod='cpbsync'}</th>
-                    <th>{l s='Resultado' mod='cpbsync'}</th>
+                    <th>{l s='PrestaShop field' d='Modules.Cpbsync.Admin'}</th>
+                    <th>{l s='Original' d='Modules.Cpbsync.Admin'}</th>
+                    <th>{l s='Result' d='Modules.Cpbsync.Admin'}</th>
                 </tr>
                 </thead>
 
@@ -73,7 +73,7 @@
 
                             {if $fieldData.changed}
                                 <span class="label label-warning" style="margin-left: 8px;">
-                                    Cambiado
+                                    {l s='Changed' d='Modules.Cpbsync.Admin'}
                                 </span>
                             {/if}
                         </td>
@@ -89,7 +89,7 @@
     <div class="panel-footer">
         <a href="{$back_url}" class="btn btn-default">
             <i class="icon-arrow-left"></i>
-            Volver al mapping
+            {l s='Back to mapping' d='Modules.Cpbsync.Admin'}
         </a>
     </div>
 </div>

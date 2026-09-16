@@ -12,7 +12,7 @@ class CsvSourceReader
 
         if ($content === '') {
             throw new RuntimeException(
-                'El archivo CSV está vacío.'
+                'The CSV file is empty.'
             );
         }
 
@@ -23,7 +23,7 @@ class CsvSourceReader
 
         if (empty($lines)) {
             throw new RuntimeException(
-                'El archivo CSV está vacío.'
+                'The CSV file is empty.'
             );
         }
 
@@ -95,21 +95,21 @@ class CsvSourceReader
     {
         if (empty($headers)) {
             throw new RuntimeException(
-                'El archivo CSV no contiene encabezados.'
+                'The CSV file has no headers.'
             );
         }
 
         foreach ($headers as $header) {
             if ($header === '') {
                 throw new RuntimeException(
-                    'El archivo CSV contiene un encabezado vacío.'
+                    'The CSV file contains an empty header.'
                 );
             }
         }
 
         if (count($headers) !== count(array_unique($headers))) {
             throw new RuntimeException(
-                'El archivo CSV contiene encabezados duplicados.'
+                'The CSV file contains duplicated headers.'
             );
         }
     }
@@ -123,7 +123,7 @@ class CsvSourceReader
 
         if ($handle === false) {
             throw new \RuntimeException(
-                'No se pudo abrir la fuente CSV.'
+                'The CSV source could not be opened.'
             );
         }
 
@@ -165,7 +165,7 @@ class CsvSourceReader
 
         if ($handle === false) {
             throw new \RuntimeException(
-                'No se pudo abrir la fuente CSV.'
+                'The CSV source could not be opened.'
             );
         }
 
@@ -195,7 +195,7 @@ class CsvSourceReader
     ): array {
         if (!is_readable($path)) {
             throw new \RuntimeException(
-                'No se pudo leer el archivo CSV.'
+                'The CSV file could not be read.'
             );
         }
 
@@ -203,7 +203,7 @@ class CsvSourceReader
 
         if ($handle === false) {
             throw new \RuntimeException(
-                'No se pudo abrir el archivo CSV.'
+                'The CSV file could not be opened.'
             );
         }
 
@@ -260,7 +260,7 @@ class CsvSourceReader
     {
         if (!is_readable($path)) {
             throw new \RuntimeException(
-                'No se pudo leer el archivo CSV.'
+                'The CSV file could not be read.'
             );
         }
 
@@ -268,7 +268,7 @@ class CsvSourceReader
 
         if ($handle === false) {
             throw new \RuntimeException(
-                'No se pudo abrir el archivo CSV.'
+                'The CSV file could not be opened.'
             );
         }
 

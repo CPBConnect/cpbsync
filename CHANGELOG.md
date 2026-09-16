@@ -51,6 +51,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-Changes for the next version will be documented here.
+### Added
+
+* `Presentation/Admin` layer with one handler per back office area (sources, mapping, Dry Run and synchronization, history, import), a central action router and an admin URL builder.
+* Focused application services: `SourceService`, `SourceValidator`, `MappingInputValidator`, `MappingSaver`, `SourceSyncService`, `SyncHistoryService` and `ImportService`.
+* `ModuleAdminShell`, the adapter between the presentation layer and PrestaShop.
+* Test suite runnable without a PrestaShop installation, through `php tests/run.php` or `composer test`.
+* XLIFF translation catalogues for English (`en-US`) and Spanish (`es-ES`) in the `Modules.Cpbsync.Admin` domain.
+* `isUsingNewTranslationSystem()` so the module opts into the new PrestaShop translation interface.
+* `translations/translations-to-do.csv` as a human-readable glossary of every wording and its Spanish translation.
+* `tools/check-translations.php` to verify that no wording is missing from the catalogues (`composer check-translations`).
+
+### Changed
+
+* `cpbsync.php` now only keeps the module lifecycle and delegates every `cpbsync_action` to the presentation layer.
+* Source reading and mapping loading are no longer duplicated between Dry Run and synchronization.
+* Mapping form validation and mapping persistence are separated from the controller code.
+* Translation and notification now use the public PrestaShop API, since `Module::trans()` and `Module::$context` are `protected`.
+* All wordings are written in English and translated through the new translation system; Spanish ships as a translation.
+* Back office templates use `{l s='...' d='Modules.Cpbsync.Admin'}` instead of the classic `mod='cpbsync'` syntax.
+* Everything shown in the back office is now translatable: source form validation errors, import JSON responses, JavaScript messages, product validation errors in the Dry Run, synchronization results and history details.
+
+### Fixed
+
+* `history.tpl` and `history-detail.tpl` contained hardcoded text with no translation tags; every wording is now wrapped in `{l}`.
+* Missing `</strong>` closing tag in `sync-result.tpl`.
+* Product image downloader reported a stale Spanish wording.
+
+### Removed
+
+* Dead code in `cpbsync.php`: the unused `createImport()` and `renderImportProgress()` methods.
+* Development scratch file `src/Infrastructure/Source/test-source.php`.
+* The unused `module_name` Smarty variable assigned by the sources page.
 
 [1.0.0]: https://github.com/CPBConnect/cpbsync/releases/tag/v1.0.0

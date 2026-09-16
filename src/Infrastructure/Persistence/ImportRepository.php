@@ -44,7 +44,7 @@ class ImportRepository
 
         if (!$result) {
             throw new \RuntimeException(
-                'No fue posible crear la importación.'
+                'The import could not be created.'
             );
         }
 

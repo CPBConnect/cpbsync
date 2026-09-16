@@ -21,7 +21,7 @@ class ImportFileStorage
             || !is_uploaded_file($file['tmp_name'])
         ) {
             throw new RuntimeException(
-                'El archivo subido no es válido.'
+                'The uploaded file is not valid.'
             );
         }
 
@@ -30,7 +30,7 @@ class ImportFileStorage
             && $file['error'] !== UPLOAD_ERR_OK
         ) {
             throw new RuntimeException(
-                'Ocurrió un error al subir el archivo.'
+                'An error occurred while uploading the file.'
             );
         }
 
@@ -40,7 +40,7 @@ class ImportFileStorage
 
         if ($extension !== 'csv') {
             throw new RuntimeException(
-                'Solo se permiten archivos CSV.'
+                'Only CSV files are allowed.'
             );
         }
 
@@ -50,7 +50,7 @@ class ImportFileStorage
                 && !is_dir($this->directory)
             ) {
                 throw new RuntimeException(
-                    'No se pudo crear el directorio de importaciones.'
+                    'The imports directory could not be created.'
                 );
             }
         }
@@ -64,7 +64,7 @@ class ImportFileStorage
             $destination
         )) {
             throw new RuntimeException(
-                'No se pudo guardar el archivo CSV.'
+                'The CSV file could not be saved.'
             );
         }
 

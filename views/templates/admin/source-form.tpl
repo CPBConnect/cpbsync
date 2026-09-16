@@ -2,7 +2,7 @@
 
     <div class="panel-heading">
         <i class="icon-plus"></i>
-        {l s='Nueva fuente' mod='cpbsync'}
+        {l s='New source' d='Modules.Cpbsync.Admin'}
     </div>
 
     <div class="panel-body">
@@ -18,7 +18,7 @@
 
             <div class="form-group">
                 <label>
-                    {l s='Nombre' mod='cpbsync'}
+                    {l s='Name' d='Modules.Cpbsync.Admin'}
                 </label>
 
                 <input
@@ -26,13 +26,13 @@
                         name="name"
                         class="form-control"
                         value="{if isset($source)}{$source.name|escape:'htmlall':'UTF-8'}{/if}"
-                        placeholder="{l s='Ej. Proveedor ABC' mod='cpbsync'}"
+                        placeholder="{l s='E.g. Supplier ABC' d='Modules.Cpbsync.Admin'}"
                 >
             </div>
 
             <div class="form-group">
                 <label>
-                    {l s='Tipo de fuente' mod='cpbsync'}
+                    {l s='Source type' d='Modules.Cpbsync.Admin'}
                 </label>
 
                 <select name="type" class="form-control">
@@ -49,7 +49,7 @@
 
             <div class="form-group">
                 <label>
-                    {l s='URL de la fuente' mod='cpbsync'}
+                    {l s='Source URL' d='Modules.Cpbsync.Admin'}
                 </label>
 
                 <input
@@ -63,29 +63,29 @@
 
             <div class="form-group">
                 <label>
-                    {l s='Frecuencia' mod='cpbsync'}
+                    {l s='Frequency' d='Modules.Cpbsync.Admin'}
                 </label>
 
                 <select name="frequency" class="form-control">
 
                     <option value="manual"
                             {if isset($source) && $source.frequency === 'manual'}selected{/if}>
-                        {l s='Manual' mod='cpbsync'}
+                        {l s='Manual' d='Modules.Cpbsync.Admin'}
                     </option>
 
                     <option value="hourly"
                             {if isset($source) && $source.frequency === 'hourly'}selected{/if}>
-                        {l s='Cada hora' mod='cpbsync'}
+                        {l s='Hourly' d='Modules.Cpbsync.Admin'}
                     </option>
 
                     <option value="6_hours"
                             {if isset($source) && $source.frequency === '6_hours'}selected{/if}>
-                        {l s='Cada 6 horas' mod='cpbsync'}
+                        {l s='Every 6 hours' d='Modules.Cpbsync.Admin'}
                     </option>
 
                     <option value="daily"
                             {if isset($source) && $source.frequency === 'daily'}selected{/if}>
-                        {l s='Diariamente' mod='cpbsync'}
+                        {l s='Daily' d='Modules.Cpbsync.Admin'}
                     </option>
 
                 </select>
@@ -100,7 +100,7 @@
                             {if !isset($source) || $source.active}checked{/if}
                     >
 
-                    {l s='Fuente activa' mod='cpbsync'}
+                    {l s='Active source' d='Modules.Cpbsync.Admin'}
                 </label>
             </div>
 
@@ -110,12 +110,12 @@
                     href="{$cancel_url|escape:'htmlall':'UTF-8'}"
                     class="btn btn-default"
             >
-                {l s='Cancelar' mod='cpbsync'}
+                {l s='Cancel' d='Modules.Cpbsync.Admin'}
             </a>
 
             <button type="submit" class="btn btn-primary">
                 <i class="icon-save"></i>
-                {l s='Guardar' mod='cpbsync'}
+                {l s='Save' d='Modules.Cpbsync.Admin'}
             </button>
 
         </form>

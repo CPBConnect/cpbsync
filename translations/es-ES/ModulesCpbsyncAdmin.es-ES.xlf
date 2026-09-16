@@ -1,0 +1,827 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="ModulesCpbsyncAdmin" source-language="en-US" target-language="es-ES" datatype="plaintext">
+    <body>
+      <trans-unit id="9a38d27598" resname="-- Do not map --">
+        <source>-- Do not map --</source>
+        <target>-- No mapear --</target>
+      </trans-unit>
+      <trans-unit id="a00d3c1998" resname="-- None --">
+        <source>-- None --</source>
+        <target>-- Ninguna --</target>
+      </trans-unit>
+      <trans-unit id="cf49ca6638" resname="A category cannot be created without a name.">
+        <source>A category cannot be created without a name.</source>
+        <target>No se puede crear una categoría sin nombre.</target>
+      </trans-unit>
+      <trans-unit id="211ff038fd" resname="A manufacturer cannot be created without a name.">
+        <source>A manufacturer cannot be created without a name.</source>
+        <target>No se puede crear un fabricante sin nombre.</target>
+      </trans-unit>
+      <trans-unit id="646453bdeb" resname="A product cannot be created without a name.">
+        <source>A product cannot be created without a name.</source>
+        <target>No se puede crear un producto sin name.</target>
+      </trans-unit>
+      <trans-unit id="986134313d" resname="A product cannot be created without a reference.">
+        <source>A product cannot be created without a reference.</source>
+        <target>No se puede crear un producto sin reference.</target>
+      </trans-unit>
+      <trans-unit id="5de22071c1" resname="Active">
+        <source>Active</source>
+        <target>Activa</target>
+      </trans-unit>
+      <trans-unit id="4c635c5b90" resname="Active source">
+        <source>Active source</source>
+        <target>Fuente activa</target>
+      </trans-unit>
+      <trans-unit id="a73d159d9f" resname="Add source">
+        <source>Add source</source>
+        <target>Agregar fuente</target>
+      </trans-unit>
+      <trans-unit id="c5c374fffd" resname="An error occurred while uploading the file.">
+        <source>An error occurred while uploading the file.</source>
+        <target>Ocurrió un error al subir el archivo.</target>
+      </trans-unit>
+      <trans-unit id="1c4cd3141d" resname="An image cannot be applied to a product without an ID.">
+        <source>An image cannot be applied to a product without an ID.</source>
+        <target>No se puede aplicar una imagen a un producto sin ID.</target>
+      </trans-unit>
+      <trans-unit id="c5db1fa156" resname="Are you sure you want to delete this source?">
+        <source>Are you sure you want to delete this source?</source>
+        <target>¿Estás seguro de eliminar esta fuente?</target>
+      </trans-unit>
+      <trans-unit id="a77d89ba5d" resname="Assign each source field to the matching PrestaShop field.">
+        <source>Assign each source field to the matching PrestaShop field.</source>
+        <target>Asigna cada campo de la fuente al campo correspondiente de PrestaShop.</target>
+      </trans-unit>
+      <trans-unit id="fbd25a66a8" resname="Back">
+        <source>Back</source>
+        <target>Volver</target>
+      </trans-unit>
+      <trans-unit id="5ec0ad3476" resname="Back to history">
+        <source>Back to history</source>
+        <target>Volver al historial</target>
+      </trans-unit>
+      <trans-unit id="d7dd9b5457" resname="Back to mapping">
+        <source>Back to mapping</source>
+        <target>Volver al mapping</target>
+      </trans-unit>
+      <trans-unit id="7f83c6d799" resname="Back to sources">
+        <source>Back to sources</source>
+        <target>Volver a fuentes</target>
+      </trans-unit>
+      <trans-unit id="95e297e0cc" resname="CPB Sync">
+        <source>CPB Sync</source>
+        <target>CPB Sync</target>
+      </trans-unit>
+      <trans-unit id="a4ebe65a9f" resname="CPB Sync is not installed.">
+        <source>CPB Sync is not installed.</source>
+        <target>CPB Sync no está instalado.</target>
+      </trans-unit>
+      <trans-unit id="a21fa64cc7" resname="CSV file">
+        <source>CSV file</source>
+        <target>Archivo CSV</target>
+      </trans-unit>
+      <trans-unit id="0612dbf8d6" resname="Cancel">
+        <source>Cancel</source>
+        <target>Cancelar</target>
+      </trans-unit>
+      <trans-unit id="8527ed8305" resname="Changed">
+        <source>Changed</source>
+        <target>Cambiado</target>
+      </trans-unit>
+      <trans-unit id="f9a2f3abfe" resname="Connect suppliers, ERP systems and other product sources with PrestaShop.">
+        <source>Connect suppliers, ERP systems and other product sources with PrestaShop.</source>
+        <target>Conecta proveedores, ERP y otras fuentes de productos con PrestaShop.</target>
+      </trans-unit>
+      <trans-unit id="5e5f2c5ecc" resname="Connection successful.">
+        <source>Connection successful.</source>
+        <target>Conexión exitosa.</target>
+      </trans-unit>
+      <trans-unit id="7171ab8c4f" resname="Could not connect to the source: %error%">
+        <source>Could not connect to the source: %error%</source>
+        <target>No fue posible conectar con la fuente: %error%</target>
+      </trans-unit>
+      <trans-unit id="5c5f014749" resname="Created">
+        <source>Created</source>
+        <target>Creados</target>
+      </trans-unit>
+      <trans-unit id="3b95565f30" resname="Daily">
+        <source>Daily</source>
+        <target>Diariamente</target>
+      </trans-unit>
+      <trans-unit id="ad98013c94" resname="Data sources">
+        <source>Data sources</source>
+        <target>Fuentes de datos</target>
+      </trans-unit>
+      <trans-unit id="22eb464408" resname="Date">
+        <source>Date</source>
+        <target>Fecha</target>
+      </trans-unit>
+      <trans-unit id="9d8c37ceb0" resname="Date:">
+        <source>Date:</source>
+        <target>Fecha:</target>
+      </trans-unit>
+      <trans-unit id="82cce92e81" resname="Delete">
+        <source>Delete</source>
+        <target>Eliminar</target>
+      </trans-unit>
+      <trans-unit id="e604c5443b" resname="Deleted source">
+        <source>Deleted source</source>
+        <target>Fuente eliminada</target>
+      </trans-unit>
+      <trans-unit id="490f16df52" resname="Detail">
+        <source>Detail</source>
+        <target>Detalle</target>
+      </trans-unit>
+      <trans-unit id="4027c8b120" resname="Detected columns">
+        <source>Detected columns</source>
+        <target>Columnas detectadas</target>
+      </trans-unit>
+      <trans-unit id="918942ccd9" resname="E.g. Supplier ABC">
+        <source>E.g. Supplier ABC</source>
+        <target>Ej. Proveedor ABC</target>
+      </trans-unit>
+      <trans-unit id="b5d635e5f8" resname="Edit">
+        <source>Edit</source>
+        <target>Editar</target>
+      </trans-unit>
+      <trans-unit id="e1d2543da9" resname="Error">
+        <source>Error</source>
+        <target>Error</target>
+      </trans-unit>
+      <trans-unit id="afe08a6957" resname="Errors">
+        <source>Errors</source>
+        <target>Errores</target>
+      </trans-unit>
+      <trans-unit id="7feac4178d" resname="Errors:">
+        <source>Errors:</source>
+        <target>Errores:</target>
+      </trans-unit>
+      <trans-unit id="3c4f9ffb32" resname="Every 6 hours">
+        <source>Every 6 hours</source>
+        <target>Cada 6 horas</target>
+      </trans-unit>
+      <trans-unit id="b286918ab1" resname="File uploaded. Starting import...">
+        <source>File uploaded. Starting import...</source>
+        <target>Archivo cargado. Iniciando importación...</target>
+      </trans-unit>
+      <trans-unit id="0de74fa5ff" resname="First records">
+        <source>First records</source>
+        <target>Primeros registros</target>
+      </trans-unit>
+      <trans-unit id="26cbe6c99d" resname="Frequency">
+        <source>Frequency</source>
+        <target>Frecuencia</target>
+      </trans-unit>
+      <trans-unit id="01c0885dcb" resname="Frequency:">
+        <source>Frequency:</source>
+        <target>Frecuencia:</target>
+      </trans-unit>
+      <trans-unit id="113491cfae" resname="History">
+        <source>History</source>
+        <target>Historial</target>
+      </trans-unit>
+      <trans-unit id="dc02ff5929" resname="Hourly">
+        <source>Hourly</source>
+        <target>Cada hora</target>
+      </trans-unit>
+      <trans-unit id="e2e7107020" resname="Import CSV">
+        <source>Import CSV</source>
+        <target>Importar CSV</target>
+      </trans-unit>
+      <trans-unit id="c24ce39ec5" resname="Import completed successfully.">
+        <source>Import completed successfully.</source>
+        <target>Importación completada correctamente.</target>
+      </trans-unit>
+      <trans-unit id="0df4677064" resname="Import error:">
+        <source>Import error:</source>
+        <target>Error en la importación:</target>
+      </trans-unit>
+      <trans-unit id="649f3438de" resname="Import products">
+        <source>Import products</source>
+        <target>Importar productos</target>
+      </trans-unit>
+      <trans-unit id="cede41d397" resname="Inactive">
+        <source>Inactive</source>
+        <target>Inactiva</target>
+      </trans-unit>
+      <trans-unit id="d10de3da94" resname="Manual">
+        <source>Manual</source>
+        <target>Manual</target>
+      </trans-unit>
+      <trans-unit id="490ee549a5" resname="Map fields">
+        <source>Map fields</source>
+        <target>Mapear campos</target>
+      </trans-unit>
+      <trans-unit id="9b5dc4e594" resname="Name">
+        <source>Name</source>
+        <target>Nombre</target>
+      </trans-unit>
+      <trans-unit id="f98d1e768f" resname="New source">
+        <source>New source</source>
+        <target>Nueva fuente</target>
+      </trans-unit>
+      <trans-unit id="f82b7cddfb" resname="No details available.">
+        <source>No details available.</source>
+        <target>No hay detalles disponibles.</target>
+      </trans-unit>
+      <trans-unit id="ffc330a19a" resname="No product was modified in PrestaShop.">
+        <source>No product was modified in PrestaShop.</source>
+        <target>No se modificó ningún producto en PrestaShop.</target>
+      </trans-unit>
+      <trans-unit id="d725edc028" resname="Normalize price">
+        <source>Normalize price</source>
+        <target>Normalizar precio</target>
+      </trans-unit>
+      <trans-unit id="5d21fac73c" resname="Normalize stock">
+        <source>Normalize stock</source>
+        <target>Normalizar stock</target>
+      </trans-unit>
+      <trans-unit id="ad171c91ed" resname="Normalize text">
+        <source>Normalize text</source>
+        <target>Normalizar texto</target>
+      </trans-unit>
+      <trans-unit id="4729380e58" resname="Not available">
+        <source>Not available</source>
+        <target>No disponible</target>
+      </trans-unit>
+      <trans-unit id="6f1b6b9b1d" resname="One of the mappings could not be saved.">
+        <source>One of the mappings could not be saved.</source>
+        <target>No fue posible guardar uno de los mappings.</target>
+      </trans-unit>
+      <trans-unit id="5b68e1e8a7" resname="Only CSV files are allowed.">
+        <source>Only CSV files are allowed.</source>
+        <target>Solo se permiten archivos CSV.</target>
+      </trans-unit>
+      <trans-unit id="078709196f" resname="Only CSV sources are supported in this version.">
+        <source>Only CSV sources are supported in this version.</source>
+        <target>En esta versión solo se admiten fuentes CSV.</target>
+      </trans-unit>
+      <trans-unit id="55f58cda25" resname="Only CSV sources can be run for now.">
+        <source>Only CSV sources can be run for now.</source>
+        <target>Por ahora solo se pueden ejecutar fuentes CSV.</target>
+      </trans-unit>
+      <trans-unit id="e317175b66" resname="Only CSV sources can be used for now.">
+        <source>Only CSV sources can be used for now.</source>
+        <target>Por ahora solo se pueden utilizar fuentes CSV.</target>
+      </trans-unit>
+      <trans-unit id="f3c92c209d" resname="Original">
+        <source>Original</source>
+        <target>Original</target>
+      </trans-unit>
+      <trans-unit id="c908dc8b8d" resname="PrestaShop ID">
+        <source>PrestaShop ID</source>
+        <target>ID PrestaShop</target>
+      </trans-unit>
+      <trans-unit id="e7d13520e0" resname="PrestaShop field">
+        <source>PrestaShop field</source>
+        <target>Campo PrestaShop</target>
+      </trans-unit>
+      <trans-unit id="7b443c8085" resname="Preview">
+        <source>Preview</source>
+        <target>Vista previa</target>
+      </trans-unit>
+      <trans-unit id="c84ab22d79" resname="Processed products">
+        <source>Processed products</source>
+        <target>Productos procesados</target>
+      </trans-unit>
+      <trans-unit id="bd28ebf4ee" resname="Processing import">
+        <source>Processing import</source>
+        <target>Procesando importación</target>
+      </trans-unit>
+      <trans-unit id="8d2027bc4b" resname="Product">
+        <source>Product</source>
+        <target>Producto</target>
+      </trans-unit>
+      <trans-unit id="a98b287358" resname="Product ID">
+        <source>Product ID</source>
+        <target>ID producto</target>
+      </trans-unit>
+      <trans-unit id="a41765ee7b" resname="Reference">
+        <source>Reference</source>
+        <target>Referencia</target>
+      </trans-unit>
+      <trans-unit id="ad59bf9880" resname="Replace text">
+        <source>Replace text</source>
+        <target>Reemplazar texto</target>
+      </trans-unit>
+      <trans-unit id="6ecf4f9338" resname="Replace with">
+        <source>Replace with</source>
+        <target>Reemplazar por</target>
+      </trans-unit>
+      <trans-unit id="6dbafc5455" resname="Result">
+        <source>Result</source>
+        <target>Resultado</target>
+      </trans-unit>
+      <trans-unit id="16dc0dc2da" resname="Run">
+        <source>Run</source>
+        <target>Ejecución</target>
+      </trans-unit>
+      <trans-unit id="f29b09814b" resname="Run Dry Run">
+        <source>Run Dry Run</source>
+        <target>Ejecutar Dry Run</target>
+      </trans-unit>
+      <trans-unit id="9d23ca7e6a" resname="Run Sync">
+        <source>Run Sync</source>
+        <target>Ejecutar Sync</target>
+      </trans-unit>
+      <trans-unit id="bc7dab17a0" resname="Save">
+        <source>Save</source>
+        <target>Guardar</target>
+      </trans-unit>
+      <trans-unit id="2c9596e34b" resname="Save mapping">
+        <source>Save mapping</source>
+        <target>Guardar mapping</target>
+      </trans-unit>
+      <trans-unit id="aa90363e69" resname="Search">
+        <source>Search</source>
+        <target>Buscar</target>
+      </trans-unit>
+      <trans-unit id="8869333a86" resname="Select a source">
+        <source>Select a source</source>
+        <target>Selecciona una fuente</target>
+      </trans-unit>
+      <trans-unit id="2d4495e58c" resname="Skipped">
+        <source>Skipped</source>
+        <target>Omitido</target>
+      </trans-unit>
+      <trans-unit id="650f12ba57" resname="Source">
+        <source>Source</source>
+        <target>Fuente</target>
+      </trans-unit>
+      <trans-unit id="841a1bf747" resname="Source URL">
+        <source>Source URL</source>
+        <target>URL de la fuente</target>
+      </trans-unit>
+      <trans-unit id="cea5ef4ae7" resname="Source preview">
+        <source>Source preview</source>
+        <target>Vista previa de la fuente</target>
+      </trans-unit>
+      <trans-unit id="5e1f58745d" resname="Source type">
+        <source>Source type</source>
+        <target>Tipo de fuente</target>
+      </trans-unit>
+      <trans-unit id="c388df50d8" resname="Source:">
+        <source>Source:</source>
+        <target>Fuente:</target>
+      </trans-unit>
+      <trans-unit id="455f3da3d3" resname="Status">
+        <source>Status</source>
+        <target>Estado</target>
+      </trans-unit>
+      <trans-unit id="ac74400cb3" resname="Status:">
+        <source>Status:</source>
+        <target>Estado:</target>
+      </trans-unit>
+      <trans-unit id="9bb4e80465" resname="Success">
+        <source>Success</source>
+        <target>Éxito</target>
+      </trans-unit>
+      <trans-unit id="e345211681" resname="Successful:">
+        <source>Successful:</source>
+        <target>Exitosos:</target>
+      </trans-unit>
+      <trans-unit id="c8ae1a8f27" resname="Supplier field">
+        <source>Supplier field</source>
+        <target>Campo proveedor</target>
+      </trans-unit>
+      <trans-unit id="13d3a16886" resname="Synchronization completed">
+        <source>Synchronization completed</source>
+        <target>Sincronización completada</target>
+      </trans-unit>
+      <trans-unit id="7a97fbd527" resname="Synchronization detail">
+        <source>Synchronization detail</source>
+        <target>Detalle de sincronización</target>
+      </trans-unit>
+      <trans-unit id="d23e710e94" resname="Synchronization history">
+        <source>Synchronization history</source>
+        <target>Historial de sincronizaciones</target>
+      </trans-unit>
+      <trans-unit id="3ee185d605" resname="Synchronization result">
+        <source>Synchronization result</source>
+        <target>Resultado de sincronización</target>
+      </trans-unit>
+      <trans-unit id="e9bc828b09" resname="Synchronize external product catalogs with PrestaShop using configurable mappings and data transformations.">
+        <source>Synchronize external product catalogs with PrestaShop using configurable mappings and data transformations.</source>
+        <target>Sincroniza catálogos de productos externos con PrestaShop usando mappings y transformaciones de datos configurables.</target>
+      </trans-unit>
+      <trans-unit id="0b94ff070b" resname="Test connection">
+        <source>Test connection</source>
+        <target>Probar conexión</target>
+      </trans-unit>
+      <trans-unit id="568bc9ce9c" resname="The CSV file contains an empty header.">
+        <source>The CSV file contains an empty header.</source>
+        <target>El archivo CSV contiene un encabezado vacío.</target>
+      </trans-unit>
+      <trans-unit id="5bae2f1ca7" resname="The CSV file contains duplicated headers.">
+        <source>The CSV file contains duplicated headers.</source>
+        <target>El archivo CSV contiene encabezados duplicados.</target>
+      </trans-unit>
+      <trans-unit id="ec105a776b" resname="The CSV file contains no products.">
+        <source>The CSV file contains no products.</source>
+        <target>El archivo CSV no contiene productos.</target>
+      </trans-unit>
+      <trans-unit id="54c2696ae5" resname="The CSV file could not be opened.">
+        <source>The CSV file could not be opened.</source>
+        <target>No se pudo abrir el archivo CSV.</target>
+      </trans-unit>
+      <trans-unit id="61948eba8f" resname="The CSV file could not be read.">
+        <source>The CSV file could not be read.</source>
+        <target>No se pudo leer el archivo CSV.</target>
+      </trans-unit>
+      <trans-unit id="54b1b2f0b7" resname="The CSV file could not be saved.">
+        <source>The CSV file could not be saved.</source>
+        <target>No se pudo guardar el archivo CSV.</target>
+      </trans-unit>
+      <trans-unit id="50fcffb04c" resname="The CSV file has no headers.">
+        <source>The CSV file has no headers.</source>
+        <target>El archivo CSV no contiene encabezados.</target>
+      </trans-unit>
+      <trans-unit id="7d7417be43" resname="The CSV file is empty.">
+        <source>The CSV file is empty.</source>
+        <target>El archivo CSV está vacío.</target>
+      </trans-unit>
+      <trans-unit id="d1199ba1d4" resname="The CSV source contains no records.">
+        <source>The CSV source contains no records.</source>
+        <target>La fuente CSV no contiene registros.</target>
+      </trans-unit>
+      <trans-unit id="27df0c3eb3" resname="The CSV source could not be opened.">
+        <source>The CSV source could not be opened.</source>
+        <target>No se pudo abrir la fuente CSV.</target>
+      </trans-unit>
+      <trans-unit id="adf8a321c4" resname="The Dry Run could not be executed: %error%">
+        <source>The Dry Run could not be executed: %error%</source>
+        <target>No fue posible ejecutar el Dry Run: %error%</target>
+      </trans-unit>
+      <trans-unit id="36633b3d0c" resname="The PrestaShop field &quot;%field%&quot; is assigned more than once.">
+        <source>The PrestaShop field "%field%" is assigned more than once.</source>
+        <target>El campo de PrestaShop "%field%" está asignado más de una vez.</target>
+      </trans-unit>
+      <trans-unit id="06110efe1b" resname="The PrestaShop field &quot;%field%&quot; is not valid.">
+        <source>The PrestaShop field "%field%" is not valid.</source>
+        <target>El campo de PrestaShop "%field%" no es válido.</target>
+      </trans-unit>
+      <trans-unit id="6ce345624f" resname="The category could not be created in PrestaShop.">
+        <source>The category could not be created in PrestaShop.</source>
+        <target>No fue posible crear la categoría en PrestaShop.</target>
+      </trans-unit>
+      <trans-unit id="026e4d09c7" resname="The detail could not be loaded: %error%">
+        <source>The detail could not be loaded: %error%</source>
+        <target>No fue posible cargar el detalle: %error%</target>
+      </trans-unit>
+      <trans-unit id="58dfce76a6" resname="The downloaded content is not a valid image.">
+        <source>The downloaded content is not a valid image.</source>
+        <target>El contenido descargado no es una imagen válida.</target>
+      </trans-unit>
+      <trans-unit id="00f9b3cb6a" resname="The existing product could not be loaded.">
+        <source>The existing product could not be loaded.</source>
+        <target>No fue posible cargar el producto existente.</target>
+      </trans-unit>
+      <trans-unit id="5848cfb134" resname="The first 5 products from the source are shown.">
+        <source>The first 5 products from the source are shown.</source>
+        <target>Se muestran los primeros 5 productos de la fuente.</target>
+      </trans-unit>
+      <trans-unit id="84901edcfb" resname="The history could not be loaded: %error%">
+        <source>The history could not be loaded: %error%</source>
+        <target>No fue posible cargar el historial: %error%</target>
+      </trans-unit>
+      <trans-unit id="b4823ae703" resname="The image URL does not contain a valid host.">
+        <source>The image URL does not contain a valid host.</source>
+        <target>La URL de la imagen no contiene un host válido.</target>
+      </trans-unit>
+      <trans-unit id="044f89a943" resname="The image URL is not valid.">
+        <source>The image URL is not valid.</source>
+        <target>La URL de la imagen no es válida.</target>
+      </trans-unit>
+      <trans-unit id="f2c38b59b8" resname="The image URL points to a disallowed address.">
+        <source>The image URL points to a disallowed address.</source>
+        <target>La URL de la imagen apunta a una dirección no permitida.</target>
+      </trans-unit>
+      <trans-unit id="0d7b77b111" resname="The image could not be downloaded.">
+        <source>The image could not be downloaded.</source>
+        <target>No fue posible descargar la imagen.</target>
+      </trans-unit>
+      <trans-unit id="d256d7ca51" resname="The image exceeds the maximum allowed size of 5 MB.">
+        <source>The image exceeds the maximum allowed size of 5 MB.</source>
+        <target>La imagen supera el tamaño máximo permitido de 5 MB.</target>
+      </trans-unit>
+      <trans-unit id="2a40aa1c93" resname="The image file does not exist.">
+        <source>The image file does not exist.</source>
+        <target>El archivo de imagen no existe.</target>
+      </trans-unit>
+      <trans-unit id="d0f3c48e0a" resname="The image format is not allowed.">
+        <source>The image format is not allowed.</source>
+        <target>El formato de imagen no está permitido.</target>
+      </trans-unit>
+      <trans-unit id="b27ffe77eb" resname="The image host could not be resolved.">
+        <source>The image host could not be resolved.</source>
+        <target>No fue posible resolver el host de la imagen.</target>
+      </trans-unit>
+      <trans-unit id="6689fe0a9f" resname="The image must use HTTP or HTTPS.">
+        <source>The image must use HTTP or HTTPS.</source>
+        <target>La imagen debe utilizar HTTP o HTTPS.</target>
+      </trans-unit>
+      <trans-unit id="ca74f7ba01" resname="The import could not be created.">
+        <source>The import could not be created.</source>
+        <target>No fue posible crear la importación.</target>
+      </trans-unit>
+      <trans-unit id="0793feaf15" resname="The import could not be retrieved.">
+        <source>The import could not be retrieved.</source>
+        <target>No fue posible obtener la importación.</target>
+      </trans-unit>
+      <trans-unit id="73067c909f" resname="The import does not exist.">
+        <source>The import does not exist.</source>
+        <target>La importación no existe.</target>
+      </trans-unit>
+      <trans-unit id="d3fccbd679" resname="The import finished with errors.">
+        <source>The import finished with errors.</source>
+        <target>La importación terminó con errores.</target>
+      </trans-unit>
+      <trans-unit id="03adca218b" resname="The import is not valid.">
+        <source>The import is not valid.</source>
+        <target>La importación no es válida.</target>
+      </trans-unit>
+      <trans-unit id="f6af06feb7" resname="The imports directory could not be created.">
+        <source>The imports directory could not be created.</source>
+        <target>No se pudo crear el directorio de importaciones.</target>
+      </trans-unit>
+      <trans-unit id="11a7cbd051" resname="The manufacturer could not be created in PrestaShop.">
+        <source>The manufacturer could not be created in PrestaShop.</source>
+        <target>No fue posible crear el fabricante en PrestaShop.</target>
+      </trans-unit>
+      <trans-unit id="2dcb364d31" resname="The mapping could not be saved: %error%">
+        <source>The mapping could not be saved: %error%</source>
+        <target>No fue posible guardar el mapping: %error%</target>
+      </trans-unit>
+      <trans-unit id="9b983858c2" resname="The mapping was saved successfully.">
+        <source>The mapping was saved successfully.</source>
+        <target>El mapping se guardó correctamente.</target>
+      </trans-unit>
+      <trans-unit id="9388a2132a" resname="The previous mapping could not be deleted.">
+        <source>The previous mapping could not be deleted.</source>
+        <target>No fue posible eliminar el mapping anterior.</target>
+      </trans-unit>
+      <trans-unit id="fd129e55b5" resname="The price cannot be empty.">
+        <source>The price cannot be empty.</source>
+        <target>El precio no puede estar vacío.</target>
+      </trans-unit>
+      <trans-unit id="d6d41bf132" resname="The price format is not valid.">
+        <source>The price format is not valid.</source>
+        <target>El precio no tiene un formato válido.</target>
+      </trans-unit>
+      <trans-unit id="f2d69154c4" resname="The product ID is not valid.">
+        <source>The product ID is not valid.</source>
+        <target>El ID del producto no es válido.</target>
+      </trans-unit>
+      <trans-unit id="3330a26ebd" resname="The product could not be created in PrestaShop.">
+        <source>The product could not be created in PrestaShop.</source>
+        <target>No fue posible crear el producto en PrestaShop.</target>
+      </trans-unit>
+      <trans-unit id="66654c1494" resname="The product could not be updated.">
+        <source>The product could not be updated.</source>
+        <target>No fue posible actualizar el producto.</target>
+      </trans-unit>
+      <trans-unit id="e64d33042f" resname="The product does not exist in PrestaShop.">
+        <source>The product does not exist in PrestaShop.</source>
+        <target>El producto no existe en PrestaShop.</target>
+      </trans-unit>
+      <trans-unit id="16e4761b48" resname="The product image could not be created.">
+        <source>The product image could not be created.</source>
+        <target>No fue posible crear la imagen del producto.</target>
+      </trans-unit>
+      <trans-unit id="bb780c9bfe" resname="The product image could not be saved.">
+        <source>The product image could not be saved.</source>
+        <target>No fue posible guardar la imagen del producto.</target>
+      </trans-unit>
+      <trans-unit id="bba943e3f0" resname="The run does not exist.">
+        <source>The run does not exist.</source>
+        <target>La ejecución no existe.</target>
+      </trans-unit>
+      <trans-unit id="1526875349" resname="The selected source does not exist.">
+        <source>The selected source does not exist.</source>
+        <target>La fuente seleccionada no existe.</target>
+      </trans-unit>
+      <trans-unit id="e8b358948a" resname="The source ID is not valid.">
+        <source>The source ID is not valid.</source>
+        <target>El ID de la fuente no es válido.</target>
+      </trans-unit>
+      <trans-unit id="46e947a22a" resname="The source URL does not contain a valid host.">
+        <source>The source URL does not contain a valid host.</source>
+        <target>La URL de la fuente no contiene un host válido.</target>
+      </trans-unit>
+      <trans-unit id="281b79c636" resname="The source URL is not valid.">
+        <source>The source URL is not valid.</source>
+        <target>La URL de la fuente no es válida.</target>
+      </trans-unit>
+      <trans-unit id="9b9fc167cb" resname="The source URL is required.">
+        <source>The source URL is required.</source>
+        <target>La URL de la fuente es obligatoria.</target>
+      </trans-unit>
+      <trans-unit id="f34b0191e4" resname="The source URL points to a disallowed address.">
+        <source>The source URL points to a disallowed address.</source>
+        <target>La URL de la fuente apunta a una dirección no permitida.</target>
+      </trans-unit>
+      <trans-unit id="2194a32da1" resname="The source contains no records.">
+        <source>The source contains no records.</source>
+        <target>La fuente no contiene registros.</target>
+      </trans-unit>
+      <trans-unit id="58eb1dd420" resname="The source content could not be retrieved.">
+        <source>The source content could not be retrieved.</source>
+        <target>No fue posible obtener el contenido de la fuente.</target>
+      </trans-unit>
+      <trans-unit id="05208aacc0" resname="The source could not be created.">
+        <source>The source could not be created.</source>
+        <target>No fue posible crear la fuente.</target>
+      </trans-unit>
+      <trans-unit id="3b48faffab" resname="The source could not be deleted.">
+        <source>The source could not be deleted.</source>
+        <target>No fue posible eliminar la fuente.</target>
+      </trans-unit>
+      <trans-unit id="9f8013f90e" resname="The source could not be found.">
+        <source>The source could not be found.</source>
+        <target>No fue posible encontrar la fuente.</target>
+      </trans-unit>
+      <trans-unit id="f50decf5d2" resname="The source could not be loaded: %error%">
+        <source>The source could not be loaded: %error%</source>
+        <target>No fue posible cargar la fuente: %error%</target>
+      </trans-unit>
+      <trans-unit id="50ecaf7910" resname="The source does not exist.">
+        <source>The source does not exist.</source>
+        <target>La fuente no existe.</target>
+      </trans-unit>
+      <trans-unit id="ad266468b5" resname="The source has no mapping configured.">
+        <source>The source has no mapping configured.</source>
+        <target>La fuente no tiene un mapping configurado.</target>
+      </trans-unit>
+      <trans-unit id="0772a4262b" resname="The source host could not be resolved.">
+        <source>The source host could not be resolved.</source>
+        <target>No fue posible resolver el host de la fuente.</target>
+      </trans-unit>
+      <trans-unit id="8493bd6919" resname="The source is not valid.">
+        <source>The source is not valid.</source>
+        <target>La fuente no es válida.</target>
+      </trans-unit>
+      <trans-unit id="1fcfa012aa" resname="The source must use HTTP or HTTPS.">
+        <source>The source must use HTTP or HTTPS.</source>
+        <target>La fuente debe utilizar HTTP o HTTPS.</target>
+      </trans-unit>
+      <trans-unit id="b34deb1e97" resname="The source name is required.">
+        <source>The source name is required.</source>
+        <target>El nombre de la fuente es obligatorio.</target>
+      </trans-unit>
+      <trans-unit id="9ba8fbf470" resname="The source was created successfully.">
+        <source>The source was created successfully.</source>
+        <target>La fuente se creó correctamente.</target>
+      </trans-unit>
+      <trans-unit id="e78c9fd735" resname="The source was deleted successfully.">
+        <source>The source was deleted successfully.</source>
+        <target>La fuente se eliminó correctamente.</target>
+      </trans-unit>
+      <trans-unit id="044cccbb25" resname="The source was updated successfully.">
+        <source>The source was updated successfully.</source>
+        <target>La fuente se actualizó correctamente.</target>
+      </trans-unit>
+      <trans-unit id="c607c0fa8a" resname="The stock cannot be empty.">
+        <source>The stock cannot be empty.</source>
+        <target>El stock no puede estar vacío.</target>
+      </trans-unit>
+      <trans-unit id="06bb501a72" resname="The stock format is not valid.">
+        <source>The stock format is not valid.</source>
+        <target>El stock no tiene un formato válido.</target>
+      </trans-unit>
+      <trans-unit id="7ea3186b07" resname="The submitted mapping is not valid.">
+        <source>The submitted mapping is not valid.</source>
+        <target>El mapping recibido no es válido.</target>
+      </trans-unit>
+      <trans-unit id="0330c0b129" resname="The synchronization could not be executed: %error%">
+        <source>The synchronization could not be executed: %error%</source>
+        <target>No fue posible ejecutar el Sync: %error%</target>
+      </trans-unit>
+      <trans-unit id="3518c36787" resname="The synchronization frequency is not valid.">
+        <source>The synchronization frequency is not valid.</source>
+        <target>La frecuencia de sincronización no es válida.</target>
+      </trans-unit>
+      <trans-unit id="312ed3f552" resname="The synchronization log could not be saved.">
+        <source>The synchronization log could not be saved.</source>
+        <target>No fue posible guardar el log de sincronización.</target>
+      </trans-unit>
+      <trans-unit id="fa21c4cef4" resname="The temporary file could not be created.">
+        <source>The temporary file could not be created.</source>
+        <target>No fue posible crear el archivo temporal.</target>
+      </trans-unit>
+      <trans-unit id="751bc1678c" resname="The temporary image could not be saved.">
+        <source>The temporary image could not be saved.</source>
+        <target>No fue posible guardar la imagen temporal.</target>
+      </trans-unit>
+      <trans-unit id="5a8e6a8421" resname="The thumbnail &quot;">
+        <source>The thumbnail "</source>
+        <target>No fue posible generar el thumbnail "</target>
+      </trans-unit>
+      <trans-unit id="9bb63b8116" resname="The transformation &quot;%transform%&quot; is not valid.">
+        <source>The transformation "%transform%" is not valid.</source>
+        <target>La transformación "%transform%" no es válida.</target>
+      </trans-unit>
+      <trans-unit id="a49ab23365" resname="The transformation configuration could not be saved.">
+        <source>The transformation configuration could not be saved.</source>
+        <target>No fue posible guardar la configuración de la transformación.</target>
+      </trans-unit>
+      <trans-unit id="f5df77360a" resname="The uploaded file is not valid.">
+        <source>The uploaded file is not valid.</source>
+        <target>El archivo subido no es válido.</target>
+      </trans-unit>
+      <trans-unit id="2660dda60d" resname="There are no mappings for the source.">
+        <source>There are no mappings for the source.</source>
+        <target>No existen mappings para la fuente.</target>
+      </trans-unit>
+      <trans-unit id="cc8a25f9f9" resname="There are no synchronizations recorded yet.">
+        <source>There are no synchronizations recorded yet.</source>
+        <target>No hay sincronizaciones registradas todavía.</target>
+      </trans-unit>
+      <trans-unit id="b1e1be4138" resname="This synchronization was recorded in the history.">
+        <source>This synchronization was recorded in the history.</source>
+        <target>Esta sincronización quedó registrada en el historial.</target>
+      </trans-unit>
+      <trans-unit id="9d7362d066" resname="Total">
+        <source>Total</source>
+        <target>Total</target>
+      </trans-unit>
+      <trans-unit id="ca4b766363" resname="Transformation">
+        <source>Transformation</source>
+        <target>Transformación</target>
+      </trans-unit>
+      <trans-unit id="78bce098f3" resname="Type:">
+        <source>Type:</source>
+        <target>Tipo:</target>
+      </trans-unit>
+      <trans-unit id="dd3beda67a" resname="URL:">
+        <source>URL:</source>
+        <target>URL:</target>
+      </trans-unit>
+      <trans-unit id="bd3e09dafa" resname="Unable to create CPB Sync mapping.">
+        <source>Unable to create CPB Sync mapping.</source>
+        <target>Unable to create CPB Sync mapping.</target>
+      </trans-unit>
+      <trans-unit id="76755eae05" resname="Unable to create CPB Sync source.">
+        <source>Unable to create CPB Sync source.</source>
+        <target>Unable to create CPB Sync source.</target>
+      </trans-unit>
+      <trans-unit id="cc033df112" resname="Unchanged">
+        <source>Unchanged</source>
+        <target>Sin cambios</target>
+      </trans-unit>
+      <trans-unit id="46301b6d93" resname="Updated">
+        <source>Updated</source>
+        <target>Actualizados</target>
+      </trans-unit>
+      <trans-unit id="d3f6c025e6" resname="Upload and start import">
+        <source>Upload and start import</source>
+        <target>Subir e iniciar importación</target>
+      </trans-unit>
+      <trans-unit id="86b794974b" resname="Uploading file...">
+        <source>Uploading file...</source>
+        <target>Subiendo archivo...</target>
+      </trans-unit>
+      <trans-unit id="f013ad3c49" resname="Valid">
+        <source>Valid</source>
+        <target>Válido</target>
+      </trans-unit>
+      <trans-unit id="fee834efb3" resname="View detail">
+        <source>View detail</source>
+        <target>Ver detalle</target>
+      </trans-unit>
+      <trans-unit id="3d709c13c9" resname="Warning">
+        <source>Warning</source>
+        <target>Advertencia</target>
+      </trans-unit>
+      <trans-unit id="68a5c8bfac" resname="With errors">
+        <source>With errors</source>
+        <target>Con errores</target>
+      </trans-unit>
+      <trans-unit id="134e15b442" resname="You have no sources configured yet.">
+        <source>You have no sources configured yet.</source>
+        <target>Aún no tienes fuentes configuradas.</target>
+      </trans-unit>
+      <trans-unit id="3573e555ac" resname="You must map a supplier field to reference.">
+        <source>You must map a supplier field to reference.</source>
+        <target>Debes asignar un campo del proveedor a reference.</target>
+      </trans-unit>
+      <trans-unit id="895ac7b0f8" resname="You must provide the text to replace for the &quot;%field%&quot; field.">
+        <source>You must provide the text to replace for the "%field%" field.</source>
+        <target>Debes indicar el texto que deseas reemplazar para el campo "%field%".</target>
+      </trans-unit>
+      <trans-unit id="2bce21618f" resname="You must select a CSV file.">
+        <source>You must select a CSV file.</source>
+        <target>Debes seleccionar un archivo CSV.</target>
+      </trans-unit>
+      <trans-unit id="b875d0ad32" resname="You must select a source.">
+        <source>You must select a source.</source>
+        <target>Debes seleccionar una fuente.</target>
+      </trans-unit>
+      <trans-unit id="01ce836ce6" resname="records found.">
+        <source>records found.</source>
+        <target>registros encontrados.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

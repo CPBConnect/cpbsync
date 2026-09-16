@@ -2,7 +2,7 @@
 
     <div class="panel-heading">
         <i class="icon-refresh"></i>
-        {l s='CPB Sync' mod='cpbsync'}
+        {l s='CPB Sync' d='Modules.Cpbsync.Admin'}
     </div>
 
     <div class="panel-body">
@@ -11,11 +11,11 @@
             <div class="col-md-8">
 
                 <h3>
-                    {l s='Fuentes de datos' mod='cpbsync'}
+                    {l s='Data sources' d='Modules.Cpbsync.Admin'}
                 </h3>
 
                 <p class="text-muted">
-                    {l s='Conecta proveedores, ERP y otras fuentes de productos con PrestaShop.' mod='cpbsync'}
+                    {l s='Connect suppliers, ERP systems and other product sources with PrestaShop.' d='Modules.Cpbsync.Admin'}
                 </p>
 
             </div>
@@ -25,21 +25,21 @@
                         href="{$import_url|escape:'htmlall':'UTF-8'}"
                         class="btn btn-primary"
                 >
-                    {l s='Importar CSV' mod='cpbsync'}
+                    {l s='Import CSV' d='Modules.Cpbsync.Admin'}
                 </a>
                 <a
                         href="{$history_url|escape:'htmlall':'UTF-8'}"
                         class="btn btn-default"
                 >
                     <i class="icon-time"></i>
-                    {l s='Historial' mod='cpbsync'}
+                    {l s='History' d='Modules.Cpbsync.Admin'}
                 </a>
                 <a
                         href="{$source_form_url|escape:'htmlall':'UTF-8'}"
                         class="btn btn-primary"
                 >
                     <i class="icon-plus"></i>
-                    {l s='Agregar fuente' mod='cpbsync'}
+                    {l s='Add source' d='Modules.Cpbsync.Admin'}
                 </a>
 
             </div>
@@ -51,7 +51,7 @@
 
             <div class="alert alert-info">
                 <i class="icon-info-circle"></i>
-                {l s='Aún no tienes fuentes configuradas.' mod='cpbsync'}
+                {l s='You have no sources configured yet.' d='Modules.Cpbsync.Admin'}
             </div>
 
         {else}
@@ -68,7 +68,7 @@
 
                         <p>
                             <strong>
-                                {l s='Tipo:' mod='cpbsync'}
+                                {l s='Type:' d='Modules.Cpbsync.Admin'}
                             </strong>
 
                             {$source.type|escape:'htmlall':'UTF-8'}
@@ -76,7 +76,7 @@
 
                         <p>
                             <strong>
-                                {l s='URL:' mod='cpbsync'}
+                                {l s='URL:' d='Modules.Cpbsync.Admin'}
                             </strong>
 
                             {$source.url|escape:'htmlall':'UTF-8'}
@@ -84,7 +84,7 @@
 
                         <p>
                             <strong>
-                                {l s='Frecuencia:' mod='cpbsync'}
+                                {l s='Frequency:' d='Modules.Cpbsync.Admin'}
                             </strong>
 
                             {$source.frequency|escape:'htmlall':'UTF-8'}
@@ -92,16 +92,16 @@
 
                         <p>
                             <strong>
-                                {l s='Estado:' mod='cpbsync'}
+                                {l s='Status:' d='Modules.Cpbsync.Admin'}
                             </strong>
 
                             {if $source.active}
                                 <span class="label label-success">
-                                    {l s='Activa' mod='cpbsync'}
+                                    {l s='Active' d='Modules.Cpbsync.Admin'}
                                 </span>
                             {else}
                                 <span class="label label-default">
-                                    {l s='Inactiva' mod='cpbsync'}
+                                    {l s='Inactive' d='Modules.Cpbsync.Admin'}
                                 </span>
                             {/if}
                         </p>
@@ -114,7 +114,7 @@
                                     class="btn btn-info"
                             >
                                 <i class="icon-refresh"></i>
-                                {l s='Probar conexión' mod='cpbsync'}
+                                {l s='Test connection' d='Modules.Cpbsync.Admin'}
                             </a>
 
                             <a
@@ -122,7 +122,7 @@
                                     class="btn btn-default"
                             >
                                 <i class="icon-random"></i>
-                                {l s='Mapear' mod='cpbsync'}
+                                {l s='Map fields' d='Modules.Cpbsync.Admin'}
                             </a>
 
                             <a
@@ -130,21 +130,21 @@
                                     class="btn btn-default"
                             >
                                 <i class="icon-edit"></i>
-                                {l s='Editar' mod='cpbsync'}
+                                {l s='Edit' d='Modules.Cpbsync.Admin'}
                             </a>
 
                             <form
                                     method="post"
                                     action="{$source.delete_url|escape:'htmlall':'UTF-8'}"
                                     style="display:inline;"
-                                    onsubmit="return confirm('{l s='¿Estás seguro de eliminar esta fuente?' mod='cpbsync'}');"
+                                    onsubmit="return confirm('{l s='Are you sure you want to delete this source?' d='Modules.Cpbsync.Admin'}');"
                             >
                                 <button
                                         type="submit"
                                         class="btn btn-danger"
                                 >
                                     <i class="icon-trash"></i>
-                                    {l s='Eliminar' mod='cpbsync'}
+                                    {l s='Delete' d='Modules.Cpbsync.Admin'}
                                 </button>
                             </form>
 

@@ -12,7 +12,7 @@ class CategoryCreator
 
         if ($name === '') {
             throw new \RuntimeException(
-                'No se puede crear una categoría sin nombre.'
+                'A category cannot be created without a name.'
             );
         }
 
@@ -34,7 +34,7 @@ class CategoryCreator
 
         if (!$category->add()) {
             throw new \RuntimeException(
-                'No fue posible crear la categoría en PrestaShop.'
+                'The category could not be created in PrestaShop.'
             );
         }
 

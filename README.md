@@ -6,22 +6,30 @@ CPB Sync is a PrestaShop module developed by **CPBConnect** that allows store ad
 
 Version **1.0.0** focuses on reliable CSV-based product synchronization with configurable mappings, transformations, validation, Dry Run, batch processing, synchronization history, and automated execution through cron.
 
+## ❤️ Support CPB Sync
+
+CPB Sync is free and open source.
+
+If CPB Sync is useful to you, consider supporting its continued development.
+
+[☕ Support CPB Sync via PayPal](https://paypal.me/cpbconnet)
+
 ## Features
 
-* 📥 Import product catalogs from CSV sources
-* 🔗 Configurable source-to-PrestaShop field mapping
-* 🔄 Configurable data transformations
-* 🧪 Dry Run before applying changes
-* 📦 Product creation and updates
-* ⏭️ Automatically skip products without changes
-* 🖼️ Product image synchronization
-* 📊 Synchronization results and history
-* 📈 Batch processing with progress tracking
-* ⏰ Scheduled synchronization through cron
-* ✅ Product data validation
-* ⚠️ Individual product error handling
-* 🗂️ Multiple configurable data sources
-* 🧹 Automatic cleanup of temporary import files
+- 📥 Import product catalogs from CSV sources
+- 🔗 Configurable source-to-PrestaShop field mapping
+- 🔄 Configurable data transformations
+- 🧪 Dry Run before applying changes
+- 📦 Product creation and updates
+- ⏭️ Automatically skip products without changes
+- 🖼️ Product image synchronization
+- 📊 Synchronization results and history
+- 📈 Batch processing with progress tracking
+- ⏰ Scheduled synchronization through cron
+- ✅ Product data validation
+- ⚠️ Individual product error handling
+- 🗂️ Multiple configurable data sources
+- 🧹 Automatic cleanup of temporary import files
 
 ## Supported sources
 
@@ -63,11 +71,11 @@ A source field can also have a transformation applied before synchronization.
 
 The current version includes:
 
-* No transformation
-* Price normalization
-* Stock normalization
-* Text normalization
-* Text replacement
+- No transformation
+- Price normalization
+- Stock normalization
+- Text normalization
+- Text replacement
 
 Transformations allow external catalog data to be adapted before it is synchronized with PrestaShop.
 
@@ -97,23 +105,23 @@ After validating the mapping, administrators can execute a synchronization.
 
 CPB Sync can:
 
-* Create new products
-* Update existing products
-* Skip products without changes
-* Validate product data
-* Report individual product errors
-* Continue processing when individual products fail
+- Create new products
+- Update existing products
+- Skip products without changes
+- Validate product data
+- Report individual product errors
+- Continue processing when individual products fail
 
 Synchronization results are stored in the module history.
 
 Each synchronization records:
 
-* Total products
-* Created products
-* Updated products
-* Skipped products
-* Errors
-* Detailed synchronization results
+- Total products
+- Created products
+- Updated products
+- Skipped products
+- Errors
+- Detailed synchronization results
 
 ## Cron
 
@@ -121,10 +129,10 @@ CPB Sync includes scheduled synchronization support through cron.
 
 Supported frequencies include:
 
-* Manual
-* Hourly
-* Every 6 hours
-* Daily
+- Manual
+- Hourly
+- Every 6 hours
+- Daily
 
 The cron process only executes active sources configured with a scheduled frequency.
 
@@ -204,10 +212,10 @@ Synchronization history
 
 ## Requirements
 
-* PrestaShop 8.0 or later
-* PHP version compatible with the installed PrestaShop version
-* MySQL/MariaDB supported by PrestaShop
-* Composer dependencies included in the module package
+- PrestaShop 8.0 or later
+- PHP version compatible with the installed PrestaShop version
+- MySQL/MariaDB supported by PrestaShop
+- Composer dependencies included in the module package
 
 ## Installation
 
@@ -234,13 +242,25 @@ For automatic synchronization, configure the desired frequency and add the CPB S
 
 ```text
 cpbsync/
-├── config/
 ├── controllers/
 ├── src/
 │   ├── Application/
-│   ├── Domain/
-│   └── Infrastructure/
+│   │   ├── Import/
+│   │   ├── Mapping/
+│   │   ├── Product/
+│   │   ├── Source/
+│   │   ├── Sync/
+│   │   ├── Transform/
+│   │   └── Validation/
+│   ├── Infrastructure/
+│   │   ├── Persistence/
+│   │   ├── PrestaShop/
+│   │   └── Source/
+│   └── Presentation/
+│       └── Admin/
+│           └── Handler/
 ├── tests/
+├── tools/
 ├── translations/
 ├── views/
 ├── composer.json
@@ -249,7 +269,62 @@ cpbsync/
 └── cron.php
 ```
 
-The module follows a layered structure separating application logic, domain logic, infrastructure, and PrestaShop integration.
+The module follows a layered structure separating application logic, infrastructure, and PrestaShop integration:
+
+- **Application** contains the use cases: sources, mapping, transformations, product synchronization and history.
+- **Infrastructure** contains persistence, catalog readers and the PrestaShop adapters.
+- **Presentation** contains the back office actions and their routing. `cpbsync.php` only keeps the module lifecycle and delegates every `cpbsync_action` to the presentation layer.
+
+## Tests
+
+The test suite runs without a PrestaShop installation:
+
+```bash
+php tests/run.php
+```
+
+or, with Composer:
+
+```bash
+composer test
+```
+
+## Translations
+
+CPB Sync uses the new PrestaShop translation system (translation domains) and does not rely on the classic dictionary files.
+
+- Every wording belongs to the `Modules.Cpbsync.Admin` translation domain.
+- PHP code translates through `trans()` / `getTranslator()->trans()`; Smarty templates use `{l s='...' d='Modules.Cpbsync.Admin'}`.
+- The module declares `isUsingNewTranslationSystem()`, so it is listed under **International > Translations > Modify translations**.
+
+Translation catalogues ship as XLIFF files:
+
+```text
+translations/
+├── en-US/
+│   └── ModulesCpbsyncAdmin.en-US.xlf
+├── es-ES/
+│   └── ModulesCpbsyncAdmin.es-ES.xlf
+└── translations-to-do.csv
+```
+
+Wordings are written in English, and Spanish is provided as a translation.
+
+To add another language, copy one of the XLIFF files to `translations/<locale>/ModulesCpbsyncAdmin.<locale>.xlf`, update `target-language` and translate the `<target>` elements. PrestaShop loads these files during the module installation; after editing them, reinstall the module or clear the cache.
+
+`translations/translations-to-do.csv` is a human-readable glossary listing every wording with its Spanish translation.
+
+To verify that no wording is missing from the catalogues:
+
+```bash
+php tools/check-translations.php
+```
+
+or, with Composer:
+
+```bash
+composer check-translations
+```
 
 ## Current version
 
@@ -263,15 +338,15 @@ This version provides a complete CSV-based product synchronization workflow, inc
 
 Future versions may include:
 
-* XML sources
-* JSON sources
-* REST API integrations
-* Incremental synchronization
-* Advanced transformation rules
-* Additional synchronization options
-* Improved logging and monitoring
-* Additional scheduling options
-* Premium features
+- XML sources
+- JSON sources
+- REST API integrations
+- Incremental synchronization
+- Advanced transformation rules
+- Additional synchronization options
+- Improved logging and monitoring
+- Additional scheduling options
+- Premium features
 
 The roadmap may evolve according to user feedback and real-world requirements.
 

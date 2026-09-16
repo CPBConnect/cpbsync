@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const messages = window.cpbsyncMessages || {};
+
     const form = document.getElementById('cpbsync-import-form');
 
     if (!form) {
@@ -44,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         resultElement.innerHTML =
             '<div class="alert alert-info">'
-            + 'Subiendo archivo...'
+            + messages.uploading
             + '</div>';
 
         fetch(window.location.href, {
@@ -66,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 resultElement.innerHTML =
                     '<div class="alert alert-info">'
-                    + 'Archivo cargado. Iniciando importación...'
+                    + messages.uploaded
                     + '</div>';
 
                 processNextBatch(
@@ -120,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (data.status === 'completed') {
                     resultElement.innerHTML =
                         '<div class="alert alert-success">'
-                        + 'Importación completada correctamente.'
+                        + messages.completed
                         + '</div>';
 
                     submitButton.disabled = false;
@@ -131,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (data.status === 'failed') {
                     resultElement.innerHTML =
                         '<div class="alert alert-danger">'
-                        + 'La importación terminó con errores.'
+                        + messages.failed
                         + '</div>';
 
                     submitButton.disabled = false;
@@ -147,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(function (error) {
                 resultElement.innerHTML =
                     '<div class="alert alert-danger">'
-                    + '<strong>Error en la importación:</strong><br>'
+                    + '<strong>' + messages.failedTitle + '</strong><br>'
                     + error.message
                     + '</div>';
 

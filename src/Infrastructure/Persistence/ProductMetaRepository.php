@@ -20,7 +20,7 @@ class ProductMetaRepository
     ): bool {
         if ($idProduct <= 0) {
             throw new \InvalidArgumentException(
-                'El ID del producto no es válido.'
+                'The product ID is not valid.'
             );
         }
 

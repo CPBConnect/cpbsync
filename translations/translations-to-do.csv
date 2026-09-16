@@ -1,83 +1,206 @@
-﻿Archivo,Linea,Traduccion
-views/templates/admin/dry-run.tpl,8,Vista previa
-views/templates/admin/dry-run.tpl,10,Se muestran los primeros 5 productos de la fuente.
-views/templates/admin/dry-run.tpl,12,No se modificó ningún producto en PrestaShop.
-views/templates/admin/dry-run.tpl,20,Producto
-views/templates/admin/dry-run.tpl,24,Válido
-views/templates/admin/dry-run.tpl,28,Con errores
-views/templates/admin/dry-run.tpl,35,Errores:
-views/templates/admin/dry-run.tpl,50,Campo PrestaShop
-views/templates/admin/dry-run.tpl,51,Original
-views/templates/admin/dry-run.tpl,52,Resultado
-views/templates/admin/sync-result.tpl,4,Resultado de sincronización
-views/templates/admin/sync-result.tpl,8,Sincronización completada
-views/templates/admin/sync-result.tpl,14,Ejecución
-views/templates/admin/sync-result.tpl,18,Esta sincronización quedó registrada en el historial.
-views/templates/admin/sync-result.tpl,27,Total
-views/templates/admin/sync-result.tpl,35,Creado
-views/templates/admin/sync-result.tpl,44,Actualizado
-views/templates/admin/sync-result.tpl,53,Omitido
-views/templates/admin/sync-result.tpl,62,Errores
-views/templates/admin/sync-result.tpl,73,Referencia
-views/templates/admin/sync-result.tpl,74,Estado
-views/templates/admin/sync-result.tpl,75,ID PrestaShop
-views/templates/admin/sync-result.tpl,76,Detalle
-views/templates/admin/sync-result.tpl,90,Creado
-views/templates/admin/sync-result.tpl,94,Actualizado
-views/templates/admin/sync-result.tpl,98,Omitido
-views/templates/admin/sync-result.tpl,102,Errores
-views/templates/admin/sync-result.tpl,136,Volver al mapping
-views/templates/admin/source-preview.tpl,5,Vista previa de la fuente
-views/templates/admin/source-preview.tpl,13,Conexión exitosa.
-views/templates/admin/source-preview.tpl,19,registros encontrados.
-views/templates/admin/source-preview.tpl,23,Columnas detectadas
-views/templates/admin/source-preview.tpl,41,Primeros registros
-views/templates/admin/source-preview.tpl,93,Volver a fuentes
-views/templates/admin/sources.tpl,5,CPB Sync
-views/templates/admin/sources.tpl,14,Fuentes de datos
-views/templates/admin/sources.tpl,18,"Conecta proveedores, ERP y otras fuentes de productos con PrestaShop."
-views/templates/admin/sources.tpl,29,Historial
-views/templates/admin/sources.tpl,36,Agregar fuente
-views/templates/admin/sources.tpl,48,Aún no tienes fuentes configuradas.
-views/templates/admin/sources.tpl,65,Tipo:
-views/templates/admin/sources.tpl,73,URL:
-views/templates/admin/sources.tpl,81,Frecuencia:
-views/templates/admin/sources.tpl,89,Estado:
-views/templates/admin/sources.tpl,94,Activa
-views/templates/admin/sources.tpl,98,Inactiva
-views/templates/admin/sources.tpl,111,Probar conexión
-views/templates/admin/sources.tpl,119,Mapear
-views/templates/admin/sources.tpl,127,Editar
-views/templates/admin/sources.tpl,133,¿Estás seguro de eliminar esta fuente?
-views/templates/admin/sources.tpl,136,Eliminar
-views/templates/admin/source-form.tpl,5,Nueva fuente
-views/templates/admin/source-form.tpl,21,Nombre
-views/templates/admin/source-form.tpl,29,Ej. Proveedor ABC
-views/templates/admin/source-form.tpl,35,Tipo de fuente
-views/templates/admin/source-form.tpl,52,URL de la fuente
-views/templates/admin/source-form.tpl,66,Frecuencia
-views/templates/admin/source-form.tpl,73,Manual
-views/templates/admin/source-form.tpl,78,Cada hora
-views/templates/admin/source-form.tpl,83,Cada 6 horas
-views/templates/admin/source-form.tpl,88,Diariamente
-views/templates/admin/source-form.tpl,103,Fuente activa
-views/templates/admin/source-form.tpl,113,Cancelar
-views/templates/admin/source-form.tpl,118,Guardar
-views/templates/admin/source-mapping.tpl,5,Mapear campos
-views/templates/admin/source-mapping.tpl,11,Asigna cada campo de la fuente al campo correspondiente de PrestaShop.
-views/templates/admin/source-mapping.tpl,32,Campo proveedor
-views/templates/admin/source-mapping.tpl,35,Campo PrestaShop
-views/templates/admin/source-mapping.tpl,38,Transformación
-views/templates/admin/source-mapping.tpl,97,-- No mapear --
-views/templates/admin/source-mapping.tpl,173,-- Ninguna --
-views/templates/admin/source-mapping.tpl,180,Normalizar precio
-views/templates/admin/source-mapping.tpl,189,-- Ninguna --
-views/templates/admin/source-mapping.tpl,196,Normalizar stock
-views/templates/admin/source-mapping.tpl,207,-- Ninguna --
-views/templates/admin/source-mapping.tpl,214,Normalizar texto
-views/templates/admin/source-mapping.tpl,221,Reemplazar texto
-views/templates/admin/source-mapping.tpl,232,Buscar
-views/templates/admin/source-mapping.tpl,246,Reemplazar por
-views/templates/admin/source-mapping.tpl,262,No disponible
-views/templates/admin/source-mapping.tpl,284,Volver
-views/templates/admin/source-mapping.tpl,292,Guardar mapping
+﻿Dominio,Texto original (en),Traduccion (es)
+Modules.Cpbsync.Admin,"-- Do not map --","-- No mapear --"
+Modules.Cpbsync.Admin,"-- None --","-- Ninguna --"
+Modules.Cpbsync.Admin,"A category cannot be created without a name.","No se puede crear una categoría sin nombre."
+Modules.Cpbsync.Admin,"A manufacturer cannot be created without a name.","No se puede crear un fabricante sin nombre."
+Modules.Cpbsync.Admin,"A product cannot be created without a name.","No se puede crear un producto sin name."
+Modules.Cpbsync.Admin,"A product cannot be created without a reference.","No se puede crear un producto sin reference."
+Modules.Cpbsync.Admin,"Active","Activa"
+Modules.Cpbsync.Admin,"Active source","Fuente activa"
+Modules.Cpbsync.Admin,"Add source","Agregar fuente"
+Modules.Cpbsync.Admin,"An error occurred while uploading the file.","Ocurrió un error al subir el archivo."
+Modules.Cpbsync.Admin,"An image cannot be applied to a product without an ID.","No se puede aplicar una imagen a un producto sin ID."
+Modules.Cpbsync.Admin,"Are you sure you want to delete this source?","¿Estás seguro de eliminar esta fuente?"
+Modules.Cpbsync.Admin,"Assign each source field to the matching PrestaShop field.","Asigna cada campo de la fuente al campo correspondiente de PrestaShop."
+Modules.Cpbsync.Admin,"Back","Volver"
+Modules.Cpbsync.Admin,"Back to history","Volver al historial"
+Modules.Cpbsync.Admin,"Back to mapping","Volver al mapping"
+Modules.Cpbsync.Admin,"Back to sources","Volver a fuentes"
+Modules.Cpbsync.Admin,"CPB Sync","CPB Sync"
+Modules.Cpbsync.Admin,"CPB Sync is not installed.","CPB Sync no está instalado."
+Modules.Cpbsync.Admin,"CSV file","Archivo CSV"
+Modules.Cpbsync.Admin,"Cancel","Cancelar"
+Modules.Cpbsync.Admin,"Changed","Cambiado"
+Modules.Cpbsync.Admin,"Connect suppliers, ERP systems and other product sources with PrestaShop.","Conecta proveedores, ERP y otras fuentes de productos con PrestaShop."
+Modules.Cpbsync.Admin,"Connection successful.","Conexión exitosa."
+Modules.Cpbsync.Admin,"Could not connect to the source: %error%","No fue posible conectar con la fuente: %error%"
+Modules.Cpbsync.Admin,"Created","Creados"
+Modules.Cpbsync.Admin,"Daily","Diariamente"
+Modules.Cpbsync.Admin,"Data sources","Fuentes de datos"
+Modules.Cpbsync.Admin,"Date","Fecha"
+Modules.Cpbsync.Admin,"Date:","Fecha:"
+Modules.Cpbsync.Admin,"Delete","Eliminar"
+Modules.Cpbsync.Admin,"Deleted source","Fuente eliminada"
+Modules.Cpbsync.Admin,"Detail","Detalle"
+Modules.Cpbsync.Admin,"Detected columns","Columnas detectadas"
+Modules.Cpbsync.Admin,"E.g. Supplier ABC","Ej. Proveedor ABC"
+Modules.Cpbsync.Admin,"Edit","Editar"
+Modules.Cpbsync.Admin,"Error","Error"
+Modules.Cpbsync.Admin,"Errors","Errores"
+Modules.Cpbsync.Admin,"Errors:","Errores:"
+Modules.Cpbsync.Admin,"Every 6 hours","Cada 6 horas"
+Modules.Cpbsync.Admin,"File uploaded. Starting import...","Archivo cargado. Iniciando importación..."
+Modules.Cpbsync.Admin,"First records","Primeros registros"
+Modules.Cpbsync.Admin,"Frequency","Frecuencia"
+Modules.Cpbsync.Admin,"Frequency:","Frecuencia:"
+Modules.Cpbsync.Admin,"History","Historial"
+Modules.Cpbsync.Admin,"Hourly","Cada hora"
+Modules.Cpbsync.Admin,"Import CSV","Importar CSV"
+Modules.Cpbsync.Admin,"Import completed successfully.","Importación completada correctamente."
+Modules.Cpbsync.Admin,"Import error:","Error en la importación:"
+Modules.Cpbsync.Admin,"Import products","Importar productos"
+Modules.Cpbsync.Admin,"Inactive","Inactiva"
+Modules.Cpbsync.Admin,"Manual","Manual"
+Modules.Cpbsync.Admin,"Map fields","Mapear campos"
+Modules.Cpbsync.Admin,"Name","Nombre"
+Modules.Cpbsync.Admin,"New source","Nueva fuente"
+Modules.Cpbsync.Admin,"No details available.","No hay detalles disponibles."
+Modules.Cpbsync.Admin,"No product was modified in PrestaShop.","No se modificó ningún producto en PrestaShop."
+Modules.Cpbsync.Admin,"Normalize price","Normalizar precio"
+Modules.Cpbsync.Admin,"Normalize stock","Normalizar stock"
+Modules.Cpbsync.Admin,"Normalize text","Normalizar texto"
+Modules.Cpbsync.Admin,"Not available","No disponible"
+Modules.Cpbsync.Admin,"One of the mappings could not be saved.","No fue posible guardar uno de los mappings."
+Modules.Cpbsync.Admin,"Only CSV files are allowed.","Solo se permiten archivos CSV."
+Modules.Cpbsync.Admin,"Only CSV sources are supported in this version.","En esta versión solo se admiten fuentes CSV."
+Modules.Cpbsync.Admin,"Only CSV sources can be run for now.","Por ahora solo se pueden ejecutar fuentes CSV."
+Modules.Cpbsync.Admin,"Only CSV sources can be used for now.","Por ahora solo se pueden utilizar fuentes CSV."
+Modules.Cpbsync.Admin,"Original","Original"
+Modules.Cpbsync.Admin,"PrestaShop ID","ID PrestaShop"
+Modules.Cpbsync.Admin,"PrestaShop field","Campo PrestaShop"
+Modules.Cpbsync.Admin,"Preview","Vista previa"
+Modules.Cpbsync.Admin,"Processed products","Productos procesados"
+Modules.Cpbsync.Admin,"Processing import","Procesando importación"
+Modules.Cpbsync.Admin,"Product","Producto"
+Modules.Cpbsync.Admin,"Product ID","ID producto"
+Modules.Cpbsync.Admin,"Reference","Referencia"
+Modules.Cpbsync.Admin,"Replace text","Reemplazar texto"
+Modules.Cpbsync.Admin,"Replace with","Reemplazar por"
+Modules.Cpbsync.Admin,"Result","Resultado"
+Modules.Cpbsync.Admin,"Run","Ejecución"
+Modules.Cpbsync.Admin,"Run Dry Run","Ejecutar Dry Run"
+Modules.Cpbsync.Admin,"Run Sync","Ejecutar Sync"
+Modules.Cpbsync.Admin,"Save","Guardar"
+Modules.Cpbsync.Admin,"Save mapping","Guardar mapping"
+Modules.Cpbsync.Admin,"Search","Buscar"
+Modules.Cpbsync.Admin,"Select a source","Selecciona una fuente"
+Modules.Cpbsync.Admin,"Skipped","Omitido"
+Modules.Cpbsync.Admin,"Source","Fuente"
+Modules.Cpbsync.Admin,"Source URL","URL de la fuente"
+Modules.Cpbsync.Admin,"Source preview","Vista previa de la fuente"
+Modules.Cpbsync.Admin,"Source type","Tipo de fuente"
+Modules.Cpbsync.Admin,"Source:","Fuente:"
+Modules.Cpbsync.Admin,"Status","Estado"
+Modules.Cpbsync.Admin,"Status:","Estado:"
+Modules.Cpbsync.Admin,"Success","Éxito"
+Modules.Cpbsync.Admin,"Successful:","Exitosos:"
+Modules.Cpbsync.Admin,"Supplier field","Campo proveedor"
+Modules.Cpbsync.Admin,"Synchronization completed","Sincronización completada"
+Modules.Cpbsync.Admin,"Synchronization detail","Detalle de sincronización"
+Modules.Cpbsync.Admin,"Synchronization history","Historial de sincronizaciones"
+Modules.Cpbsync.Admin,"Synchronization result","Resultado de sincronización"
+Modules.Cpbsync.Admin,"Synchronize external product catalogs with PrestaShop using configurable mappings and data transformations.","Sincroniza catálogos de productos externos con PrestaShop usando mappings y transformaciones de datos configurables."
+Modules.Cpbsync.Admin,"Test connection","Probar conexión"
+Modules.Cpbsync.Admin,"The CSV file contains an empty header.","El archivo CSV contiene un encabezado vacío."
+Modules.Cpbsync.Admin,"The CSV file contains duplicated headers.","El archivo CSV contiene encabezados duplicados."
+Modules.Cpbsync.Admin,"The CSV file contains no products.","El archivo CSV no contiene productos."
+Modules.Cpbsync.Admin,"The CSV file could not be opened.","No se pudo abrir el archivo CSV."
+Modules.Cpbsync.Admin,"The CSV file could not be read.","No se pudo leer el archivo CSV."
+Modules.Cpbsync.Admin,"The CSV file could not be saved.","No se pudo guardar el archivo CSV."
+Modules.Cpbsync.Admin,"The CSV file has no headers.","El archivo CSV no contiene encabezados."
+Modules.Cpbsync.Admin,"The CSV file is empty.","El archivo CSV está vacío."
+Modules.Cpbsync.Admin,"The CSV source contains no records.","La fuente CSV no contiene registros."
+Modules.Cpbsync.Admin,"The CSV source could not be opened.","No se pudo abrir la fuente CSV."
+Modules.Cpbsync.Admin,"The Dry Run could not be executed: %error%","No fue posible ejecutar el Dry Run: %error%"
+Modules.Cpbsync.Admin,"The PrestaShop field ""%field%"" is assigned more than once.","El campo de PrestaShop ""%field%"" está asignado más de una vez."
+Modules.Cpbsync.Admin,"The PrestaShop field ""%field%"" is not valid.","El campo de PrestaShop ""%field%"" no es válido."
+Modules.Cpbsync.Admin,"The category could not be created in PrestaShop.","No fue posible crear la categoría en PrestaShop."
+Modules.Cpbsync.Admin,"The detail could not be loaded: %error%","No fue posible cargar el detalle: %error%"
+Modules.Cpbsync.Admin,"The downloaded content is not a valid image.","El contenido descargado no es una imagen válida."
+Modules.Cpbsync.Admin,"The existing product could not be loaded.","No fue posible cargar el producto existente."
+Modules.Cpbsync.Admin,"The first 5 products from the source are shown.","Se muestran los primeros 5 productos de la fuente."
+Modules.Cpbsync.Admin,"The history could not be loaded: %error%","No fue posible cargar el historial: %error%"
+Modules.Cpbsync.Admin,"The image URL does not contain a valid host.","La URL de la imagen no contiene un host válido."
+Modules.Cpbsync.Admin,"The image URL is not valid.","La URL de la imagen no es válida."
+Modules.Cpbsync.Admin,"The image URL points to a disallowed address.","La URL de la imagen apunta a una dirección no permitida."
+Modules.Cpbsync.Admin,"The image could not be downloaded.","No fue posible descargar la imagen."
+Modules.Cpbsync.Admin,"The image exceeds the maximum allowed size of 5 MB.","La imagen supera el tamaño máximo permitido de 5 MB."
+Modules.Cpbsync.Admin,"The image file does not exist.","El archivo de imagen no existe."
+Modules.Cpbsync.Admin,"The image format is not allowed.","El formato de imagen no está permitido."
+Modules.Cpbsync.Admin,"The image host could not be resolved.","No fue posible resolver el host de la imagen."
+Modules.Cpbsync.Admin,"The image must use HTTP or HTTPS.","La imagen debe utilizar HTTP o HTTPS."
+Modules.Cpbsync.Admin,"The import could not be created.","No fue posible crear la importación."
+Modules.Cpbsync.Admin,"The import could not be retrieved.","No fue posible obtener la importación."
+Modules.Cpbsync.Admin,"The import does not exist.","La importación no existe."
+Modules.Cpbsync.Admin,"The import finished with errors.","La importación terminó con errores."
+Modules.Cpbsync.Admin,"The import is not valid.","La importación no es válida."
+Modules.Cpbsync.Admin,"The imports directory could not be created.","No se pudo crear el directorio de importaciones."
+Modules.Cpbsync.Admin,"The manufacturer could not be created in PrestaShop.","No fue posible crear el fabricante en PrestaShop."
+Modules.Cpbsync.Admin,"The mapping could not be saved: %error%","No fue posible guardar el mapping: %error%"
+Modules.Cpbsync.Admin,"The mapping was saved successfully.","El mapping se guardó correctamente."
+Modules.Cpbsync.Admin,"The previous mapping could not be deleted.","No fue posible eliminar el mapping anterior."
+Modules.Cpbsync.Admin,"The price cannot be empty.","El precio no puede estar vacío."
+Modules.Cpbsync.Admin,"The price format is not valid.","El precio no tiene un formato válido."
+Modules.Cpbsync.Admin,"The product ID is not valid.","El ID del producto no es válido."
+Modules.Cpbsync.Admin,"The product could not be created in PrestaShop.","No fue posible crear el producto en PrestaShop."
+Modules.Cpbsync.Admin,"The product could not be updated.","No fue posible actualizar el producto."
+Modules.Cpbsync.Admin,"The product does not exist in PrestaShop.","El producto no existe en PrestaShop."
+Modules.Cpbsync.Admin,"The product image could not be created.","No fue posible crear la imagen del producto."
+Modules.Cpbsync.Admin,"The product image could not be saved.","No fue posible guardar la imagen del producto."
+Modules.Cpbsync.Admin,"The run does not exist.","La ejecución no existe."
+Modules.Cpbsync.Admin,"The selected source does not exist.","La fuente seleccionada no existe."
+Modules.Cpbsync.Admin,"The source ID is not valid.","El ID de la fuente no es válido."
+Modules.Cpbsync.Admin,"The source URL does not contain a valid host.","La URL de la fuente no contiene un host válido."
+Modules.Cpbsync.Admin,"The source URL is not valid.","La URL de la fuente no es válida."
+Modules.Cpbsync.Admin,"The source URL is required.","La URL de la fuente es obligatoria."
+Modules.Cpbsync.Admin,"The source URL points to a disallowed address.","La URL de la fuente apunta a una dirección no permitida."
+Modules.Cpbsync.Admin,"The source contains no records.","La fuente no contiene registros."
+Modules.Cpbsync.Admin,"The source content could not be retrieved.","No fue posible obtener el contenido de la fuente."
+Modules.Cpbsync.Admin,"The source could not be created.","No fue posible crear la fuente."
+Modules.Cpbsync.Admin,"The source could not be deleted.","No fue posible eliminar la fuente."
+Modules.Cpbsync.Admin,"The source could not be found.","No fue posible encontrar la fuente."
+Modules.Cpbsync.Admin,"The source could not be loaded: %error%","No fue posible cargar la fuente: %error%"
+Modules.Cpbsync.Admin,"The source does not exist.","La fuente no existe."
+Modules.Cpbsync.Admin,"The source has no mapping configured.","La fuente no tiene un mapping configurado."
+Modules.Cpbsync.Admin,"The source host could not be resolved.","No fue posible resolver el host de la fuente."
+Modules.Cpbsync.Admin,"The source is not valid.","La fuente no es válida."
+Modules.Cpbsync.Admin,"The source must use HTTP or HTTPS.","La fuente debe utilizar HTTP o HTTPS."
+Modules.Cpbsync.Admin,"The source name is required.","El nombre de la fuente es obligatorio."
+Modules.Cpbsync.Admin,"The source was created successfully.","La fuente se creó correctamente."
+Modules.Cpbsync.Admin,"The source was deleted successfully.","La fuente se eliminó correctamente."
+Modules.Cpbsync.Admin,"The source was updated successfully.","La fuente se actualizó correctamente."
+Modules.Cpbsync.Admin,"The stock cannot be empty.","El stock no puede estar vacío."
+Modules.Cpbsync.Admin,"The stock format is not valid.","El stock no tiene un formato válido."
+Modules.Cpbsync.Admin,"The submitted mapping is not valid.","El mapping recibido no es válido."
+Modules.Cpbsync.Admin,"The synchronization could not be executed: %error%","No fue posible ejecutar el Sync: %error%"
+Modules.Cpbsync.Admin,"The synchronization frequency is not valid.","La frecuencia de sincronización no es válida."
+Modules.Cpbsync.Admin,"The synchronization log could not be saved.","No fue posible guardar el log de sincronización."
+Modules.Cpbsync.Admin,"The temporary file could not be created.","No fue posible crear el archivo temporal."
+Modules.Cpbsync.Admin,"The temporary image could not be saved.","No fue posible guardar la imagen temporal."
+Modules.Cpbsync.Admin,"The thumbnail ""","No fue posible generar el thumbnail """
+Modules.Cpbsync.Admin,"The transformation ""%transform%"" is not valid.","La transformación ""%transform%"" no es válida."
+Modules.Cpbsync.Admin,"The transformation configuration could not be saved.","No fue posible guardar la configuración de la transformación."
+Modules.Cpbsync.Admin,"The uploaded file is not valid.","El archivo subido no es válido."
+Modules.Cpbsync.Admin,"There are no mappings for the source.","No existen mappings para la fuente."
+Modules.Cpbsync.Admin,"There are no synchronizations recorded yet.","No hay sincronizaciones registradas todavía."
+Modules.Cpbsync.Admin,"This synchronization was recorded in the history.","Esta sincronización quedó registrada en el historial."
+Modules.Cpbsync.Admin,"Total","Total"
+Modules.Cpbsync.Admin,"Transformation","Transformación"
+Modules.Cpbsync.Admin,"Type:","Tipo:"
+Modules.Cpbsync.Admin,"URL:","URL:"
+Modules.Cpbsync.Admin,"Unable to create CPB Sync mapping.","Unable to create CPB Sync mapping."
+Modules.Cpbsync.Admin,"Unable to create CPB Sync source.","Unable to create CPB Sync source."
+Modules.Cpbsync.Admin,"Unchanged","Sin cambios"
+Modules.Cpbsync.Admin,"Updated","Actualizados"
+Modules.Cpbsync.Admin,"Upload and start import","Subir e iniciar importación"
+Modules.Cpbsync.Admin,"Uploading file...","Subiendo archivo..."
+Modules.Cpbsync.Admin,"Valid","Válido"
+Modules.Cpbsync.Admin,"View detail","Ver detalle"
+Modules.Cpbsync.Admin,"Warning","Advertencia"
+Modules.Cpbsync.Admin,"With errors","Con errores"
+Modules.Cpbsync.Admin,"You have no sources configured yet.","Aún no tienes fuentes configuradas."
+Modules.Cpbsync.Admin,"You must map a supplier field to reference.","Debes asignar un campo del proveedor a reference."
+Modules.Cpbsync.Admin,"You must provide the text to replace for the ""%field%"" field.","Debes indicar el texto que deseas reemplazar para el campo ""%field%""."
+Modules.Cpbsync.Admin,"You must select a CSV file.","Debes seleccionar un archivo CSV."
+Modules.Cpbsync.Admin,"You must select a source.","Debes seleccionar una fuente."
+Modules.Cpbsync.Admin,"records found.","registros encontrados."

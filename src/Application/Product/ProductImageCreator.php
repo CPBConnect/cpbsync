@@ -13,13 +13,13 @@ class ProductImageCreator
 
         if (!\Validate::isLoadedObject($product)) {
             throw new \RuntimeException(
-                'El producto no existe en PrestaShop.'
+                'The product does not exist in PrestaShop.'
             );
         }
 
         if (!is_file($tmpFile)) {
             throw new \RuntimeException(
-                'El archivo de imagen no existe.'
+                'The image file does not exist.'
             );
         }
 
@@ -33,7 +33,7 @@ class ProductImageCreator
 
         if (!$image->add()) {
             throw new \RuntimeException(
-                'No fue posible crear la imagen del producto.'
+                'The product image could not be created.'
             );
         }
 
@@ -57,7 +57,7 @@ class ProductImageCreator
             $image->delete();
 
             throw new \RuntimeException(
-                'No fue posible guardar la imagen del producto.'
+                'The product image could not be saved.'
             );
         }
 
@@ -92,7 +92,7 @@ class ProductImageCreator
                 $image->delete();
 
                 throw new \RuntimeException(
-                    'No fue posible generar el thumbnail "' .
+                    'The thumbnail "' .
                     $imageType['name'] .
                     '".'
                 );

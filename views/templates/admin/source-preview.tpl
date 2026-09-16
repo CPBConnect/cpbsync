@@ -2,7 +2,7 @@
 
     <div class="panel-heading">
         <i class="icon-eye"></i>
-        {l s='Vista previa de la fuente' mod='cpbsync'}
+        {l s='Source preview' d='Modules.Cpbsync.Admin'}
     </div>
 
     <div class="panel-body">
@@ -10,17 +10,17 @@
         <div class="alert alert-success">
             <i class="icon-check"></i>
 
-            {l s='Conexión exitosa.' mod='cpbsync'}
+            {l s='Connection successful.' d='Modules.Cpbsync.Admin'}
 
             <strong>
                 {$total}
             </strong>
 
-            {l s='registros encontrados.' mod='cpbsync'}
+            {l s='records found.' d='Modules.Cpbsync.Admin'}
         </div>
 
         <h4>
-            {l s='Columnas detectadas' mod='cpbsync'}
+            {l s='Detected columns' d='Modules.Cpbsync.Admin'}
         </h4>
 
         <div class="form-group">
@@ -38,7 +38,7 @@
         <hr>
 
         <h4>
-            {l s='Primeros registros' mod='cpbsync'}
+            {l s='First records' d='Modules.Cpbsync.Admin'}
         </h4>
 
         <div class="table-responsive">
@@ -90,7 +90,7 @@
                 class="btn btn-default"
         >
             <i class="icon-arrow-left"></i>
-            {l s='Volver a fuentes' mod='cpbsync'}
+            {l s='Back to sources' d='Modules.Cpbsync.Admin'}
         </a>
 
     </div>

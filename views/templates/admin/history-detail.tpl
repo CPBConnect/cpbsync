@@ -2,27 +2,27 @@
 
     <div class="panel-heading">
         <i class="icon-search"></i>
-        Detalle de sincronización
+        {l s='Synchronization detail' d='Modules.Cpbsync.Admin'}
     </div>
 
     <div class="alert alert-info">
 
         <strong>
-            Ejecución #{$log.id_log}
+            {l s='Run' d='Modules.Cpbsync.Admin'} #{$log.id_log}
         </strong>
 
         <p>
-            Fecha:
+            {l s='Date:' d='Modules.Cpbsync.Admin'}
             {$log.date_add|escape:'htmlall':'UTF-8'}
         </p>
 
         <p>
-            Fuente:
+            {l s='Source:' d='Modules.Cpbsync.Admin'}
 
             {if $source}
                 {$source.name|escape:'htmlall':'UTF-8'}
             {else}
-                Fuente eliminada
+                {l s='Deleted source' d='Modules.Cpbsync.Admin'}
             {/if}
         </p>
 
@@ -32,7 +32,7 @@
 
         <div class="col-md-2">
             <div class="well text-center">
-                <strong>Total</strong>
+                <strong>{l s='Total' d='Modules.Cpbsync.Admin'}</strong>
                 <br>
                 {$log.total}
             </div>
@@ -40,7 +40,7 @@
 
         <div class="col-md-2">
             <div class="well text-center">
-                <strong>Creados</strong>
+                <strong>{l s='Created' d='Modules.Cpbsync.Admin'}</strong>
                 <br>
                 {$log.created}
             </div>
@@ -48,7 +48,7 @@
 
         <div class="col-md-2">
             <div class="well text-center">
-                <strong>Actualizados</strong>
+                <strong>{l s='Updated' d='Modules.Cpbsync.Admin'}</strong>
                 <br>
                 {$log.updated}
             </div>
@@ -56,7 +56,7 @@
 
         <div class="col-md-2">
             <div class="well text-center">
-                <strong>Sin cambios</strong>
+                <strong>{l s='Unchanged' d='Modules.Cpbsync.Admin'}</strong>
                 <br>
                 {$log.skipped}
             </div>
@@ -64,7 +64,7 @@
 
         <div class="col-md-2">
             <div class="well text-center">
-                <strong>Errores</strong>
+                <strong>{l s='Errors' d='Modules.Cpbsync.Admin'}</strong>
                 <br>
                 {$log.errors}
             </div>
@@ -78,13 +78,13 @@
 <div class="panel">
 
     <div class="panel-heading">
-        Productos procesados
+        {l s='Processed products' d='Modules.Cpbsync.Admin'}
     </div>
 
     {if empty($details)}
 
         <div class="alert alert-info">
-            No hay detalles disponibles.
+            {l s='No details available.' d='Modules.Cpbsync.Admin'}
         </div>
 
     {else}
@@ -93,10 +93,10 @@
 
             <thead>
             <tr>
-                <th>Referencia</th>
-                <th>Estado</th>
-                <th>ID producto</th>
-                <th>Errores</th>
+                <th>{l s='Reference' d='Modules.Cpbsync.Admin'}</th>
+                <th>{l s='Status' d='Modules.Cpbsync.Admin'}</th>
+                <th>{l s='Product ID' d='Modules.Cpbsync.Admin'}</th>
+                <th>{l s='Errors' d='Modules.Cpbsync.Admin'}</th>
             </tr>
             </thead>
 
@@ -115,25 +115,25 @@
                         {if $item.status == 'created'}
 
                             <span class="label label-success">
-                                Creado
+                                {l s='Created' d='Modules.Cpbsync.Admin'}
                             </span>
 
                         {elseif $item.status == 'updated'}
 
                             <span class="label label-info">
-                                Actualizado
+                                {l s='Updated' d='Modules.Cpbsync.Admin'}
                             </span>
 
                         {elseif $item.status == 'skipped'}
 
                             <span class="label label-default">
-                                Sin cambios
+                                {l s='Unchanged' d='Modules.Cpbsync.Admin'}
                             </span>
 
                         {else}
 
                             <span class="label label-danger">
-                                Error
+                                {l s='Error' d='Modules.Cpbsync.Admin'}
                             </span>
 
                         {/if}
@@ -181,7 +181,7 @@
                 class="btn btn-default"
         >
             <i class="icon-arrow-left"></i>
-            Volver al historial
+            {l s='Back to history' d='Modules.Cpbsync.Admin'}
         </a>
 
     </div>

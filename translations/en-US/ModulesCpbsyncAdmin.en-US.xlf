@@ -1,0 +1,827 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="ModulesCpbsyncAdmin" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="9a38d27598" resname="-- Do not map --">
+        <source>-- Do not map --</source>
+        <target>-- Do not map --</target>
+      </trans-unit>
+      <trans-unit id="a00d3c1998" resname="-- None --">
+        <source>-- None --</source>
+        <target>-- None --</target>
+      </trans-unit>
+      <trans-unit id="cf49ca6638" resname="A category cannot be created without a name.">
+        <source>A category cannot be created without a name.</source>
+        <target>A category cannot be created without a name.</target>
+      </trans-unit>
+      <trans-unit id="211ff038fd" resname="A manufacturer cannot be created without a name.">
+        <source>A manufacturer cannot be created without a name.</source>
+        <target>A manufacturer cannot be created without a name.</target>
+      </trans-unit>
+      <trans-unit id="646453bdeb" resname="A product cannot be created without a name.">
+        <source>A product cannot be created without a name.</source>
+        <target>A product cannot be created without a name.</target>
+      </trans-unit>
+      <trans-unit id="986134313d" resname="A product cannot be created without a reference.">
+        <source>A product cannot be created without a reference.</source>
+        <target>A product cannot be created without a reference.</target>
+      </trans-unit>
+      <trans-unit id="5de22071c1" resname="Active">
+        <source>Active</source>
+        <target>Active</target>
+      </trans-unit>
+      <trans-unit id="4c635c5b90" resname="Active source">
+        <source>Active source</source>
+        <target>Active source</target>
+      </trans-unit>
+      <trans-unit id="a73d159d9f" resname="Add source">
+        <source>Add source</source>
+        <target>Add source</target>
+      </trans-unit>
+      <trans-unit id="c5c374fffd" resname="An error occurred while uploading the file.">
+        <source>An error occurred while uploading the file.</source>
+        <target>An error occurred while uploading the file.</target>
+      </trans-unit>
+      <trans-unit id="1c4cd3141d" resname="An image cannot be applied to a product without an ID.">
+        <source>An image cannot be applied to a product without an ID.</source>
+        <target>An image cannot be applied to a product without an ID.</target>
+      </trans-unit>
+      <trans-unit id="c5db1fa156" resname="Are you sure you want to delete this source?">
+        <source>Are you sure you want to delete this source?</source>
+        <target>Are you sure you want to delete this source?</target>
+      </trans-unit>
+      <trans-unit id="a77d89ba5d" resname="Assign each source field to the matching PrestaShop field.">
+        <source>Assign each source field to the matching PrestaShop field.</source>
+        <target>Assign each source field to the matching PrestaShop field.</target>
+      </trans-unit>
+      <trans-unit id="fbd25a66a8" resname="Back">
+        <source>Back</source>
+        <target>Back</target>
+      </trans-unit>
+      <trans-unit id="5ec0ad3476" resname="Back to history">
+        <source>Back to history</source>
+        <target>Back to history</target>
+      </trans-unit>
+      <trans-unit id="d7dd9b5457" resname="Back to mapping">
+        <source>Back to mapping</source>
+        <target>Back to mapping</target>
+      </trans-unit>
+      <trans-unit id="7f83c6d799" resname="Back to sources">
+        <source>Back to sources</source>
+        <target>Back to sources</target>
+      </trans-unit>
+      <trans-unit id="95e297e0cc" resname="CPB Sync">
+        <source>CPB Sync</source>
+        <target>CPB Sync</target>
+      </trans-unit>
+      <trans-unit id="a4ebe65a9f" resname="CPB Sync is not installed.">
+        <source>CPB Sync is not installed.</source>
+        <target>CPB Sync is not installed.</target>
+      </trans-unit>
+      <trans-unit id="a21fa64cc7" resname="CSV file">
+        <source>CSV file</source>
+        <target>CSV file</target>
+      </trans-unit>
+      <trans-unit id="0612dbf8d6" resname="Cancel">
+        <source>Cancel</source>
+        <target>Cancel</target>
+      </trans-unit>
+      <trans-unit id="8527ed8305" resname="Changed">
+        <source>Changed</source>
+        <target>Changed</target>
+      </trans-unit>
+      <trans-unit id="f9a2f3abfe" resname="Connect suppliers, ERP systems and other product sources with PrestaShop.">
+        <source>Connect suppliers, ERP systems and other product sources with PrestaShop.</source>
+        <target>Connect suppliers, ERP systems and other product sources with PrestaShop.</target>
+      </trans-unit>
+      <trans-unit id="5e5f2c5ecc" resname="Connection successful.">
+        <source>Connection successful.</source>
+        <target>Connection successful.</target>
+      </trans-unit>
+      <trans-unit id="7171ab8c4f" resname="Could not connect to the source: %error%">
+        <source>Could not connect to the source: %error%</source>
+        <target>Could not connect to the source: %error%</target>
+      </trans-unit>
+      <trans-unit id="5c5f014749" resname="Created">
+        <source>Created</source>
+        <target>Created</target>
+      </trans-unit>
+      <trans-unit id="3b95565f30" resname="Daily">
+        <source>Daily</source>
+        <target>Daily</target>
+      </trans-unit>
+      <trans-unit id="ad98013c94" resname="Data sources">
+        <source>Data sources</source>
+        <target>Data sources</target>
+      </trans-unit>
+      <trans-unit id="22eb464408" resname="Date">
+        <source>Date</source>
+        <target>Date</target>
+      </trans-unit>
+      <trans-unit id="9d8c37ceb0" resname="Date:">
+        <source>Date:</source>
+        <target>Date:</target>
+      </trans-unit>
+      <trans-unit id="82cce92e81" resname="Delete">
+        <source>Delete</source>
+        <target>Delete</target>
+      </trans-unit>
+      <trans-unit id="e604c5443b" resname="Deleted source">
+        <source>Deleted source</source>
+        <target>Deleted source</target>
+      </trans-unit>
+      <trans-unit id="490f16df52" resname="Detail">
+        <source>Detail</source>
+        <target>Detail</target>
+      </trans-unit>
+      <trans-unit id="4027c8b120" resname="Detected columns">
+        <source>Detected columns</source>
+        <target>Detected columns</target>
+      </trans-unit>
+      <trans-unit id="918942ccd9" resname="E.g. Supplier ABC">
+        <source>E.g. Supplier ABC</source>
+        <target>E.g. Supplier ABC</target>
+      </trans-unit>
+      <trans-unit id="b5d635e5f8" resname="Edit">
+        <source>Edit</source>
+        <target>Edit</target>
+      </trans-unit>
+      <trans-unit id="e1d2543da9" resname="Error">
+        <source>Error</source>
+        <target>Error</target>
+      </trans-unit>
+      <trans-unit id="afe08a6957" resname="Errors">
+        <source>Errors</source>
+        <target>Errors</target>
+      </trans-unit>
+      <trans-unit id="7feac4178d" resname="Errors:">
+        <source>Errors:</source>
+        <target>Errors:</target>
+      </trans-unit>
+      <trans-unit id="3c4f9ffb32" resname="Every 6 hours">
+        <source>Every 6 hours</source>
+        <target>Every 6 hours</target>
+      </trans-unit>
+      <trans-unit id="b286918ab1" resname="File uploaded. Starting import...">
+        <source>File uploaded. Starting import...</source>
+        <target>File uploaded. Starting import...</target>
+      </trans-unit>
+      <trans-unit id="0de74fa5ff" resname="First records">
+        <source>First records</source>
+        <target>First records</target>
+      </trans-unit>
+      <trans-unit id="26cbe6c99d" resname="Frequency">
+        <source>Frequency</source>
+        <target>Frequency</target>
+      </trans-unit>
+      <trans-unit id="01c0885dcb" resname="Frequency:">
+        <source>Frequency:</source>
+        <target>Frequency:</target>
+      </trans-unit>
+      <trans-unit id="113491cfae" resname="History">
+        <source>History</source>
+        <target>History</target>
+      </trans-unit>
+      <trans-unit id="dc02ff5929" resname="Hourly">
+        <source>Hourly</source>
+        <target>Hourly</target>
+      </trans-unit>
+      <trans-unit id="e2e7107020" resname="Import CSV">
+        <source>Import CSV</source>
+        <target>Import CSV</target>
+      </trans-unit>
+      <trans-unit id="c24ce39ec5" resname="Import completed successfully.">
+        <source>Import completed successfully.</source>
+        <target>Import completed successfully.</target>
+      </trans-unit>
+      <trans-unit id="0df4677064" resname="Import error:">
+        <source>Import error:</source>
+        <target>Import error:</target>
+      </trans-unit>
+      <trans-unit id="649f3438de" resname="Import products">
+        <source>Import products</source>
+        <target>Import products</target>
+      </trans-unit>
+      <trans-unit id="cede41d397" resname="Inactive">
+        <source>Inactive</source>
+        <target>Inactive</target>
+      </trans-unit>
+      <trans-unit id="d10de3da94" resname="Manual">
+        <source>Manual</source>
+        <target>Manual</target>
+      </trans-unit>
+      <trans-unit id="490ee549a5" resname="Map fields">
+        <source>Map fields</source>
+        <target>Map fields</target>
+      </trans-unit>
+      <trans-unit id="9b5dc4e594" resname="Name">
+        <source>Name</source>
+        <target>Name</target>
+      </trans-unit>
+      <trans-unit id="f98d1e768f" resname="New source">
+        <source>New source</source>
+        <target>New source</target>
+      </trans-unit>
+      <trans-unit id="f82b7cddfb" resname="No details available.">
+        <source>No details available.</source>
+        <target>No details available.</target>
+      </trans-unit>
+      <trans-unit id="ffc330a19a" resname="No product was modified in PrestaShop.">
+        <source>No product was modified in PrestaShop.</source>
+        <target>No product was modified in PrestaShop.</target>
+      </trans-unit>
+      <trans-unit id="d725edc028" resname="Normalize price">
+        <source>Normalize price</source>
+        <target>Normalize price</target>
+      </trans-unit>
+      <trans-unit id="5d21fac73c" resname="Normalize stock">
+        <source>Normalize stock</source>
+        <target>Normalize stock</target>
+      </trans-unit>
+      <trans-unit id="ad171c91ed" resname="Normalize text">
+        <source>Normalize text</source>
+        <target>Normalize text</target>
+      </trans-unit>
+      <trans-unit id="4729380e58" resname="Not available">
+        <source>Not available</source>
+        <target>Not available</target>
+      </trans-unit>
+      <trans-unit id="6f1b6b9b1d" resname="One of the mappings could not be saved.">
+        <source>One of the mappings could not be saved.</source>
+        <target>One of the mappings could not be saved.</target>
+      </trans-unit>
+      <trans-unit id="5b68e1e8a7" resname="Only CSV files are allowed.">
+        <source>Only CSV files are allowed.</source>
+        <target>Only CSV files are allowed.</target>
+      </trans-unit>
+      <trans-unit id="078709196f" resname="Only CSV sources are supported in this version.">
+        <source>Only CSV sources are supported in this version.</source>
+        <target>Only CSV sources are supported in this version.</target>
+      </trans-unit>
+      <trans-unit id="55f58cda25" resname="Only CSV sources can be run for now.">
+        <source>Only CSV sources can be run for now.</source>
+        <target>Only CSV sources can be run for now.</target>
+      </trans-unit>
+      <trans-unit id="e317175b66" resname="Only CSV sources can be used for now.">
+        <source>Only CSV sources can be used for now.</source>
+        <target>Only CSV sources can be used for now.</target>
+      </trans-unit>
+      <trans-unit id="f3c92c209d" resname="Original">
+        <source>Original</source>
+        <target>Original</target>
+      </trans-unit>
+      <trans-unit id="c908dc8b8d" resname="PrestaShop ID">
+        <source>PrestaShop ID</source>
+        <target>PrestaShop ID</target>
+      </trans-unit>
+      <trans-unit id="e7d13520e0" resname="PrestaShop field">
+        <source>PrestaShop field</source>
+        <target>PrestaShop field</target>
+      </trans-unit>
+      <trans-unit id="7b443c8085" resname="Preview">
+        <source>Preview</source>
+        <target>Preview</target>
+      </trans-unit>
+      <trans-unit id="c84ab22d79" resname="Processed products">
+        <source>Processed products</source>
+        <target>Processed products</target>
+      </trans-unit>
+      <trans-unit id="bd28ebf4ee" resname="Processing import">
+        <source>Processing import</source>
+        <target>Processing import</target>
+      </trans-unit>
+      <trans-unit id="8d2027bc4b" resname="Product">
+        <source>Product</source>
+        <target>Product</target>
+      </trans-unit>
+      <trans-unit id="a98b287358" resname="Product ID">
+        <source>Product ID</source>
+        <target>Product ID</target>
+      </trans-unit>
+      <trans-unit id="a41765ee7b" resname="Reference">
+        <source>Reference</source>
+        <target>Reference</target>
+      </trans-unit>
+      <trans-unit id="ad59bf9880" resname="Replace text">
+        <source>Replace text</source>
+        <target>Replace text</target>
+      </trans-unit>
+      <trans-unit id="6ecf4f9338" resname="Replace with">
+        <source>Replace with</source>
+        <target>Replace with</target>
+      </trans-unit>
+      <trans-unit id="6dbafc5455" resname="Result">
+        <source>Result</source>
+        <target>Result</target>
+      </trans-unit>
+      <trans-unit id="16dc0dc2da" resname="Run">
+        <source>Run</source>
+        <target>Run</target>
+      </trans-unit>
+      <trans-unit id="f29b09814b" resname="Run Dry Run">
+        <source>Run Dry Run</source>
+        <target>Run Dry Run</target>
+      </trans-unit>
+      <trans-unit id="9d23ca7e6a" resname="Run Sync">
+        <source>Run Sync</source>
+        <target>Run Sync</target>
+      </trans-unit>
+      <trans-unit id="bc7dab17a0" resname="Save">
+        <source>Save</source>
+        <target>Save</target>
+      </trans-unit>
+      <trans-unit id="2c9596e34b" resname="Save mapping">
+        <source>Save mapping</source>
+        <target>Save mapping</target>
+      </trans-unit>
+      <trans-unit id="aa90363e69" resname="Search">
+        <source>Search</source>
+        <target>Search</target>
+      </trans-unit>
+      <trans-unit id="8869333a86" resname="Select a source">
+        <source>Select a source</source>
+        <target>Select a source</target>
+      </trans-unit>
+      <trans-unit id="2d4495e58c" resname="Skipped">
+        <source>Skipped</source>
+        <target>Skipped</target>
+      </trans-unit>
+      <trans-unit id="650f12ba57" resname="Source">
+        <source>Source</source>
+        <target>Source</target>
+      </trans-unit>
+      <trans-unit id="841a1bf747" resname="Source URL">
+        <source>Source URL</source>
+        <target>Source URL</target>
+      </trans-unit>
+      <trans-unit id="cea5ef4ae7" resname="Source preview">
+        <source>Source preview</source>
+        <target>Source preview</target>
+      </trans-unit>
+      <trans-unit id="5e1f58745d" resname="Source type">
+        <source>Source type</source>
+        <target>Source type</target>
+      </trans-unit>
+      <trans-unit id="c388df50d8" resname="Source:">
+        <source>Source:</source>
+        <target>Source:</target>
+      </trans-unit>
+      <trans-unit id="455f3da3d3" resname="Status">
+        <source>Status</source>
+        <target>Status</target>
+      </trans-unit>
+      <trans-unit id="ac74400cb3" resname="Status:">
+        <source>Status:</source>
+        <target>Status:</target>
+      </trans-unit>
+      <trans-unit id="9bb4e80465" resname="Success">
+        <source>Success</source>
+        <target>Success</target>
+      </trans-unit>
+      <trans-unit id="e345211681" resname="Successful:">
+        <source>Successful:</source>
+        <target>Successful:</target>
+      </trans-unit>
+      <trans-unit id="c8ae1a8f27" resname="Supplier field">
+        <source>Supplier field</source>
+        <target>Supplier field</target>
+      </trans-unit>
+      <trans-unit id="13d3a16886" resname="Synchronization completed">
+        <source>Synchronization completed</source>
+        <target>Synchronization completed</target>
+      </trans-unit>
+      <trans-unit id="7a97fbd527" resname="Synchronization detail">
+        <source>Synchronization detail</source>
+        <target>Synchronization detail</target>
+      </trans-unit>
+      <trans-unit id="d23e710e94" resname="Synchronization history">
+        <source>Synchronization history</source>
+        <target>Synchronization history</target>
+      </trans-unit>
+      <trans-unit id="3ee185d605" resname="Synchronization result">
+        <source>Synchronization result</source>
+        <target>Synchronization result</target>
+      </trans-unit>
+      <trans-unit id="e9bc828b09" resname="Synchronize external product catalogs with PrestaShop using configurable mappings and data transformations.">
+        <source>Synchronize external product catalogs with PrestaShop using configurable mappings and data transformations.</source>
+        <target>Synchronize external product catalogs with PrestaShop using configurable mappings and data transformations.</target>
+      </trans-unit>
+      <trans-unit id="0b94ff070b" resname="Test connection">
+        <source>Test connection</source>
+        <target>Test connection</target>
+      </trans-unit>
+      <trans-unit id="568bc9ce9c" resname="The CSV file contains an empty header.">
+        <source>The CSV file contains an empty header.</source>
+        <target>The CSV file contains an empty header.</target>
+      </trans-unit>
+      <trans-unit id="5bae2f1ca7" resname="The CSV file contains duplicated headers.">
+        <source>The CSV file contains duplicated headers.</source>
+        <target>The CSV file contains duplicated headers.</target>
+      </trans-unit>
+      <trans-unit id="ec105a776b" resname="The CSV file contains no products.">
+        <source>The CSV file contains no products.</source>
+        <target>The CSV file contains no products.</target>
+      </trans-unit>
+      <trans-unit id="54c2696ae5" resname="The CSV file could not be opened.">
+        <source>The CSV file could not be opened.</source>
+        <target>The CSV file could not be opened.</target>
+      </trans-unit>
+      <trans-unit id="61948eba8f" resname="The CSV file could not be read.">
+        <source>The CSV file could not be read.</source>
+        <target>The CSV file could not be read.</target>
+      </trans-unit>
+      <trans-unit id="54b1b2f0b7" resname="The CSV file could not be saved.">
+        <source>The CSV file could not be saved.</source>
+        <target>The CSV file could not be saved.</target>
+      </trans-unit>
+      <trans-unit id="50fcffb04c" resname="The CSV file has no headers.">
+        <source>The CSV file has no headers.</source>
+        <target>The CSV file has no headers.</target>
+      </trans-unit>
+      <trans-unit id="7d7417be43" resname="The CSV file is empty.">
+        <source>The CSV file is empty.</source>
+        <target>The CSV file is empty.</target>
+      </trans-unit>
+      <trans-unit id="d1199ba1d4" resname="The CSV source contains no records.">
+        <source>The CSV source contains no records.</source>
+        <target>The CSV source contains no records.</target>
+      </trans-unit>
+      <trans-unit id="27df0c3eb3" resname="The CSV source could not be opened.">
+        <source>The CSV source could not be opened.</source>
+        <target>The CSV source could not be opened.</target>
+      </trans-unit>
+      <trans-unit id="adf8a321c4" resname="The Dry Run could not be executed: %error%">
+        <source>The Dry Run could not be executed: %error%</source>
+        <target>The Dry Run could not be executed: %error%</target>
+      </trans-unit>
+      <trans-unit id="36633b3d0c" resname="The PrestaShop field &quot;%field%&quot; is assigned more than once.">
+        <source>The PrestaShop field "%field%" is assigned more than once.</source>
+        <target>The PrestaShop field "%field%" is assigned more than once.</target>
+      </trans-unit>
+      <trans-unit id="06110efe1b" resname="The PrestaShop field &quot;%field%&quot; is not valid.">
+        <source>The PrestaShop field "%field%" is not valid.</source>
+        <target>The PrestaShop field "%field%" is not valid.</target>
+      </trans-unit>
+      <trans-unit id="6ce345624f" resname="The category could not be created in PrestaShop.">
+        <source>The category could not be created in PrestaShop.</source>
+        <target>The category could not be created in PrestaShop.</target>
+      </trans-unit>
+      <trans-unit id="026e4d09c7" resname="The detail could not be loaded: %error%">
+        <source>The detail could not be loaded: %error%</source>
+        <target>The detail could not be loaded: %error%</target>
+      </trans-unit>
+      <trans-unit id="58dfce76a6" resname="The downloaded content is not a valid image.">
+        <source>The downloaded content is not a valid image.</source>
+        <target>The downloaded content is not a valid image.</target>
+      </trans-unit>
+      <trans-unit id="00f9b3cb6a" resname="The existing product could not be loaded.">
+        <source>The existing product could not be loaded.</source>
+        <target>The existing product could not be loaded.</target>
+      </trans-unit>
+      <trans-unit id="5848cfb134" resname="The first 5 products from the source are shown.">
+        <source>The first 5 products from the source are shown.</source>
+        <target>The first 5 products from the source are shown.</target>
+      </trans-unit>
+      <trans-unit id="84901edcfb" resname="The history could not be loaded: %error%">
+        <source>The history could not be loaded: %error%</source>
+        <target>The history could not be loaded: %error%</target>
+      </trans-unit>
+      <trans-unit id="b4823ae703" resname="The image URL does not contain a valid host.">
+        <source>The image URL does not contain a valid host.</source>
+        <target>The image URL does not contain a valid host.</target>
+      </trans-unit>
+      <trans-unit id="044f89a943" resname="The image URL is not valid.">
+        <source>The image URL is not valid.</source>
+        <target>The image URL is not valid.</target>
+      </trans-unit>
+      <trans-unit id="f2c38b59b8" resname="The image URL points to a disallowed address.">
+        <source>The image URL points to a disallowed address.</source>
+        <target>The image URL points to a disallowed address.</target>
+      </trans-unit>
+      <trans-unit id="0d7b77b111" resname="The image could not be downloaded.">
+        <source>The image could not be downloaded.</source>
+        <target>The image could not be downloaded.</target>
+      </trans-unit>
+      <trans-unit id="d256d7ca51" resname="The image exceeds the maximum allowed size of 5 MB.">
+        <source>The image exceeds the maximum allowed size of 5 MB.</source>
+        <target>The image exceeds the maximum allowed size of 5 MB.</target>
+      </trans-unit>
+      <trans-unit id="2a40aa1c93" resname="The image file does not exist.">
+        <source>The image file does not exist.</source>
+        <target>The image file does not exist.</target>
+      </trans-unit>
+      <trans-unit id="d0f3c48e0a" resname="The image format is not allowed.">
+        <source>The image format is not allowed.</source>
+        <target>The image format is not allowed.</target>
+      </trans-unit>
+      <trans-unit id="b27ffe77eb" resname="The image host could not be resolved.">
+        <source>The image host could not be resolved.</source>
+        <target>The image host could not be resolved.</target>
+      </trans-unit>
+      <trans-unit id="6689fe0a9f" resname="The image must use HTTP or HTTPS.">
+        <source>The image must use HTTP or HTTPS.</source>
+        <target>The image must use HTTP or HTTPS.</target>
+      </trans-unit>
+      <trans-unit id="ca74f7ba01" resname="The import could not be created.">
+        <source>The import could not be created.</source>
+        <target>The import could not be created.</target>
+      </trans-unit>
+      <trans-unit id="0793feaf15" resname="The import could not be retrieved.">
+        <source>The import could not be retrieved.</source>
+        <target>The import could not be retrieved.</target>
+      </trans-unit>
+      <trans-unit id="73067c909f" resname="The import does not exist.">
+        <source>The import does not exist.</source>
+        <target>The import does not exist.</target>
+      </trans-unit>
+      <trans-unit id="d3fccbd679" resname="The import finished with errors.">
+        <source>The import finished with errors.</source>
+        <target>The import finished with errors.</target>
+      </trans-unit>
+      <trans-unit id="03adca218b" resname="The import is not valid.">
+        <source>The import is not valid.</source>
+        <target>The import is not valid.</target>
+      </trans-unit>
+      <trans-unit id="f6af06feb7" resname="The imports directory could not be created.">
+        <source>The imports directory could not be created.</source>
+        <target>The imports directory could not be created.</target>
+      </trans-unit>
+      <trans-unit id="11a7cbd051" resname="The manufacturer could not be created in PrestaShop.">
+        <source>The manufacturer could not be created in PrestaShop.</source>
+        <target>The manufacturer could not be created in PrestaShop.</target>
+      </trans-unit>
+      <trans-unit id="2dcb364d31" resname="The mapping could not be saved: %error%">
+        <source>The mapping could not be saved: %error%</source>
+        <target>The mapping could not be saved: %error%</target>
+      </trans-unit>
+      <trans-unit id="9b983858c2" resname="The mapping was saved successfully.">
+        <source>The mapping was saved successfully.</source>
+        <target>The mapping was saved successfully.</target>
+      </trans-unit>
+      <trans-unit id="9388a2132a" resname="The previous mapping could not be deleted.">
+        <source>The previous mapping could not be deleted.</source>
+        <target>The previous mapping could not be deleted.</target>
+      </trans-unit>
+      <trans-unit id="fd129e55b5" resname="The price cannot be empty.">
+        <source>The price cannot be empty.</source>
+        <target>The price cannot be empty.</target>
+      </trans-unit>
+      <trans-unit id="d6d41bf132" resname="The price format is not valid.">
+        <source>The price format is not valid.</source>
+        <target>The price format is not valid.</target>
+      </trans-unit>
+      <trans-unit id="f2d69154c4" resname="The product ID is not valid.">
+        <source>The product ID is not valid.</source>
+        <target>The product ID is not valid.</target>
+      </trans-unit>
+      <trans-unit id="3330a26ebd" resname="The product could not be created in PrestaShop.">
+        <source>The product could not be created in PrestaShop.</source>
+        <target>The product could not be created in PrestaShop.</target>
+      </trans-unit>
+      <trans-unit id="66654c1494" resname="The product could not be updated.">
+        <source>The product could not be updated.</source>
+        <target>The product could not be updated.</target>
+      </trans-unit>
+      <trans-unit id="e64d33042f" resname="The product does not exist in PrestaShop.">
+        <source>The product does not exist in PrestaShop.</source>
+        <target>The product does not exist in PrestaShop.</target>
+      </trans-unit>
+      <trans-unit id="16e4761b48" resname="The product image could not be created.">
+        <source>The product image could not be created.</source>
+        <target>The product image could not be created.</target>
+      </trans-unit>
+      <trans-unit id="bb780c9bfe" resname="The product image could not be saved.">
+        <source>The product image could not be saved.</source>
+        <target>The product image could not be saved.</target>
+      </trans-unit>
+      <trans-unit id="bba943e3f0" resname="The run does not exist.">
+        <source>The run does not exist.</source>
+        <target>The run does not exist.</target>
+      </trans-unit>
+      <trans-unit id="1526875349" resname="The selected source does not exist.">
+        <source>The selected source does not exist.</source>
+        <target>The selected source does not exist.</target>
+      </trans-unit>
+      <trans-unit id="e8b358948a" resname="The source ID is not valid.">
+        <source>The source ID is not valid.</source>
+        <target>The source ID is not valid.</target>
+      </trans-unit>
+      <trans-unit id="46e947a22a" resname="The source URL does not contain a valid host.">
+        <source>The source URL does not contain a valid host.</source>
+        <target>The source URL does not contain a valid host.</target>
+      </trans-unit>
+      <trans-unit id="281b79c636" resname="The source URL is not valid.">
+        <source>The source URL is not valid.</source>
+        <target>The source URL is not valid.</target>
+      </trans-unit>
+      <trans-unit id="9b9fc167cb" resname="The source URL is required.">
+        <source>The source URL is required.</source>
+        <target>The source URL is required.</target>
+      </trans-unit>
+      <trans-unit id="f34b0191e4" resname="The source URL points to a disallowed address.">
+        <source>The source URL points to a disallowed address.</source>
+        <target>The source URL points to a disallowed address.</target>
+      </trans-unit>
+      <trans-unit id="2194a32da1" resname="The source contains no records.">
+        <source>The source contains no records.</source>
+        <target>The source contains no records.</target>
+      </trans-unit>
+      <trans-unit id="58eb1dd420" resname="The source content could not be retrieved.">
+        <source>The source content could not be retrieved.</source>
+        <target>The source content could not be retrieved.</target>
+      </trans-unit>
+      <trans-unit id="05208aacc0" resname="The source could not be created.">
+        <source>The source could not be created.</source>
+        <target>The source could not be created.</target>
+      </trans-unit>
+      <trans-unit id="3b48faffab" resname="The source could not be deleted.">
+        <source>The source could not be deleted.</source>
+        <target>The source could not be deleted.</target>
+      </trans-unit>
+      <trans-unit id="9f8013f90e" resname="The source could not be found.">
+        <source>The source could not be found.</source>
+        <target>The source could not be found.</target>
+      </trans-unit>
+      <trans-unit id="f50decf5d2" resname="The source could not be loaded: %error%">
+        <source>The source could not be loaded: %error%</source>
+        <target>The source could not be loaded: %error%</target>
+      </trans-unit>
+      <trans-unit id="50ecaf7910" resname="The source does not exist.">
+        <source>The source does not exist.</source>
+        <target>The source does not exist.</target>
+      </trans-unit>
+      <trans-unit id="ad266468b5" resname="The source has no mapping configured.">
+        <source>The source has no mapping configured.</source>
+        <target>The source has no mapping configured.</target>
+      </trans-unit>
+      <trans-unit id="0772a4262b" resname="The source host could not be resolved.">
+        <source>The source host could not be resolved.</source>
+        <target>The source host could not be resolved.</target>
+      </trans-unit>
+      <trans-unit id="8493bd6919" resname="The source is not valid.">
+        <source>The source is not valid.</source>
+        <target>The source is not valid.</target>
+      </trans-unit>
+      <trans-unit id="1fcfa012aa" resname="The source must use HTTP or HTTPS.">
+        <source>The source must use HTTP or HTTPS.</source>
+        <target>The source must use HTTP or HTTPS.</target>
+      </trans-unit>
+      <trans-unit id="b34deb1e97" resname="The source name is required.">
+        <source>The source name is required.</source>
+        <target>The source name is required.</target>
+      </trans-unit>
+      <trans-unit id="9ba8fbf470" resname="The source was created successfully.">
+        <source>The source was created successfully.</source>
+        <target>The source was created successfully.</target>
+      </trans-unit>
+      <trans-unit id="e78c9fd735" resname="The source was deleted successfully.">
+        <source>The source was deleted successfully.</source>
+        <target>The source was deleted successfully.</target>
+      </trans-unit>
+      <trans-unit id="044cccbb25" resname="The source was updated successfully.">
+        <source>The source was updated successfully.</source>
+        <target>The source was updated successfully.</target>
+      </trans-unit>
+      <trans-unit id="c607c0fa8a" resname="The stock cannot be empty.">
+        <source>The stock cannot be empty.</source>
+        <target>The stock cannot be empty.</target>
+      </trans-unit>
+      <trans-unit id="06bb501a72" resname="The stock format is not valid.">
+        <source>The stock format is not valid.</source>
+        <target>The stock format is not valid.</target>
+      </trans-unit>
+      <trans-unit id="7ea3186b07" resname="The submitted mapping is not valid.">
+        <source>The submitted mapping is not valid.</source>
+        <target>The submitted mapping is not valid.</target>
+      </trans-unit>
+      <trans-unit id="0330c0b129" resname="The synchronization could not be executed: %error%">
+        <source>The synchronization could not be executed: %error%</source>
+        <target>The synchronization could not be executed: %error%</target>
+      </trans-unit>
+      <trans-unit id="3518c36787" resname="The synchronization frequency is not valid.">
+        <source>The synchronization frequency is not valid.</source>
+        <target>The synchronization frequency is not valid.</target>
+      </trans-unit>
+      <trans-unit id="312ed3f552" resname="The synchronization log could not be saved.">
+        <source>The synchronization log could not be saved.</source>
+        <target>The synchronization log could not be saved.</target>
+      </trans-unit>
+      <trans-unit id="fa21c4cef4" resname="The temporary file could not be created.">
+        <source>The temporary file could not be created.</source>
+        <target>The temporary file could not be created.</target>
+      </trans-unit>
+      <trans-unit id="751bc1678c" resname="The temporary image could not be saved.">
+        <source>The temporary image could not be saved.</source>
+        <target>The temporary image could not be saved.</target>
+      </trans-unit>
+      <trans-unit id="5a8e6a8421" resname="The thumbnail &quot;">
+        <source>The thumbnail "</source>
+        <target>The thumbnail "</target>
+      </trans-unit>
+      <trans-unit id="9bb63b8116" resname="The transformation &quot;%transform%&quot; is not valid.">
+        <source>The transformation "%transform%" is not valid.</source>
+        <target>The transformation "%transform%" is not valid.</target>
+      </trans-unit>
+      <trans-unit id="a49ab23365" resname="The transformation configuration could not be saved.">
+        <source>The transformation configuration could not be saved.</source>
+        <target>The transformation configuration could not be saved.</target>
+      </trans-unit>
+      <trans-unit id="f5df77360a" resname="The uploaded file is not valid.">
+        <source>The uploaded file is not valid.</source>
+        <target>The uploaded file is not valid.</target>
+      </trans-unit>
+      <trans-unit id="2660dda60d" resname="There are no mappings for the source.">
+        <source>There are no mappings for the source.</source>
+        <target>There are no mappings for the source.</target>
+      </trans-unit>
+      <trans-unit id="cc8a25f9f9" resname="There are no synchronizations recorded yet.">
+        <source>There are no synchronizations recorded yet.</source>
+        <target>There are no synchronizations recorded yet.</target>
+      </trans-unit>
+      <trans-unit id="b1e1be4138" resname="This synchronization was recorded in the history.">
+        <source>This synchronization was recorded in the history.</source>
+        <target>This synchronization was recorded in the history.</target>
+      </trans-unit>
+      <trans-unit id="9d7362d066" resname="Total">
+        <source>Total</source>
+        <target>Total</target>
+      </trans-unit>
+      <trans-unit id="ca4b766363" resname="Transformation">
+        <source>Transformation</source>
+        <target>Transformation</target>
+      </trans-unit>
+      <trans-unit id="78bce098f3" resname="Type:">
+        <source>Type:</source>
+        <target>Type:</target>
+      </trans-unit>
+      <trans-unit id="dd3beda67a" resname="URL:">
+        <source>URL:</source>
+        <target>URL:</target>
+      </trans-unit>
+      <trans-unit id="bd3e09dafa" resname="Unable to create CPB Sync mapping.">
+        <source>Unable to create CPB Sync mapping.</source>
+        <target>Unable to create CPB Sync mapping.</target>
+      </trans-unit>
+      <trans-unit id="76755eae05" resname="Unable to create CPB Sync source.">
+        <source>Unable to create CPB Sync source.</source>
+        <target>Unable to create CPB Sync source.</target>
+      </trans-unit>
+      <trans-unit id="cc033df112" resname="Unchanged">
+        <source>Unchanged</source>
+        <target>Unchanged</target>
+      </trans-unit>
+      <trans-unit id="46301b6d93" resname="Updated">
+        <source>Updated</source>
+        <target>Updated</target>
+      </trans-unit>
+      <trans-unit id="d3f6c025e6" resname="Upload and start import">
+        <source>Upload and start import</source>
+        <target>Upload and start import</target>
+      </trans-unit>
+      <trans-unit id="86b794974b" resname="Uploading file...">
+        <source>Uploading file...</source>
+        <target>Uploading file...</target>
+      </trans-unit>
+      <trans-unit id="f013ad3c49" resname="Valid">
+        <source>Valid</source>
+        <target>Valid</target>
+      </trans-unit>
+      <trans-unit id="fee834efb3" resname="View detail">
+        <source>View detail</source>
+        <target>View detail</target>
+      </trans-unit>
+      <trans-unit id="3d709c13c9" resname="Warning">
+        <source>Warning</source>
+        <target>Warning</target>
+      </trans-unit>
+      <trans-unit id="68a5c8bfac" resname="With errors">
+        <source>With errors</source>
+        <target>With errors</target>
+      </trans-unit>
+      <trans-unit id="134e15b442" resname="You have no sources configured yet.">
+        <source>You have no sources configured yet.</source>
+        <target>You have no sources configured yet.</target>
+      </trans-unit>
+      <trans-unit id="3573e555ac" resname="You must map a supplier field to reference.">
+        <source>You must map a supplier field to reference.</source>
+        <target>You must map a supplier field to reference.</target>
+      </trans-unit>
+      <trans-unit id="895ac7b0f8" resname="You must provide the text to replace for the &quot;%field%&quot; field.">
+        <source>You must provide the text to replace for the "%field%" field.</source>
+        <target>You must provide the text to replace for the "%field%" field.</target>
+      </trans-unit>
+      <trans-unit id="2bce21618f" resname="You must select a CSV file.">
+        <source>You must select a CSV file.</source>
+        <target>You must select a CSV file.</target>
+      </trans-unit>
+      <trans-unit id="b875d0ad32" resname="You must select a source.">
+        <source>You must select a source.</source>
+        <target>You must select a source.</target>
+      </trans-unit>
+      <trans-unit id="01ce836ce6" resname="records found.">
+        <source>records found.</source>
+        <target>records found.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
