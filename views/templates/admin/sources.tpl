@@ -27,6 +27,17 @@
                 >
                     {l s='Import CSV' d='Modules.Cpbsync.Admin'}
                 </a>
+
+                {if $monitor_url}
+                    <a
+                            href="{$monitor_url|escape:'htmlall':'UTF-8'}"
+                            class="btn btn-default"
+                    >
+                        <i class="icon-dashboard"></i>
+                        {l s='Monitoring' d='Modules.Cpbsync.Admin'}
+                    </a>
+                {/if}
+
                 <a
                         href="{$history_url|escape:'htmlall':'UTF-8'}"
                         class="btn btn-default"

@@ -26,6 +26,37 @@
             {/if}
         </p>
 
+        <p>
+            {l s='Duration:' d='Modules.Cpbsync.Admin'}
+
+            {if $log.duration !== null}
+                {$log.duration} s
+            {else}
+                -
+            {/if}
+
+            &mdash;
+
+            {l s='Memory:' d='Modules.Cpbsync.Admin'}
+
+            {if $log.memory !== null}
+                {$log.memory} MB
+            {else}
+                -
+            {/if}
+        </p>
+
+        {if !empty($phases)}
+            <ul>
+                {foreach from=$phases item=phase}
+                    <li>
+                        {$phase.name|escape:'htmlall':'UTF-8'}:
+                        <strong>{$phase.seconds} s</strong>
+                    </li>
+                {/foreach}
+            </ul>
+        {/if}
+
     </div>
 
     <div class="row">
@@ -88,6 +119,12 @@
         </div>
 
     {else}
+
+        {if $items_total > $items_shown}
+            <div class="alert alert-warning">
+                {l s='Only the first %shown% of %total% records are stored. The rest are summarised in the counters above.' sprintf=['%shown%' => $items_shown, '%total%' => $items_total] d='Modules.Cpbsync.Admin'}
+            </div>
+        {/if}
 
         <table class="table table-striped">
 

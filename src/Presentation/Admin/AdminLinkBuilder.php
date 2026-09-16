@@ -121,6 +121,24 @@ class AdminLinkBuilder
         return $this->legacy('import');
     }
 
+    /**
+     * URL de una acción con parámetros libres.
+     *
+     * Las acciones de la edición gratuita tienen su método propio;
+     * este punto de entrada existe para que otras ediciones puedan
+     * enlazar sus propias acciones sin tocar el núcleo.
+     *
+     * @param array<string, int|string> $parameters
+     */
+    public function action(
+        string $action,
+        array $parameters = []
+    ): string {
+        return $this->withAction(
+            array_merge(['cpbsync_action' => $action], $parameters)
+        );
+    }
+
     public function processImport(): string
     {
         return $this->legacy('process_import');

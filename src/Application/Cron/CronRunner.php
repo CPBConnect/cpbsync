@@ -6,6 +6,7 @@ use CPBConnect\Application\Import\ImportBatchProcessor;
 use CPBConnect\Application\Product\ProductMapper;
 use CPBConnect\Application\Product\ProductSync;
 use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
+use CPBConnect\Application\Sync\SyncMetrics;
 use CPBConnect\Infrastructure\Persistence\ImportRepository;
 use CPBConnect\Infrastructure\Persistence\MappingRepository;
 use CPBConnect\Infrastructure\Persistence\SourceRepository;
@@ -66,6 +67,9 @@ class CronRunner
                 continue;
             }
 
+            $metrics = new SyncMetrics();
+            $metrics->startPhase('sync');
+
             try {
 
                 $result =
@@ -99,7 +103,8 @@ class CronRunner
                 $this->logRepository->create(
                     (int) $source['id_source'],
                     $errorResult,
-                    'cron'
+                    'cron',
+                    $metrics->finish()
                 );
 
                 $results[] = [
@@ -115,6 +120,10 @@ class CronRunner
 
     private function runSource(array $source): array
     {
+        $metrics = new SyncMetrics();
+
+        $metrics->startPhase('sync');
+
         $reader = $this->readers->get(
             (string) ($source['type'] ?? '')
         );
@@ -247,10 +256,13 @@ class CronRunner
         /*
          * Un solo log final por ejecución cron.
          */
+        $metrics->stopPhase();
+
         $this->logRepository->create(
             (int) $source['id_source'],
             $result,
-            'cron'
+            'cron',
+            $metrics->finish()
         );
 
         return $result;

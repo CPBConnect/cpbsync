@@ -21,7 +21,8 @@ class SourceHandler
         private AdminLinkBuilder $links,
         private SourceService $sources,
         private SourceValidator $validator,
-        private SourceReaderRegistry $readers
+        private SourceReaderRegistry $readers,
+        private ?string $monitorUrl = null
     ) {
     }
 
@@ -49,6 +50,7 @@ class SourceHandler
             'source_form_url' => $this->links->sourceForm(),
             'history_url' => $this->links->history(),
             'import_url' => $this->links->import(),
+            'monitor_url' => $this->monitorUrl,
         ]);
 
         return $this->shell->fetch('sources.tpl');

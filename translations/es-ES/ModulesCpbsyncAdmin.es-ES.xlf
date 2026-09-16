@@ -58,6 +58,10 @@
         <source>Assign each source field to the matching PrestaShop field.</source>
         <target>Asigna cada campo de la fuente al campo correspondiente de PrestaShop.</target>
       </trans-unit>
+      <trans-unit id="af4370b4e8" resname="Average duration">
+        <source>Average duration</source>
+        <target>Duración media</target>
+      </trans-unit>
       <trans-unit id="fbd25a66a8" resname="Back">
         <source>Back</source>
         <target>Volver</target>
@@ -130,6 +134,14 @@
         <source>Delete</source>
         <target>Eliminar</target>
       </trans-unit>
+      <trans-unit id="28f213a699" resname="Delete old runs">
+        <source>Delete old runs</source>
+        <target>Borrar ejecuciones antiguas</target>
+      </trans-unit>
+      <trans-unit id="7ea1b5b4fd" resname="Delete the stored runs older than the retention period?">
+        <source>Delete the stored runs older than the retention period?</source>
+        <target>¿Borrar las ejecuciones guardadas anteriores al periodo de retención?</target>
+      </trans-unit>
       <trans-unit id="e604c5443b" resname="Deleted source">
         <source>Deleted source</source>
         <target>Fuente eliminada</target>
@@ -141,6 +153,14 @@
       <trans-unit id="4027c8b120" resname="Detected columns">
         <source>Detected columns</source>
         <target>Columnas detectadas</target>
+      </trans-unit>
+      <trans-unit id="e02d2ae03d" resname="Duration">
+        <source>Duration</source>
+        <target>Duración</target>
+      </trans-unit>
+      <trans-unit id="6831155807" resname="Duration:">
+        <source>Duration:</source>
+        <target>Duración:</target>
       </trans-unit>
       <trans-unit id="918942ccd9" resname="E.g. Supplier ABC">
         <source>E.g. Supplier ABC</source>
@@ -186,6 +206,10 @@
         <source>History</source>
         <target>Historial</target>
       </trans-unit>
+      <trans-unit id="9384c76b89" resname="History storage">
+        <source>History storage</source>
+        <target>Almacenamiento del historial</target>
+      </trans-unit>
       <trans-unit id="dc02ff5929" resname="Hourly">
         <source>Hourly</source>
         <target>Cada hora</target>
@@ -210,6 +234,34 @@
         <source>Inactive</source>
         <target>Inactiva</target>
       </trans-unit>
+      <trans-unit id="808f7935ce" resname="Keeps the last %days% days.">
+        <source>Keeps the last %days% days.</source>
+        <target>Conserva los últimos %days% días.</target>
+      </trans-unit>
+      <trans-unit id="6339866168" resname="Last 24 hours">
+        <source>Last 24 hours</source>
+        <target>Últimas 24 horas</target>
+      </trans-unit>
+      <trans-unit id="2557491405" resname="Last 30 days">
+        <source>Last 30 days</source>
+        <target>Últimos 30 días</target>
+      </trans-unit>
+      <trans-unit id="4e6251a059" resname="Last 7 days">
+        <source>Last 7 days</source>
+        <target>Últimos 7 días</target>
+      </trans-unit>
+      <trans-unit id="a369a30db8" resname="Last 90 days">
+        <source>Last 90 days</source>
+        <target>Últimos 90 días</target>
+      </trans-unit>
+      <trans-unit id="9d84f32cb8" resname="Last run:">
+        <source>Last run:</source>
+        <target>Última ejecución:</target>
+      </trans-unit>
+      <trans-unit id="c6c3c4d905" resname="Longest run">
+        <source>Longest run</source>
+        <target>Ejecución más larga</target>
+      </trans-unit>
       <trans-unit id="d10de3da94" resname="Manual">
         <source>Manual</source>
         <target>Manual</target>
@@ -218,9 +270,29 @@
         <source>Map fields</source>
         <target>Mapear campos</target>
       </trans-unit>
+      <trans-unit id="4789f23283" resname="Memory">
+        <source>Memory</source>
+        <target>Memoria</target>
+      </trans-unit>
+      <trans-unit id="4ccf0ac6a7" resname="Memory:">
+        <source>Memory:</source>
+        <target>Memoria:</target>
+      </trans-unit>
+      <trans-unit id="423e555c5e" resname="Monitoring">
+        <source>Monitoring</source>
+        <target>Monitorización</target>
+      </trans-unit>
+      <trans-unit id="bcb4fd2cd6" resname="Most frequent errors">
+        <source>Most frequent errors</source>
+        <target>Errores más frecuentes</target>
+      </trans-unit>
       <trans-unit id="9b5dc4e594" resname="Name">
         <source>Name</source>
         <target>Nombre</target>
+      </trans-unit>
+      <trans-unit id="6e7b34fa59" resname="Never">
+        <source>Never</source>
+        <target>Nunca</target>
       </trans-unit>
       <trans-unit id="f98d1e768f" resname="New source">
         <source>New source</source>
@@ -229,6 +301,10 @@
       <trans-unit id="f82b7cddfb" resname="No details available.">
         <source>No details available.</source>
         <target>No hay detalles disponibles.</target>
+      </trans-unit>
+      <trans-unit id="b24b78bf6c" resname="No errors were recorded in this period.">
+        <source>No errors were recorded in this period.</source>
+        <target>No se registraron errores en este periodo.</target>
       </trans-unit>
       <trans-unit id="ffc330a19a" resname="No product was modified in PrestaShop.">
         <source>No product was modified in PrestaShop.</source>
@@ -253,6 +329,10 @@
       <trans-unit id="6f1b6b9b1d" resname="One of the mappings could not be saved.">
         <source>One of the mappings could not be saved.</source>
         <target>No fue posible guardar uno de los mappings.</target>
+      </trans-unit>
+      <trans-unit id="f718a836af" resname="Only the first %shown% of %total% records are stored. The rest are summarised in the counters above.">
+        <source>Only the first %shown% of %total% records are stored. The rest are summarised in the counters above.</source>
+        <target>Sólo se guardan los primeros %shown% registros de %total%. El resto queda resumido en los contadores anteriores.</target>
       </trans-unit>
       <trans-unit id="534394c888" resname="Optional. XML and JSON sources use the record_path setting to locate the records.">
         <source>Optional. XML and JSON sources use the record_path setting to locate the records.</source>
@@ -290,9 +370,21 @@
         <source>Product ID</source>
         <target>ID producto</target>
       </trans-unit>
+      <trans-unit id="94296b0206" resname="Products processed">
+        <source>Products processed</source>
+        <target>Productos procesados</target>
+      </trans-unit>
+      <trans-unit id="3d84314a79" resname="Recent runs">
+        <source>Recent runs</source>
+        <target>Últimas ejecuciones</target>
+      </trans-unit>
       <trans-unit id="a41765ee7b" resname="Reference">
         <source>Reference</source>
         <target>Referencia</target>
+      </trans-unit>
+      <trans-unit id="6debc10025" resname="Removed %count% runs older than %days% days.">
+        <source>Removed %count% runs older than %days% days.</source>
+        <target>Se han borrado %count% ejecuciones anteriores a %days% días.</target>
       </trans-unit>
       <trans-unit id="ad59bf9880" resname="Replace text">
         <source>Replace text</source>
@@ -317,6 +409,10 @@
       <trans-unit id="9d23ca7e6a" resname="Run Sync">
         <source>Run Sync</source>
         <target>Ejecutar Sync</target>
+      </trans-unit>
+      <trans-unit id="294df7f125" resname="Runs">
+        <source>Runs</source>
+        <target>Ejecuciones</target>
       </trans-unit>
       <trans-unit id="bc7dab17a0" resname="Save">
         <source>Save</source>
@@ -365,6 +461,14 @@
       <trans-unit id="ac74400cb3" resname="Status:">
         <source>Status:</source>
         <target>Estado:</target>
+      </trans-unit>
+      <trans-unit id="f4d3fe1dd5" resname="Stored details:">
+        <source>Stored details:</source>
+        <target>Detalle guardado:</target>
+      </trans-unit>
+      <trans-unit id="bbddf55c81" resname="Stored runs:">
+        <source>Stored runs:</source>
+        <target>Ejecuciones guardadas:</target>
       </trans-unit>
       <trans-unit id="9bb4e80465" resname="Success">
         <source>Success</source>
@@ -506,6 +610,14 @@
         <source>The history could not be loaded: %error%</source>
         <target>No fue posible cargar el historial: %error%</target>
       </trans-unit>
+      <trans-unit id="f71f295aab" resname="The history could not be purged: %error%">
+        <source>The history could not be purged: %error%</source>
+        <target>No fue posible purgar el historial: %error%</target>
+      </trans-unit>
+      <trans-unit id="3301bb9df4" resname="The history only stores the summary of each run plus a limited sample of products, so it stays small even with large catalogs.">
+        <source>The history only stores the summary of each run plus a limited sample of products, so it stays small even with large catalogs.</source>
+        <target>El historial sólo guarda el resumen de cada ejecución y una muestra limitada de productos, así que se mantiene pequeño incluso con catálogos grandes.</target>
+      </trans-unit>
       <trans-unit id="b4823ae703" resname="The image URL does not contain a valid host.">
         <source>The image URL does not contain a valid host.</source>
         <target>La URL de la imagen no contiene un host válido.</target>
@@ -577,6 +689,10 @@
       <trans-unit id="9b983858c2" resname="The mapping was saved successfully.">
         <source>The mapping was saved successfully.</source>
         <target>El mapping se guardó correctamente.</target>
+      </trans-unit>
+      <trans-unit id="3e12c85d9d" resname="The monitoring data could not be loaded: %error%">
+        <source>The monitoring data could not be loaded: %error%</source>
+        <target>No fue posible cargar los datos de monitorización: %error%</target>
       </trans-unit>
       <trans-unit id="9388a2132a" resname="The previous mapping could not be deleted.">
         <source>The previous mapping could not be deleted.</source>
@@ -754,9 +870,9 @@
         <source>The temporary image could not be saved.</source>
         <target>No fue posible guardar la imagen temporal.</target>
       </trans-unit>
-      <trans-unit id="5a8e6a8421" resname="The thumbnail &quot;">
-        <source>The thumbnail "</source>
-        <target>No fue posible generar el thumbnail "</target>
+      <trans-unit id="461b973421" resname="The thumbnail could not be generated.">
+        <source>The thumbnail could not be generated.</source>
+        <target>No fue posible generar la miniatura.</target>
       </trans-unit>
       <trans-unit id="9bb63b8116" resname="The transformation &quot;%transform%&quot; is not valid.">
         <source>The transformation "%transform%" is not valid.</source>
@@ -774,6 +890,10 @@
         <source>There are no mappings for the source.</source>
         <target>No existen mappings para la fuente.</target>
       </trans-unit>
+      <trans-unit id="4aa70c0a32" resname="There are no runs stored yet.">
+        <source>There are no runs stored yet.</source>
+        <target>Todavía no hay ejecuciones guardadas.</target>
+      </trans-unit>
       <trans-unit id="cc8a25f9f9" resname="There are no synchronizations recorded yet.">
         <source>There are no synchronizations recorded yet.</source>
         <target>No hay sincronizaciones registradas todavía.</target>
@@ -782,6 +902,10 @@
         <source>This synchronization was recorded in the history.</source>
         <target>Esta sincronización quedó registrada en el historial.</target>
       </trans-unit>
+      <trans-unit id="b3ac111fd7" resname="Times">
+        <source>Times</source>
+        <target>Veces</target>
+      </trans-unit>
       <trans-unit id="9d7362d066" resname="Total">
         <source>Total</source>
         <target>Total</target>
@@ -789,6 +913,10 @@
       <trans-unit id="ca4b766363" resname="Transformation">
         <source>Transformation</source>
         <target>Transformación</target>
+      </trans-unit>
+      <trans-unit id="f698f67f56" resname="Trigger">
+        <source>Trigger</source>
+        <target>Origen</target>
       </trans-unit>
       <trans-unit id="78bce098f3" resname="Type:">
         <source>Type:</source>

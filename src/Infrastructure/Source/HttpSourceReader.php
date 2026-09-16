@@ -49,23 +49,27 @@ class HttpSourceReader
                 $body
             );
         } catch (HttpRequestException $e) {
-            throw new RuntimeException(
-                $this->messageFor($e->getReason())
-            );
-        }
-    }
+            /*
+             * Los mensajes se lanzan aquí, no en un método auxiliar,
+             * para que la comprobación de traducciones los encuentre.
+             */
+            switch ($e->getReason()) {
+                case HttpRequestException::ERROR_STATUS:
+                    throw new RuntimeException(
+                        'The source responded with an error status code.'
+                    );
 
-    private function messageFor(string $reason): string
-    {
-        if ($reason === HttpRequestException::ERROR_STATUS) {
-            return 'The source responded with an error status code.';
-        }
+                case HttpRequestException::TOO_MANY_REDIRECTS:
+                    throw new RuntimeException(
+                        'The source redirected too many times.'
+                    );
 
-        if ($reason === HttpRequestException::TOO_MANY_REDIRECTS) {
-            return 'The source redirected too many times.';
+                default:
+                    throw new RuntimeException(
+                        'The source content could not be retrieved.'
+                    );
+            }
         }
-
-        return 'The source content could not be retrieved.';
     }
 
     private function validateUrl(string $url): void

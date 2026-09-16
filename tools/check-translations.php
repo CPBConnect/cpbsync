@@ -57,8 +57,13 @@ function extractWordings(string $root, string $domain): array
         $content = file_get_contents($path);
 
         if ($extension === 'tpl') {
+            /*
+             * Entre el texto y el dominio puede haber parámetros
+             * (sprintf=, js=), así que no se exige que sean
+             * contiguos.
+             */
             preg_match_all(
-                "/\{l\s+s='((?:[^'\\\\]|\\\\.)*)'\s+d='"
+                "/\{l\s+s='((?:[^'\\\\]|\\\\.)*)'[^}]*?d='"
                 . preg_quote($domain, '/') . "'/",
                 $content,
                 $matches

@@ -71,6 +71,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * `ProductStateRepository`, which resolves many product references and stored values in a single query.
 * `HttpFetcher`, which centralizes the HTTP mechanics (redirects, headers, query parameters) shared by sources and images.
 * `ProductImageProviderInterface` with a default implementation, so the image download can be replaced without touching the synchronization engine.
+* `SyncMetrics`, which measures how long a run takes, its peak memory and the time spent in each phase (reading the source, applying the mapping and writing products).
+* Every synchronization run stores its duration, peak memory, phase breakdown and total number of processed products, with the `upgrade-1.2.0.php` migration.
+* Duration column in the history list, and duration, memory, phase breakdown and a truncation notice in the run detail.
+* The paid edition adds a monitoring dashboard with a period selector, summary counters, the most frequent errors, the size of the stored history and a retention purge.
+* `AdminActionsInterface`, the extension point the main router consults before treating an unknown action as non-existent.
 
 ### Fixed
 
@@ -81,6 +86,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * `install()` now creates the database tables before registering the module and rolls back if registration fails, so a failed installation no longer leaves the module marked as installed without its tables.
 * `tools/check-translations.php` no longer scans the generated `build/dist/` folder.
 * An empty list at `record_path` means "no records" instead of an error.
+* The thumbnail error message was cut in the catalogues (`The thumbnail "`), so it could never match the message thrown at runtime. The message is now complete and translatable: `The thumbnail could not be generated.`
+* `history.tpl` and `history-detail.tpl` contained hardcoded text with no translation tags; every wording is now wrapped in `{l}`.
+* Missing `</strong>` closing tag in `sync-result.tpl`.
+* Product image downloader reported a stale Spanish wording.
 
 ### Changed
 
@@ -94,12 +103,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * All wordings are written in English and translated through the new translation system; Spanish ships as a translation.
 * Back office templates use `{l s='...' d='Modules.Cpbsync.Admin'}` instead of the classic `mod='cpbsync'` syntax.
 * Everything shown in the back office is now translatable: source form validation errors, import JSON responses, JavaScript messages, product validation errors in the Dry Run, synchronization results and history details.
-
-### Fixed
-
-* `history.tpl` and `history-detail.tpl` contained hardcoded text with no translation tags; every wording is now wrapped in `{l}`.
-* Missing `</strong>` closing tag in `sync-result.tpl`.
-* Product image downloader reported a stale Spanish wording.
+* The synchronization history keeps the summary of every run plus a limited sample of the processed products (200 by default) instead of every one of them, so an hourly cron on a large catalog no longer grows the database without bound: 50,000 products used to add about 4.3 MB per run, roughly 103 MB a day.
+* `tools/check-translations.php` also extracts wordings that carry `sprintf=`/`js=` parameters and messages thrown from `switch` branches, which were invisible to it before.
 
 ### Removed
 

@@ -58,6 +58,10 @@
         <source>Assign each source field to the matching PrestaShop field.</source>
         <target>Assign each source field to the matching PrestaShop field.</target>
       </trans-unit>
+      <trans-unit id="af4370b4e8" resname="Average duration">
+        <source>Average duration</source>
+        <target>Average duration</target>
+      </trans-unit>
       <trans-unit id="fbd25a66a8" resname="Back">
         <source>Back</source>
         <target>Back</target>
@@ -130,6 +134,14 @@
         <source>Delete</source>
         <target>Delete</target>
       </trans-unit>
+      <trans-unit id="28f213a699" resname="Delete old runs">
+        <source>Delete old runs</source>
+        <target>Delete old runs</target>
+      </trans-unit>
+      <trans-unit id="7ea1b5b4fd" resname="Delete the stored runs older than the retention period?">
+        <source>Delete the stored runs older than the retention period?</source>
+        <target>Delete the stored runs older than the retention period?</target>
+      </trans-unit>
       <trans-unit id="e604c5443b" resname="Deleted source">
         <source>Deleted source</source>
         <target>Deleted source</target>
@@ -141,6 +153,14 @@
       <trans-unit id="4027c8b120" resname="Detected columns">
         <source>Detected columns</source>
         <target>Detected columns</target>
+      </trans-unit>
+      <trans-unit id="e02d2ae03d" resname="Duration">
+        <source>Duration</source>
+        <target>Duration</target>
+      </trans-unit>
+      <trans-unit id="6831155807" resname="Duration:">
+        <source>Duration:</source>
+        <target>Duration:</target>
       </trans-unit>
       <trans-unit id="918942ccd9" resname="E.g. Supplier ABC">
         <source>E.g. Supplier ABC</source>
@@ -186,6 +206,10 @@
         <source>History</source>
         <target>History</target>
       </trans-unit>
+      <trans-unit id="9384c76b89" resname="History storage">
+        <source>History storage</source>
+        <target>History storage</target>
+      </trans-unit>
       <trans-unit id="dc02ff5929" resname="Hourly">
         <source>Hourly</source>
         <target>Hourly</target>
@@ -210,6 +234,34 @@
         <source>Inactive</source>
         <target>Inactive</target>
       </trans-unit>
+      <trans-unit id="808f7935ce" resname="Keeps the last %days% days.">
+        <source>Keeps the last %days% days.</source>
+        <target>Keeps the last %days% days.</target>
+      </trans-unit>
+      <trans-unit id="6339866168" resname="Last 24 hours">
+        <source>Last 24 hours</source>
+        <target>Last 24 hours</target>
+      </trans-unit>
+      <trans-unit id="2557491405" resname="Last 30 days">
+        <source>Last 30 days</source>
+        <target>Last 30 days</target>
+      </trans-unit>
+      <trans-unit id="4e6251a059" resname="Last 7 days">
+        <source>Last 7 days</source>
+        <target>Last 7 days</target>
+      </trans-unit>
+      <trans-unit id="a369a30db8" resname="Last 90 days">
+        <source>Last 90 days</source>
+        <target>Last 90 days</target>
+      </trans-unit>
+      <trans-unit id="9d84f32cb8" resname="Last run:">
+        <source>Last run:</source>
+        <target>Last run:</target>
+      </trans-unit>
+      <trans-unit id="c6c3c4d905" resname="Longest run">
+        <source>Longest run</source>
+        <target>Longest run</target>
+      </trans-unit>
       <trans-unit id="d10de3da94" resname="Manual">
         <source>Manual</source>
         <target>Manual</target>
@@ -218,9 +270,29 @@
         <source>Map fields</source>
         <target>Map fields</target>
       </trans-unit>
+      <trans-unit id="4789f23283" resname="Memory">
+        <source>Memory</source>
+        <target>Memory</target>
+      </trans-unit>
+      <trans-unit id="4ccf0ac6a7" resname="Memory:">
+        <source>Memory:</source>
+        <target>Memory:</target>
+      </trans-unit>
+      <trans-unit id="423e555c5e" resname="Monitoring">
+        <source>Monitoring</source>
+        <target>Monitoring</target>
+      </trans-unit>
+      <trans-unit id="bcb4fd2cd6" resname="Most frequent errors">
+        <source>Most frequent errors</source>
+        <target>Most frequent errors</target>
+      </trans-unit>
       <trans-unit id="9b5dc4e594" resname="Name">
         <source>Name</source>
         <target>Name</target>
+      </trans-unit>
+      <trans-unit id="6e7b34fa59" resname="Never">
+        <source>Never</source>
+        <target>Never</target>
       </trans-unit>
       <trans-unit id="f98d1e768f" resname="New source">
         <source>New source</source>
@@ -229,6 +301,10 @@
       <trans-unit id="f82b7cddfb" resname="No details available.">
         <source>No details available.</source>
         <target>No details available.</target>
+      </trans-unit>
+      <trans-unit id="b24b78bf6c" resname="No errors were recorded in this period.">
+        <source>No errors were recorded in this period.</source>
+        <target>No errors were recorded in this period.</target>
       </trans-unit>
       <trans-unit id="ffc330a19a" resname="No product was modified in PrestaShop.">
         <source>No product was modified in PrestaShop.</source>
@@ -253,6 +329,10 @@
       <trans-unit id="6f1b6b9b1d" resname="One of the mappings could not be saved.">
         <source>One of the mappings could not be saved.</source>
         <target>One of the mappings could not be saved.</target>
+      </trans-unit>
+      <trans-unit id="f718a836af" resname="Only the first %shown% of %total% records are stored. The rest are summarised in the counters above.">
+        <source>Only the first %shown% of %total% records are stored. The rest are summarised in the counters above.</source>
+        <target>Only the first %shown% of %total% records are stored. The rest are summarised in the counters above.</target>
       </trans-unit>
       <trans-unit id="534394c888" resname="Optional. XML and JSON sources use the record_path setting to locate the records.">
         <source>Optional. XML and JSON sources use the record_path setting to locate the records.</source>
@@ -290,9 +370,21 @@
         <source>Product ID</source>
         <target>Product ID</target>
       </trans-unit>
+      <trans-unit id="94296b0206" resname="Products processed">
+        <source>Products processed</source>
+        <target>Products processed</target>
+      </trans-unit>
+      <trans-unit id="3d84314a79" resname="Recent runs">
+        <source>Recent runs</source>
+        <target>Recent runs</target>
+      </trans-unit>
       <trans-unit id="a41765ee7b" resname="Reference">
         <source>Reference</source>
         <target>Reference</target>
+      </trans-unit>
+      <trans-unit id="6debc10025" resname="Removed %count% runs older than %days% days.">
+        <source>Removed %count% runs older than %days% days.</source>
+        <target>Removed %count% runs older than %days% days.</target>
       </trans-unit>
       <trans-unit id="ad59bf9880" resname="Replace text">
         <source>Replace text</source>
@@ -317,6 +409,10 @@
       <trans-unit id="9d23ca7e6a" resname="Run Sync">
         <source>Run Sync</source>
         <target>Run Sync</target>
+      </trans-unit>
+      <trans-unit id="294df7f125" resname="Runs">
+        <source>Runs</source>
+        <target>Runs</target>
       </trans-unit>
       <trans-unit id="bc7dab17a0" resname="Save">
         <source>Save</source>
@@ -365,6 +461,14 @@
       <trans-unit id="ac74400cb3" resname="Status:">
         <source>Status:</source>
         <target>Status:</target>
+      </trans-unit>
+      <trans-unit id="f4d3fe1dd5" resname="Stored details:">
+        <source>Stored details:</source>
+        <target>Stored details:</target>
+      </trans-unit>
+      <trans-unit id="bbddf55c81" resname="Stored runs:">
+        <source>Stored runs:</source>
+        <target>Stored runs:</target>
       </trans-unit>
       <trans-unit id="9bb4e80465" resname="Success">
         <source>Success</source>
@@ -506,6 +610,14 @@
         <source>The history could not be loaded: %error%</source>
         <target>The history could not be loaded: %error%</target>
       </trans-unit>
+      <trans-unit id="f71f295aab" resname="The history could not be purged: %error%">
+        <source>The history could not be purged: %error%</source>
+        <target>The history could not be purged: %error%</target>
+      </trans-unit>
+      <trans-unit id="3301bb9df4" resname="The history only stores the summary of each run plus a limited sample of products, so it stays small even with large catalogs.">
+        <source>The history only stores the summary of each run plus a limited sample of products, so it stays small even with large catalogs.</source>
+        <target>The history only stores the summary of each run plus a limited sample of products, so it stays small even with large catalogs.</target>
+      </trans-unit>
       <trans-unit id="b4823ae703" resname="The image URL does not contain a valid host.">
         <source>The image URL does not contain a valid host.</source>
         <target>The image URL does not contain a valid host.</target>
@@ -577,6 +689,10 @@
       <trans-unit id="9b983858c2" resname="The mapping was saved successfully.">
         <source>The mapping was saved successfully.</source>
         <target>The mapping was saved successfully.</target>
+      </trans-unit>
+      <trans-unit id="3e12c85d9d" resname="The monitoring data could not be loaded: %error%">
+        <source>The monitoring data could not be loaded: %error%</source>
+        <target>The monitoring data could not be loaded: %error%</target>
       </trans-unit>
       <trans-unit id="9388a2132a" resname="The previous mapping could not be deleted.">
         <source>The previous mapping could not be deleted.</source>
@@ -754,9 +870,9 @@
         <source>The temporary image could not be saved.</source>
         <target>The temporary image could not be saved.</target>
       </trans-unit>
-      <trans-unit id="5a8e6a8421" resname="The thumbnail &quot;">
-        <source>The thumbnail "</source>
-        <target>The thumbnail "</target>
+      <trans-unit id="461b973421" resname="The thumbnail could not be generated.">
+        <source>The thumbnail could not be generated.</source>
+        <target>The thumbnail could not be generated.</target>
       </trans-unit>
       <trans-unit id="9bb63b8116" resname="The transformation &quot;%transform%&quot; is not valid.">
         <source>The transformation "%transform%" is not valid.</source>
@@ -774,6 +890,10 @@
         <source>There are no mappings for the source.</source>
         <target>There are no mappings for the source.</target>
       </trans-unit>
+      <trans-unit id="4aa70c0a32" resname="There are no runs stored yet.">
+        <source>There are no runs stored yet.</source>
+        <target>There are no runs stored yet.</target>
+      </trans-unit>
       <trans-unit id="cc8a25f9f9" resname="There are no synchronizations recorded yet.">
         <source>There are no synchronizations recorded yet.</source>
         <target>There are no synchronizations recorded yet.</target>
@@ -782,6 +902,10 @@
         <source>This synchronization was recorded in the history.</source>
         <target>This synchronization was recorded in the history.</target>
       </trans-unit>
+      <trans-unit id="b3ac111fd7" resname="Times">
+        <source>Times</source>
+        <target>Times</target>
+      </trans-unit>
       <trans-unit id="9d7362d066" resname="Total">
         <source>Total</source>
         <target>Total</target>
@@ -789,6 +913,10 @@
       <trans-unit id="ca4b766363" resname="Transformation">
         <source>Transformation</source>
         <target>Transformation</target>
+      </trans-unit>
+      <trans-unit id="f698f67f56" resname="Trigger">
+        <source>Trigger</source>
+        <target>Trigger</target>
       </trans-unit>
       <trans-unit id="78bce098f3" resname="Type:">
         <source>Type:</source>

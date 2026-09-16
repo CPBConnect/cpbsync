@@ -37,6 +37,10 @@ class HistoryHandler
                     );
                 }
 
+                $log['duration'] = $this->toSeconds(
+                    $log['duration_ms'] ?? null
+                );
+
                 $log['detail_url'] = $this->links->historyDetail(
                     (int) $log['id_log']
                 );
@@ -79,12 +83,27 @@ class HistoryHandler
         try {
             $detail = $this->history->detail($logId);
 
+            $log = $detail['log'];
+
+            $log['duration'] = $this->toSeconds(
+                $log['duration_ms'] ?? null
+            );
+
+            $log['memory'] = $this->toMegabytes(
+                $log['memory_kb'] ?? null
+            );
+
             $this->shell->assign([
-                'log' => $detail['log'],
+                'log' => $log,
                 'source' => $detail['source'],
                 'details' => $this->translateDetails(
                     $detail['details']
                 ),
+                'phases' => $this->decodePhases(
+                    $log['phases'] ?? null
+                ),
+                'items_shown' => count($detail['details']),
+                'items_total' => (int) ($log['items_total'] ?? 0),
                 'back_url' => $this->links->history(),
             ]);
 
@@ -102,6 +121,76 @@ class HistoryHandler
         }
 
         return $this->index();
+    }
+
+    /**
+     * Desglose de tiempos por fase, con nombres traducidos.
+     *
+     * Las fases se guardan en milisegundos; aquí pasan a segundos,
+     * que es como se muestran.
+     *
+     * @param mixed $json
+     *
+     * @return array<int, array{name: string, seconds: float}>
+     */
+    private function decodePhases($json): array
+    {
+        if (!is_string($json) || $json === '') {
+            return [];
+        }
+
+        $decoded = json_decode($json, true);
+
+        if (!is_array($decoded)) {
+            return [];
+        }
+
+        $labels = [
+            'read' => 'Reading the source',
+            'map' => 'Applying the mapping',
+            'sync' => 'Writing products',
+        ];
+
+        $phases = [];
+
+        foreach ($decoded as $name => $milliseconds) {
+            if (!is_numeric($milliseconds)) {
+                continue;
+            }
+
+            $phases[] = [
+                'name' => $this->shell->translate(
+                    $labels[$name] ?? (string) $name
+                ),
+                'seconds' => round(((int) $milliseconds) / 1000, 2),
+            ];
+        }
+
+        return $phases;
+    }
+
+    /**
+     * @param mixed $milliseconds
+     */
+    private function toSeconds($milliseconds): ?float
+    {
+        if ($milliseconds === null || !is_numeric($milliseconds)) {
+            return null;
+        }
+
+        return round(((int) $milliseconds) / 1000, 2);
+    }
+
+    /**
+     * @param mixed $kilobytes
+     */
+    private function toMegabytes($kilobytes): ?float
+    {
+        if ($kilobytes === null || !is_numeric($kilobytes)) {
+            return null;
+        }
+
+        return round(((int) $kilobytes) / 1024, 1);
     }
 
     /**
