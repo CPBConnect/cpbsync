@@ -694,6 +694,10 @@
         <source>The source name is required.</source>
         <target>El nombre de la fuente es obligatorio.</target>
       </trans-unit>
+      <trans-unit id="a15e045229" resname="The source redirected too many times.">
+        <source>The source redirected too many times.</source>
+        <target>La fuente redirigió demasiadas veces.</target>
+      </trans-unit>
       <trans-unit id="6eaa92bc45" resname="The source responded with an error status code.">
         <source>The source responded with an error status code.</source>
         <target>La fuente respondió con un código de estado de error.</target>

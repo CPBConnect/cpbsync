@@ -8,6 +8,7 @@ class HttpSourceReader
 {
     private const TIMEOUT = 30;
     private const USER_AGENT = 'CPB Sync/0.1';
+    private const MAX_REDIRECTS = 3;
 
     public function read(string $url): string
     {
@@ -15,7 +16,10 @@ class HttpSourceReader
     }
 
     /**
-     * Realiza una petición HTTP.
+     * Realiza una petición HTTP siguiendo las redirecciones.
+     *
+     * Cada salto se valida con las mismas reglas que la URL original,
+     * así que una redirección no puede llevar a un destino no admitido.
      *
      * @param array<string, string> $headers
      * @param array<string, int|float|string> $parameters
@@ -27,45 +31,71 @@ class HttpSourceReader
         array $parameters = [],
         ?string $body = null
     ): string {
-        $this->validateUrl($url);
+        $target = $this->appendParameters($url, $parameters);
+        $redirects = 0;
 
-        $url = $this->appendParameters($url, $parameters);
+        while (true) {
+            $this->validateUrl($target);
 
-        $options = [
-            'method' => strtoupper($method),
-            'timeout' => self::TIMEOUT,
-            'ignore_errors' => true,
-            'follow_location' => 0,
-            'header' => implode(
-                "\r\n",
-                array_merge(
-                    $this->defaultHeaders(),
-                    $this->formatHeaders($headers)
-                )
-            ),
-        ];
+            $options = [
+                'method' => strtoupper($method),
+                'timeout' => self::TIMEOUT,
+                'ignore_errors' => true,
+                'follow_location' => 0,
+                'header' => implode(
+                    "\r\n",
+                    array_merge(
+                        $this->defaultHeaders(),
+                        $this->formatHeaders($headers)
+                    )
+                ),
+            ];
 
-        if ($body !== null) {
-            $options['content'] = $body;
-        }
+            if ($body !== null) {
+                $options['content'] = $body;
+            }
 
-        $context = stream_context_create(['http' => $options]);
+            $context = stream_context_create(['http' => $options]);
 
-        $content = @file_get_contents(
-            $url,
-            false,
-            $context
-        );
-
-        if ($content === false) {
-            throw new RuntimeException(
-                'The source content could not be retrieved.'
+            $content = @file_get_contents(
+                $target,
+                false,
+                $context
             );
+
+            if ($content === false) {
+                throw new RuntimeException(
+                    'The source content could not be retrieved.'
+                );
+            }
+
+            $responseHeaders = $http_response_header ?? [];
+            $status = $this->statusFrom($responseHeaders);
+
+            if ($status >= 300 && $status < 400) {
+                $location = $this->locationFrom($responseHeaders);
+
+                if ($location === null
+                    || ++$redirects > self::MAX_REDIRECTS
+                ) {
+                    throw new RuntimeException(
+                        'The source redirected too many times.'
+                    );
+                }
+
+                $target = $this->absoluteUrl($target, $location);
+
+                continue;
+            }
+
+            if ($status >= 400) {
+                throw new RuntimeException(
+                    'The source responded with an error status code.'
+                );
+            }
+
+            return $content;
         }
-
-        $this->assertSuccessStatus($http_response_header ?? []);
-
-        return $content;
     }
 
     /**
@@ -124,9 +154,11 @@ class HttpSourceReader
     }
 
     /**
+     * Código de estado de la respuesta.
+     *
      * @param array<int, string> $responseHeaders
      */
-    private function assertSuccessStatus(array $responseHeaders): void
+    private function statusFrom(array $responseHeaders): int
     {
         $status = 0;
 
@@ -140,11 +172,55 @@ class HttpSourceReader
             }
         }
 
-        if ($status >= 400) {
-            throw new RuntimeException(
-                'The source responded with an error status code.'
-            );
+        return $status;
+    }
+
+    /**
+     * Destino indicado por una redirección.
+     *
+     * @param array<int, string> $responseHeaders
+     */
+    private function locationFrom(array $responseHeaders): ?string
+    {
+        foreach ($responseHeaders as $header) {
+            if (preg_match(
+                '#^location:\s*(.+)$#i',
+                trim((string) $header),
+                $matches
+            )) {
+                return trim($matches[1]);
+            }
         }
+
+        return null;
+    }
+
+    /**
+     * Convierte un destino relativo en absoluto.
+     */
+    private function absoluteUrl(string $base, string $location): string
+    {
+        if (preg_match('#^https?://#i', $location)) {
+            return $location;
+        }
+
+        $parts = parse_url($base);
+        $prefix = ($parts['scheme'] ?? 'http')
+                  . '://'
+                  . ($parts['host'] ?? '');
+
+        if (isset($parts['port'])) {
+            $prefix .= ':' . $parts['port'];
+        }
+
+        if (str_starts_with($location, '/')) {
+            return $prefix . $location;
+        }
+
+        $path = $parts['path'] ?? '/';
+        $directory = rtrim(dirname($path), '/');
+
+        return $prefix . $directory . '/' . $location;
     }
 
     private function validateUrl(string $url): void

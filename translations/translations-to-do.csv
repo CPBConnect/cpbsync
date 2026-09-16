@@ -172,6 +172,7 @@ Modules.Cpbsync.Admin,"The source host could not be resolved.","No fue posible r
 Modules.Cpbsync.Admin,"The source is not valid.","La fuente no es válida."
 Modules.Cpbsync.Admin,"The source must use HTTP or HTTPS.","La fuente debe utilizar HTTP o HTTPS."
 Modules.Cpbsync.Admin,"The source name is required.","El nombre de la fuente es obligatorio."
+Modules.Cpbsync.Admin,"The source redirected too many times.","La fuente redirigió demasiadas veces."
 Modules.Cpbsync.Admin,"The source responded with an error status code.","La fuente respondió con un código de estado de error."
 Modules.Cpbsync.Admin,"The source type ""%type%"" is not supported.","El tipo de fuente ""%type%"" no está soportado."
 Modules.Cpbsync.Admin,"The source type is not supported.","El tipo de fuente no está soportado."
