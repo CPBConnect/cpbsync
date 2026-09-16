@@ -90,10 +90,13 @@ class ProductImageCreator
             if (!$result) {
                 $image->delete();
 
+                /*
+                 * El mensaje no incluye el tipo de imagen: se traduce
+                 * por el catálogo y con un valor variable no habría
+                 * forma de encontrarlo.
+                 */
                 throw new \RuntimeException(
-                    'The thumbnail "' .
-                    $imageType['name'] .
-                    '".'
+                    'The thumbnail could not be generated.'
                 );
             }
         }

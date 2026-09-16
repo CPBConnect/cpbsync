@@ -24,6 +24,7 @@
                 <th>{l s='Updated' d='Modules.Cpbsync.Admin'}</th>
                 <th>{l s='Unchanged' d='Modules.Cpbsync.Admin'}</th>
                 <th>{l s='Errors' d='Modules.Cpbsync.Admin'}</th>
+                <th>{l s='Duration' d='Modules.Cpbsync.Admin'}</th>
                 <th>{l s='Status' d='Modules.Cpbsync.Admin'}</th>
                 <th></th>
             </tr>
@@ -61,6 +62,14 @@
 
                     <td>
                         {$log.errors}
+                    </td>
+
+                    <td>
+                        {if $log.duration !== null}
+                            {$log.duration} s
+                        {else}
+                            -
+                        {/if}
                     </td>
 
                     <td>

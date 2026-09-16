@@ -18,6 +18,126 @@ define('_PS_MODULE_DIR_', dirname(__DIR__) . DIRECTORY_SEPARATOR);
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
+/**
+ * Escapado de PrestaShop.
+ *
+ * El original delega en la conexión; en las pruebas los valores ya
+ * son seguros, así que se devuelven tal cual.
+ */
+function pSQL($value, $htmlOk = false)
+{
+    return (string) $value;
+}
+
+/**
+ * Stub de la capa de base de datos.
+ *
+ * Las pruebas que necesitan datos no imitan SQL: encolan respuestas.
+ * getRow() y executeS() devuelven lo encolado en orden y las
+ * escrituras quedan registradas para poder inspeccionarlas.
+ */
+class Db
+{
+    /** @var array<int, mixed> */
+    public array $rowQueue = [];
+
+    /** @var array<int, mixed> */
+    public array $setQueue = [];
+
+    /** @var array<int, string> */
+    public array $queries = [];
+
+    /** @var array<int, string> */
+    public array $writes = [];
+
+    public int $affectedRows = 0;
+    public int $insertId = 0;
+
+    private static ?Db $instance = null;
+
+    public static function getInstance(): Db
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+
+    public static function reset(): void
+    {
+        $instance = self::getInstance();
+
+        $instance->rowQueue = [];
+        $instance->setQueue = [];
+        $instance->queries = [];
+        $instance->writes = [];
+        $instance->affectedRows = 0;
+        $instance->insertId = 0;
+    }
+
+    public function getRow($sql, $useCache = true)
+    {
+        $this->queries[] = (string) $sql;
+
+        return array_shift($this->rowQueue);
+    }
+
+    public function executeS($sql, $array = true, $useCache = true)
+    {
+        $this->queries[] = (string) $sql;
+
+        return array_shift($this->setQueue) ?? [];
+    }
+
+    public function getValue($sql, $useCache = true)
+    {
+        $this->queries[] = (string) $sql;
+
+        $row = array_shift($this->rowQueue);
+
+        return is_array($row) ? reset($row) : $row;
+    }
+
+    public function execute($sql, $useCache = true)
+    {
+        $this->writes[] = (string) $sql;
+
+        return true;
+    }
+
+    public function insert($table, $data, $nullValues = false)
+    {
+        $this->writes[] = 'INSERT ' . $table;
+
+        return true;
+    }
+
+    public function update($table, $data, $where = '')
+    {
+        $this->writes[] = 'UPDATE ' . $table;
+
+        return true;
+    }
+
+    public function delete($table, $where = '')
+    {
+        $this->writes[] = 'DELETE ' . $table;
+
+        return true;
+    }
+
+    public function Affected_Rows()
+    {
+        return $this->affectedRows;
+    }
+
+    public function Insert_ID()
+    {
+        return $this->insertId;
+    }
+}
+
 class Tools
 {
     public static array $values = [];

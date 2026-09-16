@@ -20,11 +20,14 @@ use CPBConnect\Application\Source\SourceService;
 use CPBConnect\Application\Source\SourceValidator;
 use CPBConnect\Application\Sync\SourceSyncService;
 use CPBConnect\Application\Sync\SyncHistoryService;
+use CPBConnect\Application\Sync\SyncMetrics;
 use CPBConnect\Infrastructure\PrestaShop\ModuleAdminShell;
+use CPBConnect\Premium\Application\Monitoring\SyncMonitoringService;
 use CPBConnect\Premium\Application\Product\IncrementalProductState;
 use CPBConnect\Premium\Application\Source\Reader\JsonReader;
 use CPBConnect\Premium\Application\Source\Reader\RestApiReader;
 use CPBConnect\Premium\Application\Source\Reader\XmlReader;
+use CPBConnect\Premium\Presentation\Admin\Handler\MonitoringHandler;
 use CPBConnect\Presentation\Admin\AdminActionRouter;
 use CPBConnect\Presentation\Admin\AdminLinkBuilder;
 use CPBConnect\Presentation\Admin\Handler\HistoryHandler;
@@ -1855,6 +1858,14 @@ $logRepository->logs = [
         'details' => json_encode(
             [['reference' => 'A', 'status' => 'created']]
         ),
+        'items_total' => 500,
+        'duration_ms' => 1500,
+        'memory_kb' => 2048,
+        'phases' => json_encode([
+            'read' => 500,
+            'map' => 100,
+            'sync' => 900,
+        ]),
     ],
 ];
 
@@ -1893,6 +1904,22 @@ same(
     $shell->lastAssignment()['details'][0]['reference'],
     'pasa el detalle decodificado'
 );
+
+$detail = $shell->lastAssignment();
+
+same(1.5, $detail['log']['duration'], 'la duración se muestra en segundos');
+same(2.0, $detail['log']['memory'], 'la memoria se muestra en MB');
+same(
+    [
+        ['name' => 'Reading the source', 'seconds' => 0.5],
+        ['name' => 'Applying the mapping', 'seconds' => 0.1],
+        ['name' => 'Writing products', 'seconds' => 0.9],
+    ],
+    $detail['phases'],
+    'desglosa las fases en segundos'
+);
+same(1, $detail['items_shown'], 'cuenta los items guardados');
+same(500, $detail['items_total'], 'informa del total procesado');
 
 Tools::set(['id_log' => 99]);
 same(
@@ -2174,6 +2201,298 @@ same(
     $router->handle('history_detail'),
     'enruta history_detail'
 );
+
+/*
+ * ---------------------------------------------------------------------
+ * Acciones de administración de otras ediciones
+ * ---------------------------------------------------------------------
+ */
+
+section('AdminActionRouter: acciones adicionales');
+
+$additional = new FakeAdditionalActions();
+
+$routerWithAdditional = new AdminActionRouter(
+    $shell,
+    $stack['handlers']['source'],
+    $stack['handlers']['mapping'],
+    $stack['handlers']['sync'],
+    $stack['handlers']['history'],
+    $stack['handlers']['import'],
+    $additional
+);
+
+same(
+    'additional:monitor',
+    $routerWithAdditional->handle('monitor'),
+    'delega en el router adicional la acción que no es suya'
+);
+same(
+    ['monitor'],
+    $additional->handled,
+    'sólo le pasa la acción desconocida'
+);
+same(
+    'fetch:sources.tpl',
+    $routerWithAdditional->handle('otra_accion'),
+    'cae al listado si el router adicional tampoco la reconoce'
+);
+same(
+    'fetch:sources.tpl',
+    $router->handle('monitor'),
+    'sin edición adicional la acción no existe'
+);
+
+/*
+ * ---------------------------------------------------------------------
+ * SyncMetrics
+ * ---------------------------------------------------------------------
+ */
+
+section('SyncMetrics');
+
+$metrics = new SyncMetrics();
+usleep(3000);
+$metrics->startPhase('read');
+usleep(3000);
+$metrics->startPhase('map');
+usleep(3000);
+$metrics->stopPhase();
+
+$measured = $metrics->finish();
+
+truthy($measured['duration'] > 0, 'mide la duración total');
+truthy($measured['memory'] > 0, 'mide el pico de memoria en KB');
+same(
+    ['read', 'map'],
+    array_keys($measured['phases']),
+    'registra sólo las fases abiertas'
+);
+truthy(
+    $measured['phases']['read'] >= 2,
+    'cada fase acumula su tiempo en milisegundos'
+);
+truthy(
+    array_sum($measured['phases']) / 1000 <= $measured['duration'],
+    'la suma de fases no supera la duración total'
+);
+
+$repeated = new SyncMetrics();
+$repeated->startPhase('sync');
+usleep(2000);
+$repeated->startPhase('sync');
+usleep(2000);
+$repeated->stopPhase();
+
+truthy(
+    $repeated->finish()['phases']['sync'] >= 3,
+    'suma el tiempo de una fase abierta varias veces'
+);
+
+same(
+    [],
+    (new SyncMetrics())->finish()['phases'],
+    'sin fases no hay desglose'
+);
+
+/*
+ * ---------------------------------------------------------------------
+ * Monitorización (edición de pago)
+ * ---------------------------------------------------------------------
+ */
+
+if (class_exists(SyncMonitoringService::class)) {
+    section('SyncMonitoringService');
+
+    Db::reset();
+
+    $monitoring = new SyncMonitoringService();
+
+    Db::getInstance()->rowQueue = [[
+        'runs' => 3,
+        'products' => 120,
+        'created' => 10,
+        'updated' => 20,
+        'skipped' => 90,
+        'errors' => 2,
+        'avg_duration' => 1500,
+        'max_duration' => 2560,
+        'last_run' => '2024-05-01 10:00:00',
+    ]];
+
+    $summary = $monitoring->summary(7);
+
+    same(3, $summary['runs'], 'cuenta las ejecuciones del periodo');
+    same(120, $summary['products'], 'suma los productos procesados');
+    same(1.5, $summary['avg_duration'], 'convierte la media a segundos');
+    same(2.56, $summary['max_duration'], 'convierte el máximo a segundos');
+    truthy(
+        str_contains(Db::getInstance()->queries[0], '`date_add` >='),
+        'el resumen se limita al periodo'
+    );
+
+    Db::getInstance()->setQueue = [[
+        [
+            'id_log' => 2,
+            'source_name' => 'Proveedor A',
+            'duration_ms' => 1200,
+            'memory_kb' => 2048,
+        ],
+        [
+            'id_log' => 1,
+            'source_name' => null,
+            'duration_ms' => null,
+            'memory_kb' => null,
+        ],
+    ]];
+
+    $recent = $monitoring->recent(20);
+
+    same(1.2, $recent[0]['duration'], 'convierte la duración a segundos');
+    same(2.0, $recent[0]['memory'], 'convierte la memoria a megabytes');
+    same(null, $recent[1]['duration'], 'deja la duración vacía sin datos');
+    same(null, $recent[1]['memory'], 'deja la memoria vacía sin datos');
+    truthy(
+        str_contains(Db::getInstance()->queries[1], 'LIMIT 20'),
+        'limita las ejecuciones devueltas'
+    );
+
+    Db::getInstance()->setQueue = [[
+        [
+            'details' => (string) json_encode([
+                [
+                    'reference' => 'A',
+                    'errors' => [
+                        'The reference is required.',
+                        'No stock',
+                    ],
+                ],
+                ['reference' => 'B', 'errors' => ['No stock']],
+            ]),
+        ],
+        ['details' => 'no es json'],
+        [
+            'details' => (string) json_encode([
+                ['reference' => 'C', 'errors' => ['No stock', '  ']],
+            ]),
+        ],
+    ]];
+
+    same(
+        [
+            'No stock' => 3,
+            'The reference is required.' => 1,
+        ],
+        $monitoring->topErrors(30, 5),
+        'agrupa los errores repetidos y descarta los vacíos'
+    );
+
+    Db::getInstance()->rowQueue = [[
+        'rows_count' => 4,
+        'bytes' => 2097152,
+    ]];
+
+    same(
+        ['rows' => 4, 'megabytes' => 2.0],
+        $monitoring->size(),
+        'mide el tamaño del historial'
+    );
+
+    Db::getInstance()->affectedRows = 5;
+
+    same(5, $monitoring->purge(30), 'devuelve las filas borradas');
+
+    $delete = Db::getInstance()->writes[0];
+
+    truthy(
+        str_contains($delete, 'DELETE FROM `ps_cpbsync_sync_log`'),
+        'borra de la tabla del historial'
+    );
+    truthy(
+        str_contains($delete, '`date_add` <'),
+        'aplica la retención por fecha'
+    );
+
+    section('MonitoringHandler');
+
+    Db::reset();
+
+    $monitoringShell = new FakeShell();
+
+    $monitoringHandler = new MonitoringHandler(
+        $monitoringShell,
+        $stack['doubles']['links'],
+        $monitoring,
+        $stack['handlers']['source']
+    );
+
+    $fillMonitoringQueues = static function (): void {
+        Db::getInstance()->rowQueue = [
+            ['runs' => 1, 'errors' => 0],
+            ['rows_count' => 1, 'bytes' => 1024],
+        ];
+
+        Db::getInstance()->setQueue = [
+            [
+                [
+                    'id_log' => 1,
+                    'source_name' => null,
+                    'duration_ms' => 1000,
+                    'memory_kb' => 1024,
+                ],
+            ],
+            [],
+        ];
+    };
+
+    $fillMonitoringQueues();
+    Tools::set(['days' => '30']);
+
+    same(
+        'fetch:monitoring.tpl',
+        $monitoringHandler->index(),
+        'renderiza el panel de monitorización'
+    );
+    same(
+        30,
+        $monitoringShell->lastAssignment()['days'],
+        'usa el periodo solicitado'
+    );
+    same(
+        'Deleted source',
+        $monitoringShell->lastAssignment()['logs'][0]['source_name'],
+        'nombra las fuentes eliminadas'
+    );
+    truthy(
+        str_contains(
+            $monitoringShell->lastAssignment()['logs'][0]['detail_url'],
+            'history_detail'
+        ),
+        'enlaza el detalle de cada ejecución'
+    );
+
+    $fillMonitoringQueues();
+    Db::getInstance()->affectedRows = 5;
+    Tools::set(['days' => '9999']);
+
+    same(
+        'fetch:monitoring.tpl',
+        $monitoringHandler->purge(),
+        'purga el historial y vuelve al panel'
+    );
+    same(
+        ['Removed 5 runs older than 365 days.'],
+        $monitoringShell->confirmations,
+        'confirma cuántas ejecuciones se han borrado'
+    );
+    truthy(
+        str_contains(Db::getInstance()->writes[0], 'DELETE FROM'),
+        'la purga borra de verdad'
+    );
+
+    Db::reset();
+    Tools::reset();
+}
 
 /*
  * ---------------------------------------------------------------------

@@ -33,13 +33,20 @@ use CPBConnect\Presentation\Admin\Handler\SyncHandler;
  */
 final class AdminActionRouter
 {
+    /**
+     * Router de la edición de pago, si está instalada.
+     */
+    private const ADDITIONAL_ROUTER =
+        'CPBConnect\\Premium\\Presentation\\Admin\\PremiumActionRouter';
+
     public function __construct(
         private AdminShellInterface $shell,
         private SourceHandler $sources,
         private MappingHandler $mapping,
         private SyncHandler $sync,
         private HistoryHandler $history,
-        private ImportHandler $import
+        private ImportHandler $import,
+        private ?AdminActionsInterface $additional = null
     ) {
     }
 
@@ -63,12 +70,17 @@ final class AdminActionRouter
             $readers
         );
 
+        $additionalClass = self::additionalRouterClass();
+
         $sourceHandler = new SourceHandler(
             $shell,
             $links,
             $sourceService,
             new SourceValidator($readers),
-            $readers
+            $readers,
+            $additionalClass !== null
+                ? $links->action('monitor')
+                : null
         );
 
         $mappingHandler = new MappingHandler(
@@ -90,6 +102,16 @@ final class AdminActionRouter
             new ProductSync()
         );
 
+        $historyHandler = new HistoryHandler(
+            $shell,
+            $links,
+            new SyncHistoryService(
+                $logRepository,
+                $sourceRepository
+            ),
+            $sourceHandler
+        );
+
         return new self(
             $shell,
             $sourceHandler,
@@ -109,15 +131,7 @@ final class AdminActionRouter
                 $mappingHandler,
                 $sourceHandler
             ),
-            new HistoryHandler(
-                $shell,
-                $links,
-                new SyncHistoryService(
-                    $logRepository,
-                    $sourceRepository
-                ),
-                $sourceHandler
-            ),
+            $historyHandler,
             new ImportHandler(
                 $shell,
                 $links,
@@ -129,8 +143,23 @@ final class AdminActionRouter
                     new ImportFileStorage($readers),
                     $batchProcessor
                 )
-            )
+            ),
+            $additionalClass !== null
+                ? $additionalClass::create($shell, $links, $sourceHandler)
+                : null
         );
+    }
+
+    /**
+     * Clase del router adicional, si la edición está instalada.
+     *
+     * @return class-string|null
+     */
+    private static function additionalRouterClass(): ?string
+    {
+        return class_exists(self::ADDITIONAL_ROUTER)
+            ? self::ADDITIONAL_ROUTER
+            : null;
     }
 
     /**
@@ -190,7 +219,8 @@ final class AdminActionRouter
                 exit;
 
             default:
-                return $this->sources->index();
+                return $this->additional?->handle($action)
+                       ?? $this->sources->index();
         }
     }
 }

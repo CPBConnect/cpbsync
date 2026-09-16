@@ -54,13 +54,27 @@ class SourceSyncService
      */
     public function sync(int $sourceId): array
     {
+        $metrics = new SyncMetrics();
+
+        $metrics->startPhase('read');
+
         $source = $this->requireSource($sourceId);
         $rows = $this->requireRows($source);
         $mapping = $this->requireMapping($sourceId);
 
+        $metrics->stopPhase();
+
+        $metrics->startPhase('map');
+
         $products = $this->productMapper->map($rows, $mapping);
 
+        $metrics->stopPhase();
+
+        $metrics->startPhase('sync');
+
         $result = $this->productSync->sync($products);
+
+        $metrics->stopPhase();
 
         return [
             'source' => $source,
@@ -68,7 +82,8 @@ class SourceSyncService
             'log_id' => $this->logRepository->create(
                 $sourceId,
                 $result,
-                'manual'
+                'manual',
+                $metrics->finish()
             ),
         ];
     }

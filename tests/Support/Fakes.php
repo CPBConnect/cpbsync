@@ -21,6 +21,7 @@ use CPBConnect\Infrastructure\Persistence\SourceRepository;
 use CPBConnect\Infrastructure\Persistence\SyncLogRepository;
 use CPBConnect\Infrastructure\Source\HttpSourceReader;
 use CPBConnect\Application\Import\ImportFileStorage;
+use CPBConnect\Presentation\Admin\AdminActionsInterface;
 use CPBConnect\Presentation\Admin\AdminShellInterface;
 
 class FakeShell implements AdminShellInterface
@@ -260,12 +261,14 @@ class FakeSyncLogRepository extends SyncLogRepository
     public function create(
         int $sourceId,
         array $result,
-        string $executionType = 'manual'
+        string $executionType = 'manual',
+        array $metrics = []
     ): int {
         $this->created[] = [
             'id_source' => $sourceId,
             'result' => $result,
             'execution_type' => $executionType,
+            'metrics' => $metrics,
         ];
 
         return $this->nextId++;
@@ -539,5 +542,21 @@ class FakeCatalogProductState extends CatalogProductState
 
     public function remember(array $product, int $idProduct): void
     {
+    }
+}
+
+/**
+ * Router adicional de prueba: sólo reconoce "monitor".
+ */
+class FakeAdditionalActions implements AdminActionsInterface
+{
+    /** @var array<int, string> */
+    public array $handled = [];
+
+    public function handle(string $action): ?string
+    {
+        $this->handled[] = $action;
+
+        return $action === 'monitor' ? 'additional:monitor' : null;
     }
 }
