@@ -323,6 +323,72 @@ class FakeImportFileStorage extends ImportFileStorage
     }
 }
 
+class FakeImportBatchRepository extends ImportRepository
+{
+    /** @var array<int, array<string, mixed>> */
+    public array $imports = [];
+
+    public array $statuses = [];
+    public array $progress = [];
+    public array $cleared = [];
+
+    public function __construct()
+    {
+    }
+
+    public function find(int $importId): ?array
+    {
+        return $this->imports[$importId] ?? null;
+    }
+
+    public function updateStatus(int $importId, string $status): bool
+    {
+        $this->statuses[] = [$importId, $status];
+
+        if (isset($this->imports[$importId])) {
+            $this->imports[$importId]['status'] = $status;
+        }
+
+        return true;
+    }
+
+    public function updateProgress(
+        int $importId,
+        int $processed,
+        int $success,
+        int $errors,
+        int $currentPosition
+    ): bool {
+        $this->progress[] = [
+            $importId,
+            $processed,
+            $success,
+            $errors,
+            $currentPosition,
+        ];
+
+        if (isset($this->imports[$importId])) {
+            $this->imports[$importId]['processed'] = $processed;
+            $this->imports[$importId]['success'] = $success;
+            $this->imports[$importId]['errors'] = $errors;
+            $this->imports[$importId]['current_position'] = $currentPosition;
+        }
+
+        return true;
+    }
+
+    public function clearFilePath(int $importId): bool
+    {
+        $this->cleared[] = $importId;
+
+        if (isset($this->imports[$importId])) {
+            $this->imports[$importId]['file_path'] = null;
+        }
+
+        return true;
+    }
+}
+
 class FakeImportBatchProcessor extends ImportBatchProcessor
 {
     public array $result = [
