@@ -464,9 +464,11 @@ finishes you will see the **Synchronization result**:
   synchronization **does not stop** because of a product that fails.
 - A **Back to mapping** button at the foot.
 
-Manual synchronization is not limited: if the catalogue has 20,000 products, it
-processes all of them. For large catalogues it is better to use cron, which goes
-in batches and does not depend on PHP's maximum execution time.
+Manual synchronization processes the whole catalogue in a single request, so it
+has no cap on products, but it does depend on PHP's maximum execution time and
+on the tab not being closed. For very large catalogues it is better to use cron
+(which goes in batches) or the file import, which also advances in batches and
+shows the progress.
 
 ### 11.2 Importing a file
 
