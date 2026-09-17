@@ -5,6 +5,7 @@ namespace CPBConnect\Application\Import;
 use CPBConnect\Application\Product\ProductMapper;
 use CPBConnect\Application\Product\ProductSync;
 use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
+use CPBConnect\Application\Sync\SyncOptions;
 use CPBConnect\Infrastructure\Persistence\ImportRepository;
 use CPBConnect\Infrastructure\Persistence\MappingRepository;
 use CPBConnect\Infrastructure\Persistence\SourceRepository;

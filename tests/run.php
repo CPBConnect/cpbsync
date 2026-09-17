@@ -9,6 +9,7 @@
 require_once __DIR__ . '/bootstrap.php';
 require_once __DIR__ . '/Support/Fakes.php';
 
+use CPBConnect\Application\Import\ImportBatchProcessor;
 use CPBConnect\Application\Import\ImportService;
 use CPBConnect\Application\Mapping\MappingConfigurationBuilder;
 use CPBConnect\Application\Mapping\MappingApplier;
@@ -3303,6 +3304,139 @@ same(
     $response['message'],
     'propaga el error del procesador'
 );
+
+/*
+ * ---------------------------------------------------------------------
+ * ImportBatchProcessor
+ * ---------------------------------------------------------------------
+ */
+
+section('ImportBatchProcessor');
+
+/*
+ * Aquí se instancia la clase real, no un doble que sobrescriba
+ * processBatch(): es la que lee las opciones de sincronización de la
+ * fuente al importar un archivo. Un `use` que falte en esa clase no se
+ * ve si el doble se salta el método, y el fallo sólo aparece al
+ * importar de verdad (fatal: clase no encontrada).
+ */
+$batchSources = new FakeSourceRepository();
+$batchMappings = new FakeMappingRepository();
+$batchImports = new FakeImportBatchRepository();
+$batchReaders = new SourceReaderRegistry();
+$batchReader = new FakeSourceReader('csv');
+
+$batchReaders->register($batchReader);
+
+$batchMapper = new FakeProductMapper();
+$batchSync = new FakeProductSync();
+
+$batchProcessor = new ImportBatchProcessor(
+    $batchSources,
+    $batchMappings,
+    $batchImports,
+    $batchReaders,
+    $batchMapper,
+    $batchSync
+);
+
+$batchSources->sources = [
+    3 => [
+        'id_source' => 3,
+        'type' => 'csv',
+        'options' => json_encode(['skip_stock' => '1']),
+    ],
+];
+
+$batchMappings->mappings = [
+    [
+        'source_field' => 'sku',
+        'target_field' => 'reference',
+        'transform' => 'none',
+        'transform_config' => null,
+    ],
+];
+
+$batchReader->result = [
+    'headers' => ['sku'],
+    'rows' => [['sku' => 'IMP-001'], ['sku' => 'IMP-002']],
+    'total' => 2,
+];
+
+$batchImports->imports = [
+    7 => [
+        'id_import' => 7,
+        'id_source' => 3,
+        'status' => 'processing',
+        'total' => 2,
+        'processed' => 0,
+        'success' => 0,
+        'errors' => 0,
+        'current_position' => 0,
+        'file_path' => null,
+    ],
+];
+
+$batchSync->result = [
+    'total' => 2,
+    'created' => 2,
+    'updated' => 0,
+    'skipped' => 0,
+    'errors' => 0,
+    'items' => [
+        ['reference' => 'IMP-001', 'status' => 'created'],
+        ['reference' => 'IMP-002', 'status' => 'created'],
+    ],
+];
+
+$batch = $batchProcessor->processBatch(7);
+
+same(2, $batch['batch']['total'], 'procesa el lote de la importación');
+same(2, $batch['batch']['created'], 'cuenta los productos creados');
+same(2, count($batchMapper->mapped[0][0]), 'mapea las filas del lote');
+truthy(
+    $batchSync->options[0] instanceof SyncOptions,
+    'sincroniza con las opciones de la fuente'
+);
+truthy(
+    $batchSync->options[0]->skipsStock(),
+    'lee las opciones guardadas en la fuente'
+);
+same(
+    2,
+    $batchImports->progress[0][1],
+    'guarda el avance de la importación'
+);
+same(
+    'completed',
+    $batchImports->statuses[count($batchImports->statuses) - 1][1],
+    'marca la importación como completada'
+);
+same(7, $batchImports->cleared[0], 'suelta el archivo temporal');
+
+// Una fuente sin opciones se comporta como siempre.
+$batchSources->sources[3]['options'] = null;
+$batchImports->imports[7]['status'] = 'processing';
+$batchImports->imports[7]['current_position'] = 0;
+
+$batchProcessor->processBatch(7);
+
+truthy(
+    $batchSync->options[1] instanceof SyncOptions,
+    'sin opciones también sincroniza'
+);
+same(
+    false,
+    $batchSync->options[1]->skipsStock(),
+    'sin opciones no se salta el stock'
+);
+
+// Una importación ya terminada no se vuelve a procesar.
+$batchImports->imports[7]['status'] = 'completed';
+
+$done = $batchProcessor->processBatch(7);
+
+same(0, $done['batch']['total'], 'una importación terminada no se repite');
 
 /*
  * ---------------------------------------------------------------------
