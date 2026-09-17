@@ -20,11 +20,11 @@
       </trans-unit>
       <trans-unit id="646453bdeb" resname="A product cannot be created without a name.">
         <source>A product cannot be created without a name.</source>
-        <target>No se puede crear un producto sin name.</target>
+        <target>No se puede crear un producto sin nombre.</target>
       </trans-unit>
       <trans-unit id="986134313d" resname="A product cannot be created without a reference.">
         <source>A product cannot be created without a reference.</source>
-        <target>No se puede crear un producto sin reference.</target>
+        <target>No se puede crear un producto sin referencia.</target>
       </trans-unit>
       <trans-unit id="5de22071c1" resname="Active">
         <source>Active</source>
@@ -1312,11 +1312,11 @@
       </trans-unit>
       <trans-unit id="bd3e09dafa" resname="Unable to create CPB Sync mapping.">
         <source>Unable to create CPB Sync mapping.</source>
-        <target>Unable to create CPB Sync mapping.</target>
+        <target>No fue posible crear el mapping de CPB Sync.</target>
       </trans-unit>
       <trans-unit id="76755eae05" resname="Unable to create CPB Sync source.">
         <source>Unable to create CPB Sync source.</source>
-        <target>Unable to create CPB Sync source.</target>
+        <target>No fue posible crear la fuente de CPB Sync.</target>
       </trans-unit>
       <trans-unit id="cc033df112" resname="Unchanged">
         <source>Unchanged</source>
