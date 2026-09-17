@@ -13,6 +13,7 @@ use CPBConnect\Application\Product\ProductMapper;
 use CPBConnect\Application\Product\ProductSync;
 use CPBConnect\Application\Product\CatalogProductState;
 use CPBConnect\Application\Source\Reader\AbstractSourceReader;
+use CPBConnect\Application\Sync\SyncOptions;
 use CPBConnect\Infrastructure\Persistence\ImportRepository;
 use CPBConnect\Infrastructure\Persistence\MappingRepository;
 use CPBConnect\Infrastructure\Persistence\ProductMetaRepository;
@@ -390,6 +391,9 @@ class FakeProductSync extends ProductSync
 {
     public array $synced = [];
 
+    /** @var array<int, SyncOptions|null> */
+    public array $options = [];
+
     public array $result = [
         'total' => 1,
         'created' => 1,
@@ -403,9 +407,13 @@ class FakeProductSync extends ProductSync
     {
     }
 
-    public function sync(array $products): array
-    {
+    public function sync(
+        array $products,
+        ?SyncOptions $options = null
+    ): array {
         $this->synced[] = $products;
+
+        $this->options[] = $options;
 
         return $this->result;
     }
@@ -542,6 +550,26 @@ class FakeCatalogProductState extends CatalogProductState
 
     public function remember(array $product, int $idProduct): void
     {
+    }
+}
+
+/**
+ * Estado de producto con referencias ya existentes, para probar las
+ * decisiones de sincronización sin tocar PrestaShop.
+ */
+class FakeExistingProductState extends FakeCatalogProductState
+{
+    /** @var array<string, int> */
+    public array $ids = [];
+
+    public function findExistingId(string $reference): ?int
+    {
+        return $this->ids[$reference] ?? null;
+    }
+
+    public function hasChanges(int $idProduct, array $product): bool
+    {
+        return true;
     }
 }
 

@@ -17,6 +17,7 @@ use CPBConnect\Application\Mapping\MappingSaver;
 use CPBConnect\Application\Product\ProductImageProviderFactory;
 use CPBConnect\Application\Product\ImageList;
 use CPBConnect\Application\Product\ProductStateFactory;
+use CPBConnect\Application\Product\ProductSync;
 use CPBConnect\Application\Schedule\ScheduleFactory;
 use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use CPBConnect\Application\Source\SourceService;
@@ -24,6 +25,8 @@ use CPBConnect\Application\Source\SourceValidator;
 use CPBConnect\Application\Sync\SourceSyncService;
 use CPBConnect\Application\Sync\SyncHistoryService;
 use CPBConnect\Application\Sync\SyncMetrics;
+use CPBConnect\Application\Sync\SyncOptionFactory;
+use CPBConnect\Application\Sync\SyncOptions;
 use CPBConnect\Application\Transform\TransformerFactory;
 use CPBConnect\Infrastructure\PrestaShop\ModuleAdminShell;
 use CPBConnect\Premium\Application\Monitoring\SyncMonitoringService;
@@ -1761,6 +1764,87 @@ if (!class_exists(
         'acepta un calendario válido'
     );
 }
+
+/*
+ * ---------------------------------------------------------------------
+ * Opciones de sincronización
+ * ---------------------------------------------------------------------
+ */
+
+section('Opciones de sincronización');
+
+$syncOptions = SyncOptions::fromJson(
+    '{"create_only":"1","fill_empty":"","skip_stock":"0"}'
+);
+
+same(true, $syncOptions->onlyCreate(), 'lee una opción activada');
+same(
+    false,
+    $syncOptions->fillEmpty(),
+    'un valor vacío es una opción apagada'
+);
+same(false, $syncOptions->skipsStock(), 'el cero también está apagado');
+same(false, $syncOptions->skipsImages(), 'lo que no viene está apagado');
+same([], SyncOptions::none()->all(), 'sin opciones no hay nada activado');
+
+same(
+    true,
+    SyncOptions::fromSource(
+        ['options' => '{"skip_images":"1"}']
+    )->skipsImages(),
+    'las opciones se leen de la fuente'
+);
+same(
+    false,
+    SyncOptions::fromSource([])->onlyCreate(),
+    'una fuente sin opciones se comporta como siempre'
+);
+
+$syncOptionRegistry = SyncOptionFactory::create();
+
+truthy(
+    $syncOptionRegistry->has(SyncOptions::CREATE_ONLY)
+    && $syncOptionRegistry->has(SyncOptions::FILL_EMPTY)
+    && $syncOptionRegistry->has(SyncOptions::SKIP_STOCK)
+    && $syncOptionRegistry->has(SyncOptions::SKIP_IMAGES),
+    'el núcleo registra las cuatro opciones'
+);
+same(
+    4,
+    count($syncOptionRegistry->describeAll()),
+    'el formulario recibe una casilla por opción'
+);
+
+// "Sólo crear": un producto que ya existe no se toca.
+$existingState = new FakeExistingProductState();
+$existingState->ids = ['SKU-1' => 10];
+
+$optionsSync = new ProductSync($existingState);
+
+$onlyCreate = $optionsSync->sync(
+    [['reference' => 'SKU-1', 'name' => 'Producto uno', 'price' => 10]],
+    SyncOptions::fromArray([SyncOptions::CREATE_ONLY => '1'])
+);
+
+same(
+    1,
+    $onlyCreate['skipped'],
+    'con sólo crear, lo que ya existe se omite'
+);
+same(0, $onlyCreate['created'], 'y no se crea de nuevo');
+same(0, $onlyCreate['updated'], 'ni se actualiza');
+same(0, $onlyCreate['errors'], 'sin errores');
+same(
+    'skipped',
+    $onlyCreate['items'][0]['status'],
+    'el detalle lo marca como omitido'
+);
+
+same(
+    'SKU-1',
+    $onlyCreate['items'][0]['reference'],
+    'el detalle lleva la referencia'
+);
 
 if (class_exists(XmlReader::class)) {
     class TestableXmlReader extends XmlReader

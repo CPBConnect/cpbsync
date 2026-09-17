@@ -2,6 +2,7 @@
 
 namespace CPBConnect\Application\Product;
 
+use CPBConnect\Application\Sync\SyncOptions;
 use Product;
 
 class ProductImageApplier
@@ -24,8 +25,15 @@ class ProductImageApplier
             new \CPBConnect\Infrastructure\Persistence\ProductMetaRepository();
     }
 
-    public function apply(Product $product, array $data): void
-    {
+    public function apply(
+        Product $product,
+        array $data,
+        ?SyncOptions $options = null
+    ): void {
+        if ($options !== null && $options->skipsImages()) {
+            return;
+        }
+
         if (!isset($data['image'])) {
             return;
         }

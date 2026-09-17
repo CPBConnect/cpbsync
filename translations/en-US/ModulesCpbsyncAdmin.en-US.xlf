@@ -218,6 +218,14 @@
         <source>Divide</source>
         <target>Divide</target>
       </trans-unit>
+      <trans-unit id="a205a2bf5e" resname="Do not import images">
+        <source>Do not import images</source>
+        <target>Do not import images</target>
+      </trans-unit>
+      <trans-unit id="7cee4c820a" resname="Do not synchronise stock">
+        <source>Do not synchronise stock</source>
+        <target>Do not synchronise stock</target>
+      </trans-unit>
       <trans-unit id="e02d2ae03d" resname="Duration">
         <source>Duration</source>
         <target>Duration</target>
@@ -510,6 +518,14 @@
         <source>One rule per line, with the source value and the target value separated by "=".</source>
         <target>One rule per line, with the source value and the target value separated by "=".</target>
       </trans-unit>
+      <trans-unit id="f87713340a" resname="Only create new products">
+        <source>Only create new products</source>
+        <target>Only create new products</target>
+      </trans-unit>
+      <trans-unit id="fd7ad20d4c" resname="Only fill empty fields">
+        <source>Only fill empty fields</source>
+        <target>Only fill empty fields</target>
+      </trans-unit>
       <trans-unit id="f718a836af" resname="Only the first %shown% of %total% records are stored. The rest are summarised in the counters above.">
         <source>Only the first %shown% of %total% records are stored. The rest are summarised in the counters above.</source>
         <target>Only the first %shown% of %total% records are stored. The rest are summarised in the counters above.</target>
@@ -577,6 +593,10 @@
       <trans-unit id="94296b0206" resname="Products processed">
         <source>Products processed</source>
         <target>Products processed</target>
+      </trans-unit>
+      <trans-unit id="25b42e3a83" resname="Products that already exist are left untouched, even if the catalog has changed.">
+        <source>Products that already exist are left untouched, even if the catalog has changed.</source>
+        <target>Products that already exist are left untouched, even if the catalog has changed.</target>
       </trans-unit>
       <trans-unit id="7c8bc2148b" resname="Reading the source">
         <source>Reading the source</source>
@@ -753,6 +773,10 @@
       <trans-unit id="d23e710e94" resname="Synchronization history">
         <source>Synchronization history</source>
         <target>Synchronization history</target>
+      </trans-unit>
+      <trans-unit id="9f933e9cfc" resname="Synchronization options">
+        <source>Synchronization options</source>
+        <target>Synchronization options</target>
       </trans-unit>
       <trans-unit id="3ee185d605" resname="Synchronization result">
         <source>Synchronization result</source>
@@ -962,6 +986,10 @@
         <source>The image must use HTTP or HTTPS.</source>
         <target>The image must use HTTP or HTTPS.</target>
       </trans-unit>
+      <trans-unit id="268d19dba8" resname="The images the product already has are kept, and no new ones are downloaded.">
+        <source>The images the product already has are kept, and no new ones are downloaded.</source>
+        <target>The images the product already has are kept, and no new ones are downloaded.</target>
+      </trans-unit>
       <trans-unit id="ca74f7ba01" resname="The import could not be created.">
         <source>The import could not be created.</source>
         <target>The import could not be created.</target>
@@ -1053,6 +1081,10 @@
       <trans-unit id="bb780c9bfe" resname="The product image could not be saved.">
         <source>The product image could not be saved.</source>
         <target>The product image could not be saved.</target>
+      </trans-unit>
+      <trans-unit id="4184f3b2d9" resname="The quantity in the shop is left as it is.">
+        <source>The quantity in the shop is left as it is.</source>
+        <target>The quantity in the shop is left as it is.</target>
       </trans-unit>
       <trans-unit id="bba943e3f0" resname="The run does not exist.">
         <source>The run does not exist.</source>
@@ -1321,6 +1353,10 @@
       <trans-unit id="413286b6e2" resname="Value map">
         <source>Value map</source>
         <target>Value map</target>
+      </trans-unit>
+      <trans-unit id="855b5dbbf6" resname="Values already present in the product are kept: useful when the descriptions or the prices are edited by hand.">
+        <source>Values already present in the product are kept: useful when the descriptions or the prices are edited by hand.</source>
+        <target>Values already present in the product are kept: useful when the descriptions or the prices are edited by hand.</target>
       </trans-unit>
       <trans-unit id="f0c302d425" resname="Values that mean yes">
         <source>Values that mean yes</source>

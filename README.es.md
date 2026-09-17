@@ -23,6 +23,7 @@ Si CPB Sync te resulta útil, considera apoyar su desarrollo continuo.
 - 📦 Creación y actualización de productos
 - ⏭️ Omisión automática de productos sin cambios
 - 🖼️ Sincronización de imágenes de productos, con varias imágenes por producto
+- ⚙️ Opciones de sincronización por fuente: sólo crear, rellenar sólo los campos vacíos, no tocar el stock y no importar imágenes
 - 📊 Resultados e historial de sincronizaciones, con duración, pico de memoria y tiempo por fase
 - 📈 Procesamiento por lotes con seguimiento del progreso
 - ⏰ Sincronización programada mediante cron
@@ -126,6 +127,15 @@ CPB Sync puede:
 - Continuar procesando el resto de productos cuando un producto presenta un error
 
 Los resultados de cada sincronización se almacenan en el historial del módulo.
+
+Cada fuente decide qué puede escribir la sincronización. Las opciones se marcan en el formulario de la fuente y se guardan con ella:
+
+- **Sólo crear productos nuevos**: los productos que ya existen no se tocan, aunque el catálogo haya cambiado. Cuentan como omitidos.
+- **Rellenar sólo los campos vacíos**: la referencia, el nombre, la descripción, el precio y el EAN sólo se escriben cuando el producto no tiene nada ahí, así que los valores editados a mano se conservan. El stock tiene su propia opción, porque un stock vacío en un catálogo suele significar "agotado" y rellenarlo vaciaría la cantidad de la tienda.
+- **No sincronizar el stock**: la cantidad de la tienda se queda como está.
+- **No importar imágenes**: no se descarga ninguna imagen y se conservan las que el producto ya tiene. Las descargas no se preparan siquiera, así que tampoco se gasta red en comprobarlas.
+
+Sin ninguna opción marcada la sincronización se comporta como antes: se actualiza todo lo mapeado, el stock y las imágenes.
 
 Cada sincronización registra:
 
@@ -375,17 +385,13 @@ Consulta el archivo `CHANGELOG.md` para la lista completa.
 
 ## Roadmap
 
-La edición de pago cubre las fuentes XML, JSON y REST, la sincronización incremental, los catálogos anidados, las transformaciones avanzadas, varias imágenes por producto, más programación y el panel de monitorización. Lo que sigue en el roadmap:
-
-- Opciones adicionales de sincronización
-
-El roadmap puede evolucionar según los comentarios de los usuarios y las necesidades reales de las tiendas.
+La edición de pago cubre las fuentes XML, JSON y REST, la sincronización incremental, los catálogos anidados, las transformaciones avanzadas, varias imágenes por producto, más programación y el panel de monitorización. Las opciones de sincronización forman parte de la versión gratuita, así que el roadmap anunciado está completo: lo siguiente se decidirá a partir de los comentarios de los usuarios y las necesidades reales de las tiendas.
 
 ## Versión gratuita
 
 CPB Sync 1.2.0 se proporciona de forma gratuita.
 
-La versión gratuita incluye el flujo completo de sincronización CSV: fuentes, mapeo, transformaciones, Dry Run, procesamiento por lotes, importación de imágenes, historial y ejecución programada mediante cron.
+La versión gratuita incluye el flujo completo de sincronización CSV: fuentes, mapeo, transformaciones, Dry Run, procesamiento por lotes, importación de imágenes, opciones de sincronización por fuente, historial y ejecución programada mediante cron.
 
 ## Edición de pago
 

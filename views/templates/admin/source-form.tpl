@@ -192,6 +192,45 @@
                 </label>
             </div>
 
+            {if !empty($sync_options)}
+
+                <div class="form-group">
+
+                    <label>
+                        {l s='Synchronization options' d='Modules.Cpbsync.Admin'}
+                    </label>
+
+                    {foreach from=$sync_options item=option}
+
+                        <div class="checkbox">
+
+                            <label>
+
+                                <input
+                                        type="checkbox"
+                                        name="sync_options[{$option.name|escape:'htmlall':'UTF-8'}]"
+                                        value="1"
+                                        {if !empty($saved_options[$option.name])}checked{/if}
+                                >
+
+                                {$option.label|escape:'htmlall':'UTF-8'}
+
+                            </label>
+
+                            {if $option.hint}
+                                <p class="help-block">
+                                    {$option.hint|escape:'htmlall':'UTF-8'}
+                                </p>
+                            {/if}
+
+                        </div>
+
+                    {/foreach}
+
+                </div>
+
+            {/if}
+
             <hr>
 
             <a

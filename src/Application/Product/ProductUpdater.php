@@ -2,6 +2,7 @@
 
 namespace CPBConnect\Application\Product;
 
+use CPBConnect\Application\Sync\SyncOptions;
 use Product;
 
 class ProductUpdater
@@ -22,8 +23,11 @@ class ProductUpdater
         $this->stockApplier = new ProductStockApplier();
     }
 
-    public function update(int $idProduct, array $data): bool
-    {
+    public function update(
+        int $idProduct,
+        array $data,
+        ?SyncOptions $options = null
+    ): bool {
         $product = new Product($idProduct);
 
         if (!\Validate::isLoadedObject($product)) {
@@ -32,11 +36,11 @@ class ProductUpdater
             );
         }
 
-        $this->dataApplier->apply($product, $data);
-        $this->stockApplier->apply($product, $data);
+        $this->dataApplier->apply($product, $data, $options);
+        $this->stockApplier->apply($product, $data, $options);
         $this->manufacturerApplier->apply($product, $data);
         $this->categoryApplier->apply($product, $data);
-        $this->imageApplier->apply($product, $data);
+        $this->imageApplier->apply($product, $data, $options);
 
         return (bool) $product->update();
     }

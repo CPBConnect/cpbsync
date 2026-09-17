@@ -24,6 +24,7 @@ class SourceRepository
                 'config' => $this->configForStorage($data),
                 'frequency' => pSQL($data['frequency']),
                 'schedule' => $this->scheduleForStorage($data),
+                'options' => $this->optionsForStorage($data),
                 'active' => !empty($data['active']) ? 1 : 0,
                 'date_add' => date('Y-m-d H:i:s'),
                 'date_upd' => date('Y-m-d H:i:s'),
@@ -70,6 +71,7 @@ class SourceRepository
                 'config' => $this->configForStorage($data),
                 'frequency' => pSQL($data['frequency']),
                 'schedule' => $this->scheduleForStorage($data),
+                'options' => $this->optionsForStorage($data),
                 'active' => !empty($data['active']) ? 1 : 0,
                 'date_upd' => date('Y-m-d H:i:s'),
             ],
@@ -97,6 +99,16 @@ class SourceRepository
         $schedule = trim((string) ($data['schedule'] ?? ''));
 
         return $schedule === '' ? null : pSQL($schedule);
+    }
+
+    /**
+     * Opciones de sincronización de la fuente, en JSON.
+     */
+    private function optionsForStorage(array $data): ?string
+    {
+        $options = trim((string) ($data['options'] ?? ''));
+
+        return $options === '' ? null : pSQL($options);
     }
 
     public function delete(int $id): bool

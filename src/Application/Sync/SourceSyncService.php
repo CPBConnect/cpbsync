@@ -72,7 +72,10 @@ class SourceSyncService
 
         $metrics->startPhase('sync');
 
-        $result = $this->productSync->sync($products);
+        $result = $this->productSync->sync(
+            $products,
+            SyncOptions::fromSource($source)
+        );
 
         $metrics->stopPhase();
 

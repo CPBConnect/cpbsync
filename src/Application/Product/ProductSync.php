@@ -2,6 +2,8 @@
 
 namespace CPBConnect\Application\Product;
 
+use CPBConnect\Application\Sync\SyncOptions;
+
 class ProductSync
 {
     private ProductCreator $creator;
@@ -23,8 +25,12 @@ class ProductSync
         $this->validator = new ProductValidator();
     }
 
-    public function sync(array $products): array
-    {
+    public function sync(
+        array $products,
+        ?SyncOptions $options = null
+    ): array {
+        $options = $options ?? SyncOptions::none();
+
         $result = [
             'total' => count($products),
             'created' => 0,
@@ -40,10 +46,12 @@ class ProductSync
          * Las imágenes que van a hacer falta se preparan antes de
          * recorrer el lote, para poder descargarlas en paralelo.
          */
-        $this->images->prefetch($products);
+        if (!$options->skipsImages()) {
+            $this->images->prefetch($products);
+        }
 
         try {
-            return $this->processProducts($products, $result);
+            return $this->processProducts($products, $result, $options);
         } finally {
             $this->images->cleanup();
         }
@@ -51,13 +59,14 @@ class ProductSync
 
     /**
      * @param array<int, array<string, mixed>> $products
-     * @param array<string, mixed> $result
+     * @param array<string, mixed>             $result
      *
      * @return array<string, mixed>
      */
     private function processProducts(
         array $products,
-        array $result
+        array $result,
+        SyncOptions $options
     ): array {
         foreach ($products as $product) {
 
@@ -83,6 +92,22 @@ class ProductSync
 
                 if ($existingId !== null) {
 
+                    /*
+                     * Con "sólo crear", un producto que ya existe se
+                     * deja como está aunque el catálogo haya cambiado.
+                     */
+                    if ($options->onlyCreate()) {
+                        $result['skipped']++;
+
+                        $result['items'][] = [
+                            'reference' => $product['reference'],
+                            'status' => 'skipped',
+                            'id_product' => $existingId,
+                        ];
+
+                        continue;
+                    }
+
                     if (!$this->state->hasChanges($existingId, $product)) {
 
                         $result['skipped']++;
@@ -99,7 +124,8 @@ class ProductSync
                     $updated =
                         $this->updater->update(
                             $existingId,
-                            $product
+                            $product,
+                            $options
                         );
 
                     if (!$updated) {
@@ -122,7 +148,7 @@ class ProductSync
                 }
 
                 $idProduct =
-                    $this->creator->create($product);
+                    $this->creator->create($product, $options);
 
                 $this->state->remember($product, $idProduct);
 

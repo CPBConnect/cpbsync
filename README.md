@@ -23,6 +23,7 @@ If CPB Sync is useful to you, consider supporting its continued development.
 - 📦 Product creation and updates
 - ⏭️ Automatically skip products without changes
 - 🖼️ Product image synchronization, with several images per product
+- ⚙️ Per-source synchronization options: create only, fill empty fields only, do not touch stock, do not import images
 - 📊 Synchronization results and history, with duration, peak memory and time per phase
 - 📈 Batch processing with progress tracking
 - ⏰ Scheduled synchronization through cron
@@ -126,6 +127,15 @@ CPB Sync can:
 - Continue processing when individual products fail
 
 Synchronization results are stored in the module history.
+
+Each source decides what the synchronization is allowed to write. The options are chosen in the source form and stored with the source:
+
+- **Only create new products**: products that already exist are left untouched, even if the catalog has changed. They are reported as skipped.
+- **Only fill empty fields**: the reference, the name, the description, the price and the EAN are only written when the product has nothing there, so the values edited by hand are kept. The stock has its own option, because an empty stock in a catalog usually means "sold out" and filling it would empty the shop's quantity.
+- **Do not synchronize stock**: the quantity in the shop is left as it is.
+- **Do not import images**: no image is downloaded and the ones the product already has are kept. The downloads are not even prepared, so no network time is spent on them.
+
+With no option selected the synchronization behaves as before: every mapped field, the stock and the images are updated.
 
 Each synchronization records:
 
@@ -375,17 +385,13 @@ See the `CHANGELOG.md` file for the complete list.
 
 ## Roadmap
 
-The paid edition covers the XML, JSON and REST sources, incremental synchronization, nested catalogs, advanced transformations, several images per product, richer scheduling and the monitoring dashboard. What is still on the roadmap:
-
-- Additional synchronization options
-
-The roadmap may evolve according to user feedback and real-world requirements.
+The paid edition covers the XML, JSON and REST sources, incremental synchronization, nested catalogs, advanced transformations, several images per product, richer scheduling and the monitoring dashboard. The synchronization options shipped in 1.2.0 are part of the free version, so the announced roadmap is complete: what comes next will be decided from user feedback and real-world requirements.
 
 ## Free version
 
 CPB Sync 1.2.0 is provided free of charge.
 
-The free version provides the complete CSV synchronization workflow: sources, mapping, transformations, Dry Run, batch processing, image import, history and scheduled execution through cron.
+The free version provides the complete CSV synchronization workflow: sources, mapping, transformations, Dry Run, batch processing, image import, per-source synchronization options, history and scheduled execution through cron.
 
 ## Paid edition
 
@@ -395,7 +401,6 @@ The paid edition adds, on top of the free version:
 - **Incremental synchronization**: products without changes are skipped. Measured on PrestaShop 9.0.0 with 200 products, a re-sync goes from 3.5 ms and 4.1 queries per product to 0.5 ms and 0.2 queries.
 - **Parallel image downloads**: 3.5× faster with 8 downloads at a time.
 - **Fifteen advanced transformations**: value maps, default values, fallback fields, joining fields, prefixes and suffixes, arithmetic with rounding, regular expressions, yes/no conversion, shortening, slugs, capitalisation, HTML removal, taking one part of a value and keeping only digits.
-- **More scheduling options**: every 15 or 30 minutes, every 12 hours, every day at a fixed time, once a week or once a month.
 - **More scheduling options**: every 15 or 30 minutes, every 12 hours, every day at a fixed time, once a week or once a month.
 - **A monitoring dashboard**: periods, counters, most frequent errors, history size and retention.
 

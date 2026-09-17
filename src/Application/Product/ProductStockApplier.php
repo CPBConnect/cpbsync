@@ -2,12 +2,20 @@
 
 namespace CPBConnect\Application\Product;
 
+use CPBConnect\Application\Sync\SyncOptions;
 use Product;
 
 class ProductStockApplier
 {
-    public function apply(Product $product, array $data): void
-    {
+    public function apply(
+        Product $product,
+        array $data,
+        ?SyncOptions $options = null
+    ): void {
+        if ($options !== null && $options->skipsStock()) {
+            return;
+        }
+
         if (!isset($data['quantity'])) {
             return;
         }

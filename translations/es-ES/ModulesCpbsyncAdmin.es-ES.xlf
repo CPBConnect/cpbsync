@@ -218,6 +218,14 @@
         <source>Divide</source>
         <target>Dividir</target>
       </trans-unit>
+      <trans-unit id="a205a2bf5e" resname="Do not import images">
+        <source>Do not import images</source>
+        <target>No importar imágenes</target>
+      </trans-unit>
+      <trans-unit id="7cee4c820a" resname="Do not synchronise stock">
+        <source>Do not synchronise stock</source>
+        <target>No sincronizar el stock</target>
+      </trans-unit>
       <trans-unit id="e02d2ae03d" resname="Duration">
         <source>Duration</source>
         <target>Duración</target>
@@ -510,6 +518,14 @@
         <source>One rule per line, with the source value and the target value separated by "=".</source>
         <target>Una regla por línea, con el valor de origen y el de destino separados por "=".</target>
       </trans-unit>
+      <trans-unit id="f87713340a" resname="Only create new products">
+        <source>Only create new products</source>
+        <target>Crear sólo productos nuevos</target>
+      </trans-unit>
+      <trans-unit id="fd7ad20d4c" resname="Only fill empty fields">
+        <source>Only fill empty fields</source>
+        <target>Rellenar sólo los campos vacíos</target>
+      </trans-unit>
       <trans-unit id="f718a836af" resname="Only the first %shown% of %total% records are stored. The rest are summarised in the counters above.">
         <source>Only the first %shown% of %total% records are stored. The rest are summarised in the counters above.</source>
         <target>Sólo se guardan los primeros %shown% registros de %total%. El resto queda resumido en los contadores anteriores.</target>
@@ -577,6 +593,10 @@
       <trans-unit id="94296b0206" resname="Products processed">
         <source>Products processed</source>
         <target>Productos procesados</target>
+      </trans-unit>
+      <trans-unit id="25b42e3a83" resname="Products that already exist are left untouched, even if the catalog has changed.">
+        <source>Products that already exist are left untouched, even if the catalog has changed.</source>
+        <target>Los productos que ya existen no se tocan, aunque el catálogo haya cambiado.</target>
       </trans-unit>
       <trans-unit id="7c8bc2148b" resname="Reading the source">
         <source>Reading the source</source>
@@ -753,6 +773,10 @@
       <trans-unit id="d23e710e94" resname="Synchronization history">
         <source>Synchronization history</source>
         <target>Historial de sincronizaciones</target>
+      </trans-unit>
+      <trans-unit id="9f933e9cfc" resname="Synchronization options">
+        <source>Synchronization options</source>
+        <target>Opciones de sincronización</target>
       </trans-unit>
       <trans-unit id="3ee185d605" resname="Synchronization result">
         <source>Synchronization result</source>
@@ -962,6 +986,10 @@
         <source>The image must use HTTP or HTTPS.</source>
         <target>La imagen debe utilizar HTTP o HTTPS.</target>
       </trans-unit>
+      <trans-unit id="268d19dba8" resname="The images the product already has are kept, and no new ones are downloaded.">
+        <source>The images the product already has are kept, and no new ones are downloaded.</source>
+        <target>Se conservan las imágenes que ya tiene el producto y no se descarga ninguna nueva.</target>
+      </trans-unit>
       <trans-unit id="ca74f7ba01" resname="The import could not be created.">
         <source>The import could not be created.</source>
         <target>No fue posible crear la importación.</target>
@@ -1053,6 +1081,10 @@
       <trans-unit id="bb780c9bfe" resname="The product image could not be saved.">
         <source>The product image could not be saved.</source>
         <target>No fue posible guardar la imagen del producto.</target>
+      </trans-unit>
+      <trans-unit id="4184f3b2d9" resname="The quantity in the shop is left as it is.">
+        <source>The quantity in the shop is left as it is.</source>
+        <target>La cantidad que hay en la tienda se deja como está.</target>
       </trans-unit>
       <trans-unit id="bba943e3f0" resname="The run does not exist.">
         <source>The run does not exist.</source>
@@ -1321,6 +1353,10 @@
       <trans-unit id="413286b6e2" resname="Value map">
         <source>Value map</source>
         <target>Tabla de valores</target>
+      </trans-unit>
+      <trans-unit id="855b5dbbf6" resname="Values already present in the product are kept: useful when the descriptions or the prices are edited by hand.">
+        <source>Values already present in the product are kept: useful when the descriptions or the prices are edited by hand.</source>
+        <target>Se respetan los valores que ya tiene el producto: útil cuando las descripciones o los precios se editan a mano.</target>
       </trans-unit>
       <trans-unit id="f0c302d425" resname="Values that mean yes">
         <source>Values that mean yes</source>
