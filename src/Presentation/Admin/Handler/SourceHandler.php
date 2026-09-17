@@ -9,6 +9,9 @@ use CPBConnect\Application\Schedule\ScheduleSummary;
 use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use CPBConnect\Application\Source\SourceService;
 use CPBConnect\Application\Source\SourceValidator;
+use CPBConnect\Application\Sync\SyncOptionFactory;
+use CPBConnect\Application\Sync\SyncOptionRegistry;
+use CPBConnect\Application\Sync\SyncOptions;
 use CPBConnect\Presentation\Admin\AdminLinkBuilder;
 use CPBConnect\Presentation\Admin\AdminShellInterface;
 use Tools;
@@ -22,6 +25,7 @@ class SourceHandler
 
     private ScheduleRegistry $schedules;
     private ScheduleSummary $summary;
+    private SyncOptionRegistry $syncOptions;
 
     public function __construct(
         private AdminShellInterface $shell,
@@ -31,13 +35,17 @@ class SourceHandler
         private SourceReaderRegistry $readers,
         private ?string $monitorUrl = null,
         ?ScheduleRegistry $schedules = null,
-        ?ScheduleSummary $summary = null
+        ?ScheduleSummary $summary = null,
+        ?SyncOptionRegistry $syncOptions = null
     ) {
         $this->schedules = $schedules ?? ScheduleFactory::create();
 
         $this->summary = $summary ?? new ScheduleSummary(
             $this->schedules
         );
+
+        $this->syncOptions = $syncOptions
+            ?? SyncOptionFactory::create();
     }
 
     /**
@@ -272,6 +280,10 @@ class SourceHandler
             'saved_schedule' => DescribedFields::decode(
                 $source['schedule'] ?? null
             ),
+            'sync_options' => $this->syncOptionFields(),
+            'saved_options' => SyncOptions::fromSource(
+                is_array($source) ? $source : []
+            )->all(),
             'cancel_url' => $this->links->home(),
             'form_action' => $formAction
                 ?? $this->links->saveSource(),
@@ -281,6 +293,27 @@ class SourceHandler
         ]);
 
         return $this->shell->fetch('source-form.tpl');
+    }
+
+    /**
+     * Opciones de sincronización, con sus etiquetas traducidas.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function syncOptionFields(): array
+    {
+        $fields = DescribedFields::translate(
+            $this->syncOptions->describeAll(),
+            fn (string $text): string => $this->shell->translate($text)
+        );
+
+        foreach ($fields as &$field) {
+            $field['type'] = 'checkbox';
+        }
+
+        unset($field);
+
+        return $fields;
     }
 
     /**
@@ -318,8 +351,31 @@ class SourceHandler
             'config' => trim((string) Tools::getValue('config')),
             'frequency' => $frequency,
             'schedule' => $this->readSchedule($frequency),
+            'options' => $this->readOptions(),
             'active' => (int) Tools::getValue('active'),
         ];
+    }
+
+    /**
+     * Opciones de sincronización marcadas en el formulario.
+     */
+    private function readOptions(): string
+    {
+        $posted = Tools::getValue('sync_options', []);
+
+        if (!is_array($posted)) {
+            return '';
+        }
+
+        $values = [];
+
+        foreach ($this->syncOptions->describeAll() as $option) {
+            $name = (string) $option['name'];
+
+            $values[$name] = empty($posted[$name]) ? '' : '1';
+        }
+
+        return (string) DescribedFields::encode($values);
     }
 
     /**

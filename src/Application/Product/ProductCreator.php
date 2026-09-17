@@ -2,6 +2,7 @@
 
 namespace CPBConnect\Application\Product;
 
+use CPBConnect\Application\Sync\SyncOptions;
 use Product;
 
 class ProductCreator
@@ -22,8 +23,10 @@ class ProductCreator
         $this->stockApplier = new ProductStockApplier();
     }
 
-    public function create(array $data): int
-    {
+    public function create(
+        array $data,
+        ?SyncOptions $options = null
+    ): int {
         if (empty($data['reference'])) {
             throw new \RuntimeException(
                 'A product cannot be created without a reference.'
@@ -38,7 +41,7 @@ class ProductCreator
 
         $product = new Product();
 
-        $this->dataApplier->apply($product, $data);
+        $this->dataApplier->apply($product, $data, $options);
         $this->manufacturerApplier->apply($product, $data);
 
         $product->active = 1;
@@ -49,9 +52,9 @@ class ProductCreator
             );
         }
 
-        $this->stockApplier->apply($product, $data);
+        $this->stockApplier->apply($product, $data, $options);
         $this->categoryApplier->apply($product, $data);
-        $this->imageApplier->apply($product, $data);
+        $this->imageApplier->apply($product, $data, $options);
 
         return (int) $product->id;
     }

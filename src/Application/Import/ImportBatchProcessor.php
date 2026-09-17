@@ -157,7 +157,8 @@ class ImportBatchProcessor
          * los errores individuales.
          */
         $syncResult = $this->productSync->sync(
-            $products
+            $products,
+            SyncOptions::fromSource($source)
         );
 
         $success =

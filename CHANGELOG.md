@@ -13,12 +13,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * The paid edition adds six frequencies on top of the four basic ones: every 15 minutes, every 30 minutes, every 12 hours, every day at a fixed time, once a week (choosing the day) and once a month (choosing the day).
 * The source list shows the translated frequency and when the next run is due, resolved for the whole list in a single query.
 * Calendar times are read in the shop's time zone, not in the server's.
+* Synchronization options, chosen per source and stored in the new `options` column, with the `upgrade-1.4.0.php` migration: **only create new products**, **only fill empty fields**, **do not synchronise stock** and **do not import images**.
+* Sync option registry (`SyncOptions`, `SyncOptionRegistry`, `SyncOptionFactory`): an option declares its name, its label and its hint, and the source form builds the checkboxes from that registry, the same way the mapping and the scheduling forms do. An additional edition can register more options in it.
+* `fill_empty` only touches the reference, the name, the description, the price and the EAN: the stock keeps its own option, because an empty stock in a catalog usually means "sold out" and writing it would empty the shop's quantity.
 
 ### Changed
 
 * The source form builds the frequency list and its calendar fields from that registry: choosing a frequency shows only the fields it needs, without reloading the page.
 * Source validation asks the chosen schedule to check its own settings, so an invalid time, weekday or day of the month is reported before saving.
-* The fields a functionality declares (name, label, hint, type, default value and options) are now read, saved and translated through a single helper (`DescribedFields`) shared by the transformation and the scheduling forms.
+* The fields a functionality declares (name, label, hint, type, default value and options) are now read, saved and translated through a single helper (`DescribedFields`) shared by the transformation, the scheduling and the synchronization option forms.
+* Synchronizing a source that has no options selected behaves exactly as before: the four options default to off, so an existing source keeps updating every field, the stock and the images.
 
 ## [1.2.0] - 2026-09-16
 
