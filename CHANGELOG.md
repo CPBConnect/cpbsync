@@ -27,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+* The batch import failed with a fatal error (`Class "CPBConnect\Application\Import\SyncOptions" not found`) as soon as the first batch was processed: `ImportBatchProcessor` used the class without importing it. It broke the file import from the back office and the scheduled import alike, in both editions. The test suite now runs the real `ImportBatchProcessor` (the doubles overrode `process()`, so the broken line never executed) and `build/e2e/import-e2e.php` imports a 55-product catalog in two batches against a real PrestaShop.
 * The Spanish catalogue repeated the English words in four wordings: «No se puede crear un producto sin name.» and «...sin reference.» now say «sin nombre» and «sin referencia», and the two failures of the source and mapping inserts are translated instead of showing the English text.
 
 ## [1.2.0] - 2026-09-16
