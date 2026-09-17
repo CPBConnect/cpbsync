@@ -2,6 +2,10 @@
 
 namespace CPBConnect\Presentation\Admin\Handler;
 
+use CPBConnect\Application\Form\DescribedFields;
+use CPBConnect\Application\Schedule\ScheduleFactory;
+use CPBConnect\Application\Schedule\ScheduleRegistry;
+use CPBConnect\Application\Schedule\ScheduleSummary;
 use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use CPBConnect\Application\Source\SourceService;
 use CPBConnect\Application\Source\SourceValidator;
@@ -16,14 +20,24 @@ class SourceHandler
 {
     private const PREVIEW_ROWS = 5;
 
+    private ScheduleRegistry $schedules;
+    private ScheduleSummary $summary;
+
     public function __construct(
         private AdminShellInterface $shell,
         private AdminLinkBuilder $links,
         private SourceService $sources,
         private SourceValidator $validator,
         private SourceReaderRegistry $readers,
-        private ?string $monitorUrl = null
+        private ?string $monitorUrl = null,
+        ?ScheduleRegistry $schedules = null,
+        ?ScheduleSummary $summary = null
     ) {
+        $this->schedules = $schedules ?? ScheduleFactory::create();
+
+        $this->summary = $summary ?? new ScheduleSummary(
+            $this->schedules
+        );
     }
 
     /**
@@ -33,6 +47,8 @@ class SourceHandler
     {
         $sources = $this->sources->all();
 
+        $schedule = $this->summary->describe($sources);
+
         foreach ($sources as &$source) {
             $sourceId = (int) $source['id_source'];
 
@@ -41,6 +57,13 @@ class SourceHandler
             $source['edit_url'] = $this->links->editSource($sourceId);
             $source['delete_url'] =
                 $this->links->deleteSource($sourceId);
+
+            $source['frequency_label'] = $this->shell->translate(
+                $schedule[$sourceId]['frequency'] ?? 'Manual'
+            );
+
+            $source['next_run'] = $schedule[$sourceId]['next_run']
+                ?? null;
         }
 
         unset($source);
@@ -245,6 +268,10 @@ class SourceHandler
         $this->shell->assign([
             'source' => $source,
             'source_types' => $this->readers->types(),
+            'frequency_options' => $this->frequencyOptions(),
+            'saved_schedule' => DescribedFields::decode(
+                $source['schedule'] ?? null
+            ),
             'cancel_url' => $this->links->home(),
             'form_action' => $formAction
                 ?? $this->links->saveSource(),
@@ -256,15 +283,69 @@ class SourceHandler
         return $this->shell->fetch('source-form.tpl');
     }
 
+    /**
+     * Frecuencias disponibles con sus etiquetas y sus campos.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function frequencyOptions(): array
+    {
+        $options = [];
+
+        foreach ($this->schedules->describeAll() as $schedule) {
+            $options[] = [
+                'name' => $schedule['name'],
+                'label' => $this->shell->translate($schedule['label']),
+                'fields' => DescribedFields::translate(
+                    $schedule['fields'],
+                    fn (string $text): string =>
+                        $this->shell->translate($text)
+                ),
+            ];
+        }
+
+        return $options;
+    }
+
     private function readRequestData(): array
     {
+        $frequency = (string) Tools::getValue('frequency');
+
         return [
             'name' => trim((string) Tools::getValue('name')),
             'type' => (string) Tools::getValue('type'),
             'url' => trim((string) Tools::getValue('url')),
             'config' => trim((string) Tools::getValue('config')),
-            'frequency' => (string) Tools::getValue('frequency'),
+            'frequency' => $frequency,
+            'schedule' => $this->readSchedule($frequency),
             'active' => (int) Tools::getValue('active'),
         ];
+    }
+
+    /**
+     * Configuración del calendario de la frecuencia elegida.
+     */
+    private function readSchedule(string $frequency): string
+    {
+        $schedule = $this->schedules->find($frequency);
+
+        if ($schedule === null) {
+            return '';
+        }
+
+        $posted = Tools::getValue('schedule_config', []);
+
+        if (!is_array($posted)) {
+            return '';
+        }
+
+        $encoded = DescribedFields::encode(
+            DescribedFields::collect(
+                $schedule->describe()['fields'],
+                $posted
+            )
+        );
+
+        return (string) $encoded;
     }
 }

@@ -2,9 +2,12 @@
 
 namespace CPBConnect\Application\Cron;
 
+use CPBConnect\Application\Form\DescribedFields;
 use CPBConnect\Application\Import\ImportBatchProcessor;
 use CPBConnect\Application\Product\ProductMapper;
 use CPBConnect\Application\Product\ProductSync;
+use CPBConnect\Application\Schedule\ScheduleFactory;
+use CPBConnect\Application\Schedule\ScheduleRegistry;
 use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use CPBConnect\Application\Sync\SyncMetrics;
 use CPBConnect\Infrastructure\Persistence\ImportRepository;
@@ -21,6 +24,7 @@ class CronRunner
     private ImportRepository $importRepository;
     private SourceReaderRegistry $readers;
     private ImportBatchProcessor $batchProcessor;
+    private ScheduleRegistry $schedules;
 
     public function __construct()
     {
@@ -38,6 +42,9 @@ class CronRunner
 
         $this->readers =
             SourceReaderFactory::create();
+
+        $this->schedules =
+            ScheduleFactory::create();
 
         $this->batchProcessor =
             new ImportBatchProcessor(
@@ -270,12 +277,7 @@ class CronRunner
 
     private function shouldRun(array $source): bool
     {
-        $frequency =
-            $source['frequency'] ?? 'manual';
-
-        if ($frequency === 'manual') {
-            return false;
-        }
+        $schedule = $this->schedules->forSource($source);
 
         $lastLog =
             $this->logRepository
@@ -283,33 +285,10 @@ class CronRunner
                     (int) $source['id_source']
                 );
 
-        if (!$lastLog) {
-            return true;
-        }
-
-        $lastRun =
-            strtotime($lastLog['date_add']);
-
-        if ($lastRun === false) {
-            return true;
-        }
-
-        $elapsed =
-            time() - $lastRun;
-
-        if ($frequency === 'hourly') {
-            return $elapsed >= 3600;
-        }
-
-        if ($frequency === '6_hours') {
-            return $elapsed >= 21600;
-        }
-
-        if ($frequency === 'daily') {
-            return $elapsed >= 86400;
-        }
-
-        return false;
+        return $schedule->isDue(
+            DescribedFields::decode($source['schedule'] ?? null),
+            $lastLog['date_add'] ?? null
+        );
     }
 
     private function findPendingCronImport(

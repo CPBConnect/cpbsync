@@ -2,6 +2,9 @@
 
 namespace CPBConnect\Application\Source;
 
+use CPBConnect\Application\Form\DescribedFields;
+use CPBConnect\Application\Schedule\ScheduleFactory;
+use CPBConnect\Application\Schedule\ScheduleRegistry;
 use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use CPBConnect\Application\Validation\ValidationError;
 
@@ -10,16 +13,13 @@ use CPBConnect\Application\Validation\ValidationError;
  */
 class SourceValidator
 {
-    public const ALLOWED_FREQUENCIES = [
-        'manual',
-        'hourly',
-        '6_hours',
-        'daily',
-    ];
+    private ScheduleRegistry $schedules;
 
     public function __construct(
-        private SourceReaderRegistry $readers
+        private SourceReaderRegistry $readers,
+        ?ScheduleRegistry $schedules = null
     ) {
+        $this->schedules = $schedules ?? ScheduleFactory::create();
     }
 
     public function validate(array $data): ?ValidationError
@@ -29,14 +29,20 @@ class SourceValidator
         $url = trim((string) ($data['url'] ?? ''));
         $frequency = (string) ($data['frequency'] ?? '');
 
-        if (!in_array(
-            $frequency,
-            self::ALLOWED_FREQUENCIES,
-            true
-        )) {
+        $schedule = $this->schedules->find($frequency);
+
+        if ($schedule === null) {
             return new ValidationError(
                 'The synchronization frequency is not valid.'
             );
+        }
+
+        $error = $schedule->validate(
+            DescribedFields::decode($data['schedule'] ?? null)
+        );
+
+        if ($error !== null) {
+            return $error;
         }
 
         if ($name === '') {

@@ -161,4 +161,43 @@ class SyncLogRepository
 
         return $result ?: null;
     }
+
+    /**
+     * Última ejecución por cron de varias fuentes, en una sola
+     * consulta: la lista de fuentes muestra cuándo toca la siguiente.
+     *
+     * @param array<int, int> $sourceIds
+     *
+     * @return array<int, string> id_source => fecha de la última ejecución
+     */
+    public function findLatestCronDates(array $sourceIds): array
+    {
+        $ids = [];
+
+        foreach ($sourceIds as $sourceId) {
+            $id = (int) $sourceId;
+
+            if ($id > 0) {
+                $ids[$id] = true;
+            }
+        }
+
+        if ($ids === []) {
+            return [];
+        }
+
+        $sql = 'SELECT `id_source`, MAX(`date_add`) AS `last_run`'
+               . ' FROM `' . $this->table . '`'
+               . ' WHERE `execution_type` = "cron"'
+               . ' AND `id_source` IN (' . implode(', ', array_keys($ids)) . ')'
+               . ' GROUP BY `id_source`';
+
+        $dates = [];
+
+        foreach ((array) Db::getInstance()->executeS($sql) as $row) {
+            $dates[(int) $row['id_source']] = (string) $row['last_run'];
+        }
+
+        return $dates;
+    }
 }

@@ -85,30 +85,99 @@
                     {l s='Frequency' d='Modules.Cpbsync.Admin'}
                 </label>
 
-                <select name="frequency" class="form-control">
+                <select name="frequency" class="form-control js-frequency">
 
-                    <option value="manual"
-                            {if isset($source) && $source.frequency === 'manual'}selected{/if}>
-                        {l s='Manual' d='Modules.Cpbsync.Admin'}
-                    </option>
+                    {foreach from=$frequency_options item=frequency_option}
 
-                    <option value="hourly"
-                            {if isset($source) && $source.frequency === 'hourly'}selected{/if}>
-                        {l s='Hourly' d='Modules.Cpbsync.Admin'}
-                    </option>
+                        <option
+                                value="{$frequency_option.name|escape:'htmlall':'UTF-8'}"
+                                {if isset($source) && $source.frequency === $frequency_option.name}selected{/if}
+                        >
+                            {$frequency_option.label|escape:'htmlall':'UTF-8'}
+                        </option>
 
-                    <option value="6_hours"
-                            {if isset($source) && $source.frequency === '6_hours'}selected{/if}>
-                        {l s='Every 6 hours' d='Modules.Cpbsync.Admin'}
-                    </option>
-
-                    <option value="daily"
-                            {if isset($source) && $source.frequency === 'daily'}selected{/if}>
-                        {l s='Daily' d='Modules.Cpbsync.Admin'}
-                    </option>
+                    {/foreach}
 
                 </select>
+
+                <p class="help-block">
+                    {l s='The frequencies other than Manual need the cron command configured on the server.' d='Modules.Cpbsync.Admin'}
+                </p>
             </div>
+
+            {foreach from=$frequency_options item=frequency_option}
+
+                {if !empty($frequency_option.fields)}
+
+                    <div
+                            class="js-frequency-fields"
+                            data-frequency="{$frequency_option.name|escape:'htmlall':'UTF-8'}"
+                            style="display: none;"
+                    >
+
+                        {foreach from=$frequency_option.fields item=field}
+
+                            <div class="form-group">
+
+                                <label>
+                                    {$field.label|escape:'htmlall':'UTF-8'}
+                                </label>
+
+                                {if $field.type == 'select'}
+
+                                    <select
+                                            name="schedule_config[{$field.name|escape:'htmlall':'UTF-8'}]"
+                                            class="form-control"
+                                    >
+                                        {foreach from=$field.options item=field_option}
+                                            <option
+                                                    value="{$field_option.value|escape:'htmlall':'UTF-8'}"
+                                                    {if isset($saved_schedule[$field.name])}
+                                                        {if $saved_schedule[$field.name] == $field_option.value}selected{/if}
+                                                    {elseif $field.default == $field_option.value}
+                                                        selected
+                                                    {/if}
+                                            >
+                                                {$field_option.label|escape:'htmlall':'UTF-8'}
+                                            </option>
+                                        {/foreach}
+                                    </select>
+
+                                {elseif $field.type == 'time'}
+
+                                    <input
+                                            type="time"
+                                            name="schedule_config[{$field.name|escape:'htmlall':'UTF-8'}]"
+                                            class="form-control"
+                                            value="{if isset($saved_schedule[$field.name])}{$saved_schedule[$field.name]|escape:'htmlall':'UTF-8'}{else}{$field.default|escape:'htmlall':'UTF-8'}{/if}"
+                                    >
+
+                                {else}
+
+                                    <input
+                                            type="text"
+                                            name="schedule_config[{$field.name|escape:'htmlall':'UTF-8'}]"
+                                            class="form-control"
+                                            value="{if isset($saved_schedule[$field.name])}{$saved_schedule[$field.name]|escape:'htmlall':'UTF-8'}{else}{$field.default|escape:'htmlall':'UTF-8'}{/if}"
+                                    >
+
+                                {/if}
+
+                                {if $field.hint}
+                                    <p class="help-block">
+                                        {$field.hint|escape:'htmlall':'UTF-8'}
+                                    </p>
+                                {/if}
+
+                            </div>
+
+                        {/foreach}
+
+                    </div>
+
+                {/if}
+
+            {/foreach}
 
             <div class="form-group">
                 <label>
@@ -142,3 +211,28 @@
     </div>
 
 </div>
+
+<script>
+    (function () {
+
+        var select = document.querySelector('.js-frequency');
+        var blocks = document.querySelectorAll('.js-frequency-fields');
+
+        if (!select) {
+            return;
+        }
+
+        function refresh() {
+            blocks.forEach(function (block) {
+                block.style.display =
+                    block.dataset.frequency === select.value
+                        ? ''
+                        : 'none';
+            });
+        }
+
+        select.addEventListener('change', refresh);
+
+        refresh();
+    })();
+</script>

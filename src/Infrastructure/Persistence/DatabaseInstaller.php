@@ -63,6 +63,7 @@ class DatabaseInstaller
                 `url` TEXT NOT NULL,
                 `config` TEXT NULL,
                 `frequency` VARCHAR(32) NOT NULL,
+                `schedule` TEXT NULL,
                 `active` TINYINT(1) NOT NULL DEFAULT 1,
                 `date_add` DATETIME NOT NULL,
                 `date_upd` DATETIME NOT NULL,

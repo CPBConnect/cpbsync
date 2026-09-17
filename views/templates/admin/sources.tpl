@@ -98,7 +98,17 @@
                                 {l s='Frequency:' d='Modules.Cpbsync.Admin'}
                             </strong>
 
-                            {$source.frequency|escape:'htmlall':'UTF-8'}
+                            {$source.frequency_label|default:$source.frequency|escape:'htmlall':'UTF-8'}
+
+                            {if $source.next_run}
+                                &mdash;
+
+                                <strong>
+                                    {l s='Next run:' d='Modules.Cpbsync.Admin'}
+                                </strong>
+
+                                {$source.next_run|escape:'htmlall':'UTF-8'}
+                            {/if}
                         </p>
 
                         <p>

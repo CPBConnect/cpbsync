@@ -150,6 +150,10 @@ Supported frequencies include:
 - Every 6 hours
 - Daily
 
+The paid edition adds every 15 and 30 minutes, every 12 hours, every day at a fixed time, once a week (choosing the day) and once a month (choosing the day). Calendar times are read in the shop's time zone, and each source runs once per period: missed runs are not queued.
+
+The source list shows each source's frequency and when its next run is due.
+
 The cron process only executes active sources configured with a scheduled frequency.
 
 The cron runner uses the same batch processing system as manual imports.
@@ -171,6 +175,8 @@ For example, a server cron job can execute CPB Sync every hour:
 ```
 
 The cron process includes a lock mechanism to prevent multiple CPB Sync cron executions from running simultaneously.
+
+The command can be scheduled more often than the sources need (every five minutes, for instance): each source only runs when its own frequency is due.
 
 ## Synchronization workflow
 
@@ -369,10 +375,9 @@ See the `CHANGELOG.md` file for the complete list.
 
 ## Roadmap
 
-The paid edition covers the XML, JSON and REST sources, incremental synchronization, nested catalogs, advanced transformations and the monitoring dashboard. What is still on the roadmap:
+The paid edition covers the XML, JSON and REST sources, incremental synchronization, nested catalogs, advanced transformations, several images per product, richer scheduling and the monitoring dashboard. What is still on the roadmap:
 
 - Additional synchronization options
-- Additional scheduling options
 
 The roadmap may evolve according to user feedback and real-world requirements.
 
@@ -390,6 +395,8 @@ The paid edition adds, on top of the free version:
 - **Incremental synchronization**: products without changes are skipped. Measured on PrestaShop 9.0.0 with 200 products, a re-sync goes from 3.5 ms and 4.1 queries per product to 0.5 ms and 0.2 queries.
 - **Parallel image downloads**: 3.5× faster with 8 downloads at a time.
 - **Fifteen advanced transformations**: value maps, default values, fallback fields, joining fields, prefixes and suffixes, arithmetic with rounding, regular expressions, yes/no conversion, shortening, slugs, capitalisation, HTML removal, taking one part of a value and keeping only digits.
+- **More scheduling options**: every 15 or 30 minutes, every 12 hours, every day at a fixed time, once a week or once a month.
+- **More scheduling options**: every 15 or 30 minutes, every 12 hours, every day at a fixed time, once a week or once a month.
 - **A monitoring dashboard**: periods, counters, most frequent errors, history size and retention.
 
 Both editions share the same code base: the free package is generated from it and contains no paid code.
