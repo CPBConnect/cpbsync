@@ -270,6 +270,10 @@ Después de instalarlo:
 
 Para utilizar la sincronización automática, configura la frecuencia deseada y agrega el comando de cron de CPB Sync al programador del servidor.
 
+### Manual de usuario
+
+La guía paso a paso para el uso diario (fuentes, mapeo, transformaciones, opciones de sincronización, programación, historial y resolución de problemas) está en [`docs/manual.es.md`](docs/manual.es.md), con su versión en inglés en [`docs/manual.en.md`](docs/manual.en.md).
+
 ### Después de actualizar el módulo
 
 Limpia la caché de PrestaShop (**Parámetros avanzados > Rendimiento**) para que se carguen las traducciones y plantillas nuevas. Desde la línea de comandos:
@@ -301,6 +305,9 @@ cpbsync/
 │   └── Presentation/
 │       └── Admin/
 │           └── Handler/
+├── docs/
+│   ├── manual.en.md
+│   └── manual.es.md
 ├── tests/
 ├── tools/
 ├── translations/
