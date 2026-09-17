@@ -170,6 +170,14 @@
         <source>Date:</source>
         <target>Date:</target>
       </trans-unit>
+      <trans-unit id="50ac9dcc0b" resname="Day of the month">
+        <source>Day of the month</source>
+        <target>Day of the month</target>
+      </trans-unit>
+      <trans-unit id="bc51c8dc11" resname="Day of the week">
+        <source>Day of the week</source>
+        <target>Day of the week</target>
+      </trans-unit>
       <trans-unit id="5ef449f60d" resname="Decimal places">
         <source>Decimal places</source>
         <target>Decimal places</target>
@@ -246,9 +254,25 @@
         <source>Errors:</source>
         <target>Errors:</target>
       </trans-unit>
+      <trans-unit id="92d06747b7" resname="Every 12 hours">
+        <source>Every 12 hours</source>
+        <target>Every 12 hours</target>
+      </trans-unit>
+      <trans-unit id="cb2531191d" resname="Every 15 minutes">
+        <source>Every 15 minutes</source>
+        <target>Every 15 minutes</target>
+      </trans-unit>
+      <trans-unit id="4f6969a709" resname="Every 30 minutes">
+        <source>Every 30 minutes</source>
+        <target>Every 30 minutes</target>
+      </trans-unit>
       <trans-unit id="3c4f9ffb32" resname="Every 6 hours">
         <source>Every 6 hours</source>
         <target>Every 6 hours</target>
+      </trans-unit>
+      <trans-unit id="42ab23df43" resname="Every day at a fixed time">
+        <source>Every day at a fixed time</source>
+        <target>Every day at a fixed time</target>
       </trans-unit>
       <trans-unit id="1d01bd3d4a" resname="Extract with a pattern">
         <source>Extract with a pattern</source>
@@ -278,6 +302,10 @@
         <source>Frequency:</source>
         <target>Frequency:</target>
       </trans-unit>
+      <trans-unit id="c33b138a16" resname="Friday">
+        <source>Friday</source>
+        <target>Friday</target>
+      </trans-unit>
       <trans-unit id="540d158839" resname="Group number to keep. 0 keeps the whole match.">
         <source>Group number to keep. 0 keeps the whole match.</source>
         <target>Group number to keep. 0 keeps the whole match.</target>
@@ -293,6 +321,10 @@
       <trans-unit id="dc02ff5929" resname="Hourly">
         <source>Hourly</source>
         <target>Hourly</target>
+      </trans-unit>
+      <trans-unit id="877e37c07a" resname="If the month is shorter, the last day is used.">
+        <source>If the month is shorter, the last day is used.</source>
+        <target>If the month is shorter, the last day is used.</target>
       </trans-unit>
       <trans-unit id="e2e7107020" resname="Import CSV">
         <source>Import CSV</source>
@@ -398,6 +430,10 @@
         <source>Memory:</source>
         <target>Memory:</target>
       </trans-unit>
+      <trans-unit id="6f8522e061" resname="Monday">
+        <source>Monday</source>
+        <target>Monday</target>
+      </trans-unit>
       <trans-unit id="423e555c5e" resname="Monitoring">
         <source>Monitoring</source>
         <target>Monitoring</target>
@@ -421,6 +457,10 @@
       <trans-unit id="f98d1e768f" resname="New source">
         <source>New source</source>
         <target>New source</target>
+      </trans-unit>
+      <trans-unit id="2570589154" resname="Next run:">
+        <source>Next run:</source>
+        <target>Next run:</target>
       </trans-unit>
       <trans-unit id="f82b7cddfb" resname="No details available.">
         <source>No details available.</source>
@@ -453,6 +493,14 @@
       <trans-unit id="76ff8ed019" resname="Number used by the operation. Use 1.21 to add 21% VAT.">
         <source>Number used by the operation. Use 1.21 to add 21% VAT.</source>
         <target>Number used by the operation. Use 1.21 to add 21% VAT.</target>
+      </trans-unit>
+      <trans-unit id="fb48f92393" resname="Once a month">
+        <source>Once a month</source>
+        <target>Once a month</target>
+      </trans-unit>
+      <trans-unit id="d08640e17b" resname="Once a week">
+        <source>Once a week</source>
+        <target>Once a week</target>
       </trans-unit>
       <trans-unit id="6f1b6b9b1d" resname="One of the mappings could not be saved.">
         <source>One of the mappings could not be saved.</source>
@@ -586,6 +634,10 @@
         <source>Runs</source>
         <target>Runs</target>
       </trans-unit>
+      <trans-unit id="8b7051187b" resname="Saturday">
+        <source>Saturday</source>
+        <target>Saturday</target>
+      </trans-unit>
       <trans-unit id="bc7dab17a0" resname="Save">
         <source>Save</source>
         <target>Save</target>
@@ -609,6 +661,10 @@
       <trans-unit id="04b2e4188d" resname="Separator">
         <source>Separator</source>
         <target>Separator</target>
+      </trans-unit>
+      <trans-unit id="41a3cd0a44" resname="Shop time, in the HH:MM format.">
+        <source>Shop time, in the HH:MM format.</source>
+        <target>Shop time, in the HH:MM format.</target>
       </trans-unit>
       <trans-unit id="2861162b99" resname="Shorten text">
         <source>Shorten text</source>
@@ -677,6 +733,10 @@
       <trans-unit id="56e6ddd1cb" resname="Suffix">
         <source>Suffix</source>
         <target>Suffix</target>
+      </trans-unit>
+      <trans-unit id="9d1a0949c3" resname="Sunday">
+        <source>Sunday</source>
+        <target>Sunday</target>
       </trans-unit>
       <trans-unit id="c8ae1a8f27" resname="Supplier field">
         <source>Supplier field</source>
@@ -810,6 +870,18 @@
         <source>The category could not be created in PrestaShop.</source>
         <target>The category could not be created in PrestaShop.</target>
       </trans-unit>
+      <trans-unit id="a862577937" resname="The configuration could not be saved.">
+        <source>The configuration could not be saved.</source>
+        <target>The configuration could not be saved.</target>
+      </trans-unit>
+      <trans-unit id="5695e64205" resname="The day of the month is not valid.">
+        <source>The day of the month is not valid.</source>
+        <target>The day of the month is not valid.</target>
+      </trans-unit>
+      <trans-unit id="d84360256e" resname="The day of the week is not valid.">
+        <source>The day of the week is not valid.</source>
+        <target>The day of the week is not valid.</target>
+      </trans-unit>
       <trans-unit id="026e4d09c7" resname="The detail could not be loaded: %error%">
         <source>The detail could not be loaded: %error%</source>
         <target>The detail could not be loaded: %error%</target>
@@ -837,6 +909,10 @@
       <trans-unit id="5848cfb134" resname="The first 5 products from the source are shown.">
         <source>The first 5 products from the source are shown.</source>
         <target>The first 5 products from the source are shown.</target>
+      </trans-unit>
+      <trans-unit id="4f2a734b49" resname="The frequencies other than Manual need the cron command configured on the server.">
+        <source>The frequencies other than Manual need the cron command configured on the server.</source>
+        <target>The frequencies other than Manual need the cron command configured on the server.</target>
       </trans-unit>
       <trans-unit id="84901edcfb" resname="The history could not be loaded: %error%">
         <source>The history could not be loaded: %error%</source>
@@ -982,6 +1058,10 @@
         <source>The run does not exist.</source>
         <target>The run does not exist.</target>
       </trans-unit>
+      <trans-unit id="ff137dadd4" resname="The schedule registry is empty.">
+        <source>The schedule registry is empty.</source>
+        <target>The schedule registry is empty.</target>
+      </trans-unit>
       <trans-unit id="1526875349" resname="The selected source does not exist.">
         <source>The selected source does not exist.</source>
         <target>The selected source does not exist.</target>
@@ -1126,13 +1206,13 @@
         <source>The thumbnail could not be generated.</source>
         <target>The thumbnail could not be generated.</target>
       </trans-unit>
+      <trans-unit id="4ed980771a" resname="The time is not valid. Use the HH:MM format.">
+        <source>The time is not valid. Use the HH:MM format.</source>
+        <target>The time is not valid. Use the HH:MM format.</target>
+      </trans-unit>
       <trans-unit id="9bb63b8116" resname="The transformation &quot;%transform%&quot; is not valid.">
         <source>The transformation "%transform%" is not valid.</source>
         <target>The transformation "%transform%" is not valid.</target>
-      </trans-unit>
-      <trans-unit id="a49ab23365" resname="The transformation configuration could not be saved.">
-        <source>The transformation configuration could not be saved.</source>
-        <target>The transformation configuration could not be saved.</target>
       </trans-unit>
       <trans-unit id="f5df77360a" resname="The uploaded file is not valid.">
         <source>The uploaded file is not valid.</source>
@@ -1162,6 +1242,14 @@
         <source>Thousands separator</source>
         <target>Thousands separator</target>
       </trans-unit>
+      <trans-unit id="78ae6f0cd1" resname="Thursday">
+        <source>Thursday</source>
+        <target>Thursday</target>
+      </trans-unit>
+      <trans-unit id="a76d4ef5f3" resname="Time">
+        <source>Time</source>
+        <target>Time</target>
+      </trans-unit>
       <trans-unit id="b3ac111fd7" resname="Times">
         <source>Times</source>
         <target>Times</target>
@@ -1177,6 +1265,10 @@
       <trans-unit id="f698f67f56" resname="Trigger">
         <source>Trigger</source>
         <target>Trigger</target>
+      </trans-unit>
+      <trans-unit id="5792315f09" resname="Tuesday">
+        <source>Tuesday</source>
+        <target>Tuesday</target>
       </trans-unit>
       <trans-unit id="78bce098f3" resname="Type:">
         <source>Type:</source>
@@ -1241,6 +1333,10 @@
       <trans-unit id="3d709c13c9" resname="Warning">
         <source>Warning</source>
         <target>Warning</target>
+      </trans-unit>
+      <trans-unit id="796c163589" resname="Wednesday">
+        <source>Wednesday</source>
+        <target>Wednesday</target>
       </trans-unit>
       <trans-unit id="68a5c8bfac" resname="With errors">
         <source>With errors</source>

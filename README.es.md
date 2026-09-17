@@ -150,11 +150,17 @@ Las frecuencias disponibles son:
 - Cada 6 horas
 - Diaria
 
+La edición de pago añade cada 15 y 30 minutos, cada 12 horas, todos los días a una hora fija, una vez a la semana (eligiendo el día) y una vez al mes (eligiendo el día). Las horas se leen en la zona horaria de la tienda y cada fuente se ejecuta una vez por periodo: las ejecuciones que se pierden no se acumulan.
+
+El listado de fuentes muestra la frecuencia de cada una y cuándo le toca la siguiente ejecución.
+
 El cron solamente ejecuta las fuentes activas que tengan configurada una frecuencia programada.
 
 El ejecutor de cron utiliza el mismo sistema de procesamiento por lotes que las importaciones manuales.
 
 Esto permite que las sincronizaciones manuales y programadas utilicen la misma lógica de procesamiento de productos.
+
+El comando puede programarse con más frecuencia de la que necesitan las fuentes (cada cinco minutos, por ejemplo): cada fuente sólo se ejecuta cuando le toca.
 
 ### Comando del cron
 
@@ -369,10 +375,9 @@ Consulta el archivo `CHANGELOG.md` para la lista completa.
 
 ## Roadmap
 
-La edición de pago cubre las fuentes XML, JSON y REST, la sincronización incremental, los catálogos anidados, las transformaciones avanzadas y el panel de monitorización. Lo que sigue en el roadmap:
+La edición de pago cubre las fuentes XML, JSON y REST, la sincronización incremental, los catálogos anidados, las transformaciones avanzadas, varias imágenes por producto, más programación y el panel de monitorización. Lo que sigue en el roadmap:
 
 - Opciones adicionales de sincronización
-- Opciones adicionales de programación
 
 El roadmap puede evolucionar según los comentarios de los usuarios y las necesidades reales de las tiendas.
 
@@ -391,6 +396,7 @@ La edición de pago añade, sobre la versión gratuita:
 - **Descarga de imágenes en paralelo**: 3,5 veces más rápida con 8 descargas a la vez.
 - **Quince transformaciones avanzadas**: tablas de equivalencias, valores por defecto, campos alternativos, unión de campos, prefijos y sufijos, operaciones aritméticas con redondeo, expresiones regulares, conversión a sí/no, acortar textos, slugs, mayúsculas y minúsculas, quitar HTML, tomar una parte del valor y quedarse sólo con los números.
 - **Un panel de monitorización**: periodos, contadores, errores más frecuentes, tamaño del historial y retención.
+- **Más programación**: cada 15 o 30 minutos, cada 12 horas, todos los días a una hora fija, una vez a la semana o una vez al mes.
 
 Las dos ediciones comparten el mismo código: el paquete gratuito se genera a partir de él y no contiene código de pago.
 

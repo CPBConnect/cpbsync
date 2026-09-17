@@ -2,8 +2,8 @@
 
 namespace CPBConnect\Application\Mapping;
 
+use CPBConnect\Application\Form\DescribedFields;
 use CPBConnect\Application\Transform\TransformerInterface;
-use RuntimeException;
 
 /**
  * Normaliza los valores de transformación tal y como llegan desde
@@ -31,11 +31,7 @@ final class MappingTransformInput
 
     public static function readValue(array $values, $key): string
     {
-        if (!isset($values[$key]) || !is_scalar($values[$key])) {
-            return '';
-        }
-
-        return (string) $values[$key];
+        return DescribedFields::readValue($values, $key);
     }
 
     /**
@@ -50,28 +46,10 @@ final class MappingTransformInput
         TransformerInterface $transformer,
         array $posted
     ): array {
-        $config = [];
-
-        foreach ($transformer->describe()['fields'] as $field) {
-            $name = (string) ($field['name'] ?? '');
-
-            if ($name === '') {
-                continue;
-            }
-
-            $value = self::readValue($posted, $name);
-
-            // Los valores se guardan tal cual (un espacio puede ser
-            // significativo), pero el valor por defecto sólo entra si
-            // el campo viene vacío.
-            if (trim($value) === '' && isset($field['default'])) {
-                $value = (string) $field['default'];
-            }
-
-            $config[$name] = $value;
-        }
-
-        return $config;
+        return DescribedFields::collect(
+            $transformer->describe()['fields'],
+            $posted
+        );
     }
 
     /**
@@ -81,18 +59,6 @@ final class MappingTransformInput
      */
     public static function encodeConfig(array $config): ?string
     {
-        if ($config === []) {
-            return null;
-        }
-
-        $encoded = json_encode($config, JSON_UNESCAPED_UNICODE);
-
-        if ($encoded === false) {
-            throw new RuntimeException(
-                'The transformation configuration could not be saved.'
-            );
-        }
-
-        return $encoded;
+        return DescribedFields::encode($config);
     }
 }

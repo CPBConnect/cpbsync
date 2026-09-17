@@ -4,50 +4,21 @@ All notable changes to CPB Sync are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project follows Semantic Versioning.
 
-## [1.0.0] - 2026-09-15
+## [Unreleased]
 
 ### Added
 
-* CSV catalog sources.
-* Multiple configurable data sources.
-* Configurable source-to-PrestaShop field mapping.
-* Data transformations:
-
-  * Price normalization.
-  * Stock normalization.
-  * Text normalization.
-  * Text replacement.
-* Dry Run before synchronization.
-* Product creation.
-* Product updates.
-* Automatic detection of products without changes.
-* Product validation.
-* Individual product error handling.
-* Synchronization history.
-* Detailed synchronization results.
-* Batch processing for large imports.
-* Import progress tracking.
-* Scheduled synchronization through cron.
-* Cron frequencies:
-
-  * Manual.
-  * Hourly.
-  * Every 6 hours.
-  * Daily.
-* Cron execution lock to prevent concurrent executions.
-* Resumption of pending batch imports.
-* Automatic cleanup of temporary CSV files after successful imports.
-* English and Spanish documentation.
+* Scheduling registry (`ScheduleInterface`, `AbstractSchedule`, `IntervalSchedule`, `ScheduleRegistry`, `ScheduleFactory`): a frequency only declares its name, its label, the fields it needs (a time, a weekday, a day of the month) and when the source is due, so the cron no longer carries a hardcoded list of frequencies.
+* `schedule` column on `cpbsync_source`, with the `upgrade-1.3.0.php` migration, for the calendar settings of a source.
+* The paid edition adds six frequencies on top of the four basic ones: every 15 minutes, every 30 minutes, every 12 hours, every day at a fixed time, once a week (choosing the day) and once a month (choosing the day).
+* The source list shows the translated frequency and when the next run is due, resolved for the whole list in a single query.
+* Calendar times are read in the shop's time zone, not in the server's.
 
 ### Changed
 
-* Manual and scheduled synchronization now use the same batch processing engine.
-* Large CSV imports are processed in batches to reduce server execution-time issues.
-* Synchronization errors are handled at the individual product level so other products can continue processing.
-
-### Security
-
-* Cron execution is restricted to the command line interface.
+* The source form builds the frequency list and its calendar fields from that registry: choosing a frequency shows only the fields it needs, without reloading the page.
+* Source validation asks the chosen schedule to check its own settings, so an invalid time, weekday or day of the month is reported before saving.
+* The fields a functionality declares (name, label, hint, type, default value and options) are now read, saved and translated through a single helper (`DescribedFields`) shared by the transformation and the scheduling forms.
 
 ## [1.2.0] - 2026-09-16
 
@@ -129,6 +100,51 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 * Dead code in `cpbsync.php`: the unused `createImport()` and `renderImportProgress()` methods.
 * Development scratch file `src/Infrastructure/Source/test-source.php`.
 * The unused `module_name` Smarty variable assigned by the sources page.
+
+## [1.0.0] - 2026-09-15
+
+### Added
+
+* CSV catalog sources.
+* Multiple configurable data sources.
+* Configurable source-to-PrestaShop field mapping.
+* Data transformations:
+
+  * Price normalization.
+  * Stock normalization.
+  * Text normalization.
+  * Text replacement.
+* Dry Run before synchronization.
+* Product creation.
+* Product updates.
+* Automatic detection of products without changes.
+* Product validation.
+* Individual product error handling.
+* Synchronization history.
+* Detailed synchronization results.
+* Batch processing for large imports.
+* Import progress tracking.
+* Scheduled synchronization through cron.
+* Cron frequencies:
+
+  * Manual.
+  * Hourly.
+  * Every 6 hours.
+  * Daily.
+* Cron execution lock to prevent concurrent executions.
+* Resumption of pending batch imports.
+* Automatic cleanup of temporary CSV files after successful imports.
+* English and Spanish documentation.
+
+### Changed
+
+* Manual and scheduled synchronization now use the same batch processing engine.
+* Large CSV imports are processed in batches to reduce server execution-time issues.
+* Synchronization errors are handled at the individual product level so other products can continue processing.
+
+### Security
+
+* Cron execution is restricted to the command line interface.
 
 [1.0.0]: https://github.com/CPBConnect/cpbsync/releases/tag/v1.0.0
 [1.2.0]: https://github.com/CPBConnect/cpbsync/releases/tag/v1.2.0

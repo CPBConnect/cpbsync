@@ -2,6 +2,7 @@
 
 namespace CPBConnect\Presentation\Admin\Handler;
 
+use CPBConnect\Application\Form\DescribedFields;
 use CPBConnect\Application\Mapping\MappingInputValidator;
 use CPBConnect\Application\Mapping\MappingSaver;
 use CPBConnect\Application\Source\SourceService;
@@ -354,70 +355,14 @@ class MappingHandler
                     ',',
                     array_map('strval', $description['targets'])
                 ),
-                'fields' => $this->transformFields(
-                    $description['fields']
+                'fields' => DescribedFields::translate(
+                    $description['fields'],
+                    fn (string $text): string =>
+                        $this->shell->translate($text)
                 ),
             ];
         }
 
         return $options;
-    }
-
-    /**
-     * @param array<int, array<string, mixed>> $fields
-     *
-     * @return array<int, array<string, mixed>>
-     */
-    private function transformFields(array $fields): array
-    {
-        $prepared = [];
-
-        foreach ($fields as $field) {
-            $prepared[] = [
-                'name' => (string) ($field['name'] ?? ''),
-                'label' => $this->shell->translate(
-                    (string) ($field['label'] ?? '')
-                ),
-                'hint' => $this->shell->translate(
-                    (string) ($field['hint'] ?? '')
-                ),
-                'type' => (string) ($field['type'] ?? 'text'),
-                'default' => (string) ($field['default'] ?? ''),
-                'options' => $this->transformFieldOptions(
-                    $field['options'] ?? []
-                ),
-            ];
-        }
-
-        return $prepared;
-    }
-
-    /**
-     * @param mixed $options
-     *
-     * @return array<int, array{value: string, label: string}>
-     */
-    private function transformFieldOptions($options): array
-    {
-        if (!is_array($options)) {
-            return [];
-        }
-
-        $prepared = [];
-
-        foreach ($options as $option) {
-            if (!is_array($option)) {
-                continue;
-            }
-
-            $prepared[] = [
-                'value' => (string) ($option['value'] ?? ''),
-                'label' => $this->shell->translate(
-                    (string) ($option['label'] ?? '')
-                ),
-            ];
-        }
-
-        return $prepared;
     }
 }

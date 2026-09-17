@@ -23,6 +23,7 @@ class SourceRepository
                 'url' => pSQL($data['url']),
                 'config' => $this->configForStorage($data),
                 'frequency' => pSQL($data['frequency']),
+                'schedule' => $this->scheduleForStorage($data),
                 'active' => !empty($data['active']) ? 1 : 0,
                 'date_add' => date('Y-m-d H:i:s'),
                 'date_upd' => date('Y-m-d H:i:s'),
@@ -68,6 +69,7 @@ class SourceRepository
                 'url' => pSQL($data['url']),
                 'config' => $this->configForStorage($data),
                 'frequency' => pSQL($data['frequency']),
+                'schedule' => $this->scheduleForStorage($data),
                 'active' => !empty($data['active']) ? 1 : 0,
                 'date_upd' => date('Y-m-d H:i:s'),
             ],
@@ -84,6 +86,17 @@ class SourceRepository
         $config = trim((string) ($data['config'] ?? ''));
 
         return $config === '' ? null : pSQL($config);
+    }
+
+    /**
+     * Configuración del calendario (hora, día de la semana...), también
+     * validada antes de llegar aquí.
+     */
+    private function scheduleForStorage(array $data): ?string
+    {
+        $schedule = trim((string) ($data['schedule'] ?? ''));
+
+        return $schedule === '' ? null : pSQL($schedule);
     }
 
     public function delete(int $id): bool

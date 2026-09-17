@@ -17,6 +17,7 @@ use CPBConnect\Application\Mapping\MappingSaver;
 use CPBConnect\Application\Product\ProductImageProviderFactory;
 use CPBConnect\Application\Product\ImageList;
 use CPBConnect\Application\Product\ProductStateFactory;
+use CPBConnect\Application\Schedule\ScheduleFactory;
 use CPBConnect\Application\Source\Reader\SourceReaderRegistry;
 use CPBConnect\Application\Source\SourceService;
 use CPBConnect\Application\Source\SourceValidator;
@@ -1498,6 +1499,268 @@ same(
     count(ImageList::parse(implode(',', $many))),
     'corta la lista en el máximo de imágenes'
 );
+
+/*
+ * ---------------------------------------------------------------------
+ * Programación de las fuentes
+ * ---------------------------------------------------------------------
+ */
+
+section('Programación de fuentes');
+
+$schedules = ScheduleFactory::create();
+
+truthy(
+    $schedules->has('manual')
+    && $schedules->has('hourly')
+    && $schedules->has('6_hours')
+    && $schedules->has('daily'),
+    'el núcleo registra las frecuencias básicas'
+);
+
+// Miércoles 16 de septiembre de 2026, 10:30 (hora del proceso).
+$now = new DateTimeImmutable('2026-09-16 10:30:00');
+
+same(
+    false,
+    $schedules->find('manual')->isDue([], null, $now),
+    'manual no se ejecuta sola'
+);
+
+$hourly = $schedules->find('hourly');
+
+same(true, $hourly->isDue([], null, $now), 'sin ejecuciones previas toca');
+same(
+    true,
+    $hourly->isDue([], '2026-09-16 09:00:00', $now),
+    'una hora después toca'
+);
+same(
+    false,
+    $hourly->isDue([], '2026-09-16 10:00:00', $now),
+    'antes de la hora no toca'
+);
+same(
+    '2026-09-16 10:30',
+    $hourly->nextRun([], '2026-09-16 09:00:00', $now)->format('Y-m-d H:i'),
+    'la próxima es ya'
+);
+same(
+    '2026-09-16 11:00',
+    $hourly->nextRun([], '2026-09-16 10:00:00', $now)->format('Y-m-d H:i'),
+    'la próxima es dentro de una hora'
+);
+
+$daily = $schedules->find('daily');
+
+same(
+    false,
+    $daily->isDue([], '2026-09-15 12:00:00', $now),
+    'la diaria no repite antes de 24 horas'
+);
+same(
+    true,
+    $daily->isDue([], '2026-09-15 09:00:00', $now),
+    'la diaria toca pasadas 24 horas'
+);
+same(
+    '2026-09-16 10:30',
+    $daily->nextRun([], null, $now)->format('Y-m-d H:i'),
+    'la diaria sin ejecuciones previas está pendiente'
+);
+
+if (!class_exists(
+    'CPBConnect\\Premium\\Application\\Schedule\\PremiumScheduleRegistry'
+)) {
+    same(4, count($schedules->all()), 'el paquete gratuito no trae más');
+} else {
+    section('Programación avanzada');
+
+    truthy(
+        $schedules->has('every_15_minutes')
+        && $schedules->has('daily_at')
+        && $schedules->has('weekly')
+        && $schedules->has('monthly'),
+        'la edición de pago amplía el registro'
+    );
+
+    $quarter = $schedules->find('every_15_minutes');
+
+    same(
+        false,
+        $quarter->isDue([], '2026-09-16 10:20:00', $now),
+        'cada 15 minutos respeta el intervalo'
+    );
+    same(
+        true,
+        $quarter->isDue([], '2026-09-16 10:10:00', $now),
+        'cada 15 minutos ya toca'
+    );
+
+    $dailyAt = $schedules->find('daily_at');
+
+    same(
+        true,
+        $dailyAt->isDue(['time' => '03:00'], null, $now),
+        'una fuente nueva está pendiente'
+    );
+    same(
+        true,
+        $dailyAt->isDue(['time' => '03:00'], '2026-09-15 03:05:00', $now),
+        'si la última fue antes de la hora de hoy, toca'
+    );
+    same(
+        false,
+        $dailyAt->isDue(['time' => '03:00'], '2026-09-16 03:05:00', $now),
+        'si ya se ejecutó hoy, no toca'
+    );
+    same(
+        false,
+        $dailyAt->isDue(['time' => '23:00'], '2026-09-16 03:05:00', $now),
+        'no se adelanta a la hora configurada'
+    );
+    same(
+        '2026-09-17 03:00',
+        $dailyAt
+            ->nextRun(['time' => '03:00'], '2026-09-16 03:05:00', $now)
+            ->format('Y-m-d H:i'),
+        'la siguiente ejecución es mañana a la misma hora'
+    );
+
+    $weekly = $schedules->find('weekly');
+
+    same(
+        false,
+        $weekly->isDue(
+            ['weekday' => '3', 'time' => '04:00'],
+            '2026-09-16 04:05:00',
+            $now
+        ),
+        'la semanal no repite el mismo día'
+    );
+    same(
+        true,
+        $weekly->isDue(
+            ['weekday' => '3', 'time' => '04:00'],
+            '2026-09-09 04:05:00',
+            $now
+        ),
+        'la semanal toca a la semana siguiente'
+    );
+    same(
+        '2026-09-23 04:00',
+        $weekly
+            ->nextRun(
+                ['weekday' => '3', 'time' => '04:00'],
+                '2026-09-16 04:05:00',
+                $now
+            )
+            ->format('Y-m-d H:i'),
+        'la próxima es el miércoles que viene'
+    );
+    same(
+        '2026-09-21 04:00',
+        $weekly
+            ->nextRun(['weekday' => '1', 'time' => '04:00'], null, $now)
+            ->format('Y-m-d H:i'),
+        'el próximo lunes es el 21'
+    );
+
+    $monthly = $schedules->find('monthly');
+
+    same(
+        false,
+        $monthly->isDue(
+            ['day' => '5', 'time' => '02:00'],
+            '2026-09-05 02:05:00',
+            $now
+        ),
+        'la mensual no repite el mismo mes'
+    );
+    same(
+        true,
+        $monthly->isDue(
+            ['day' => '5', 'time' => '02:00'],
+            '2026-08-05 02:05:00',
+            $now
+        ),
+        'la mensual toca al mes siguiente'
+    );
+    same(
+        '2026-10-05 02:00',
+        $monthly
+            ->nextRun(
+                ['day' => '5', 'time' => '02:00'],
+                '2026-09-05 02:05:00',
+                $now
+            )
+            ->format('Y-m-d H:i'),
+        'la próxima es el mes que viene'
+    );
+    same(
+        '2026-02-28 02:00',
+        $monthly
+            ->nextRun(
+                ['day' => '31', 'time' => '02:00'],
+                '2026-01-31 02:05:00',
+                new DateTimeImmutable('2026-02-01 00:00:00')
+            )
+            ->format('Y-m-d H:i'),
+        'en un mes corto se usa el último día'
+    );
+
+    same(
+        'The time is not valid. Use the HH:MM format.',
+        $dailyAt->validate(['time' => '25:00'])->getMessage(),
+        'rechaza una hora inválida'
+    );
+    same(
+        'The day of the week is not valid.',
+        $weekly
+            ->validate(['weekday' => '9', 'time' => '03:00'])
+            ->getMessage(),
+        'rechaza un día de la semana inválido'
+    );
+    same(
+        'The day of the month is not valid.',
+        $monthly
+            ->validate(['day' => '32', 'time' => '03:00'])
+            ->getMessage(),
+        'rechaza un día del mes inválido'
+    );
+
+    // El validador de fuentes usa la programación elegida.
+    [$scheduleReaders] = makeReaders('csv');
+
+    $scheduleValidator = new SourceValidator($scheduleReaders);
+
+    same(
+        'The time is not valid. Use the HH:MM format.',
+        $scheduleValidator->validate([
+            'name' => 'Proveedor',
+            'type' => 'csv',
+            'url' => 'https://example.com/a.csv',
+            'frequency' => 'daily_at',
+            'schedule' => (string) json_encode(['time' => '99:99']),
+        ])->getMessage(),
+        'la validación del calendario llega al formulario'
+    );
+
+    same(
+        null,
+        $scheduleValidator->validate([
+            'name' => 'Proveedor',
+            'type' => 'csv',
+            'url' => 'https://example.com/a.csv',
+            'frequency' => 'weekly',
+            'schedule' => (string) json_encode([
+                'weekday' => '1',
+                'time' => '03:30',
+            ]),
+        ]),
+        'acepta un calendario válido'
+    );
+}
 
 if (class_exists(XmlReader::class)) {
     class TestableXmlReader extends XmlReader
